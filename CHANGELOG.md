@@ -7,20 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Renamed package from `collie` to `infoextract_cidoc`
-- Foundation tooling: pre-commit, mypy, bandit, coverage
-- MkDocs Material documentation site
-- LangStruct extraction pipeline (replaces PydanticAI)
-- GraphForge optional output module
-
-## [0.1.0] - 2024-01-01
+## [0.1.0] - 2026-02-23
 
 ### Added
-- Initial release with CIDOC CRM v7.1.3 support
-- 99 E-class Pydantic models, 322 P-properties
-- AI-powered information extraction via PydanticAI + Gemini 2.5 Flash
-- NetworkX graph construction and social network analysis
-- Markdown, Cypher, and NetworkX output formats
+- CIDOC CRM v7.1.3 complete coverage: 99 E-class Pydantic models, 322 P-properties
+- LangStruct extraction pipeline: `LangStructExtractor`, `resolve_extraction`, `map_to_crm_entities`
+- Lite entity schema (`LiteEntity`, `LiteRelationship`, `LiteExtractionResult`) for single-pass LLM extraction
+- Entity resolution with stable UUID5 identifiers, label deduplication, and broken-link rejection
+- CRM mapping layer dispatching to E21 Person, E5 Event, E53 Place, E22 Object, E52 Time-Span
+- NetworkX graph construction and social network analysis (centrality, communities)
+- Markdown output (4 styles: card, detailed, table, narrative)
+- Cypher emitter for Neo4j and Memgraph
+- GraphForge optional output module (`pip install infoextract-cidoc[graphforge]`)
 - Visualization module (matplotlib static, plotly interactive)
-- Validation framework (cardinality, type alignment)
+- Validation framework (cardinality enforcement, type alignment)
+- CLI: `infoextract-cidoc extract | analyze | workflow | demo`
+- MkDocs Material documentation site
+- Full CI/CD: GitHub Actions (test, docs, publish, changelog-check, pr-labeler, release-tracking)
+- Pre-commit hooks (ruff, mypy, bandit, markdownlint)
+- 85 tests (100% passing)
