@@ -1,0 +1,80 @@
+site_name: infoextract-cidoc
+site_description: Classful Ontology for Life-Events Information Extraction
+site_url: https://decisionnerd.github.io/infoextract-cidoc/
+repo_url: https://github.com/decisionnerd/infoextract-cidoc
+repo_name: decisionnerd/infoextract-cidoc
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_symbol_type_heading: true
+            members_order: source
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quickstart: getting-started/quickstart.md
+    - Tutorial: getting-started/tutorial.md
+  - Guide:
+    - Extraction: guide/extraction.md
+    - Output Formats: guide/output-formats.md
+    - CRM Models: guide/crm-models.md
+  - API Reference: reference/api.md
+  - Development:
+    - Contributing: development/contributing.md
+    - Testing: development/testing.md
+    - Release Process: development/release-process.md
+  - Community:
+    - Security: community/security.md
+    - Code of Conduct: community/code-of-conduct.md
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true

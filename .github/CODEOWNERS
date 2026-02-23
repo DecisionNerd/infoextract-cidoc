@@ -1,0 +1,11 @@
+# Default owner
+* @decisionnerd
+
+# Extraction pipeline
+src/infoextract_cidoc/extraction/ @decisionnerd
+
+# Models (auto-generated; review carefully)
+src/infoextract_cidoc/models/ @decisionnerd
+
+# CI/CD
+.github/ @decisionnerd

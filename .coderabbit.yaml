@@ -1,0 +1,23 @@
+language: "en-US"
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  path_filters:
+    - "!src/infoextract_cidoc/models/generated/**"
+    - "!src/infoextract_cidoc/codegen/**"
+  path_instructions:
+    - path: "src/infoextract_cidoc/extraction/**"
+      instructions: |
+        Review for CIDOC CRM correctness. Ensure entity types and property codes
+        are valid CRM identifiers. Check that confidence scores are in [0.0, 1.0].
+    - path: "src/infoextract_cidoc/tests/**"
+      instructions: |
+        Verify test isolation and meaningful assertions. Check that LLM tests
+        are marked with @pytest.mark.llm.
+chat:
+  auto_reply: true

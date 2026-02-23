@@ -24,22 +24,22 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from dotenv import load_dotenv
 
-from collie.extraction import InformationExtractor
-from collie.io.to_markdown import to_markdown, MarkdownStyle, render_table
-from collie.io.to_networkx import (
-    to_networkx_graph, 
-    calculate_centrality_measures, 
+from infoextract_cidoc.extraction import InformationExtractor
+from infoextract_cidoc.io.to_markdown import to_markdown, MarkdownStyle, render_table
+from infoextract_cidoc.io.to_networkx import (
+    to_networkx_graph,
+    calculate_centrality_measures,
     find_communities,
     get_network_statistics
 )
-from collie.visualization import (
-    plot_network_graph, 
-    create_interactive_plot, 
+from infoextract_cidoc.visualization import (
+    plot_network_graph,
+    create_interactive_plot,
     create_network_summary,
     plot_community_network,
     plot_centrality_network
 )
-from collie.io.to_cypher import generate_cypher_script
+from infoextract_cidoc.io.to_cypher import generate_cypher_script
 
 # Load environment variables
 load_dotenv()
@@ -56,7 +56,7 @@ def check_requirements():
         print("  GOOGLE_API_KEY=your-api-key-here")
         return False
     
-    einstein_file = Path("src/collie/examples/einstein.md")
+    einstein_file = Path("src/infoextract_cidoc/examples/einstein.md")
     if not einstein_file.exists():
         print(f"❌ Error: Einstein file not found: {einstein_file}")
         return False
@@ -72,7 +72,7 @@ async def einstein_complete_demo():
     print("=" * 60)
     
     # Read Einstein biography
-    einstein_file = Path("src/collie/examples/einstein.md")
+    einstein_file = Path("src/infoextract_cidoc/examples/einstein.md")
     with open(einstein_file, "r") as f:
         einstein_text = f.read()
     
@@ -110,7 +110,7 @@ async def einstein_complete_demo():
     print("\n🏗️ Step 2: Convert to CRM Entities")
     print("-" * 50)
     
-    from collie.models.base import CRMEntity
+    from infoextract_cidoc.models.base import CRMEntity
     
     crm_entities = []
     for entity in extraction_result.entities:

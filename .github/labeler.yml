@@ -1,0 +1,24 @@
+extraction:
+  - changed-files:
+    - any-glob-to-any-file: "src/infoextract_cidoc/extraction/**"
+
+io:
+  - changed-files:
+    - any-glob-to-any-file: "src/infoextract_cidoc/io/**"
+
+models:
+  - changed-files:
+    - any-glob-to-any-file: "src/infoextract_cidoc/models/**"
+
+tests:
+  - changed-files:
+    - any-glob-to-any-file: "src/infoextract_cidoc/tests/**"
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file: "docs/**"
+    - any-glob-to-any-file: "*.md"
+
+ci-cd:
+  - changed-files:
+    - any-glob-to-any-file: ".github/**"

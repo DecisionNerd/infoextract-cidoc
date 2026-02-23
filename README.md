@@ -1,4 +1,4 @@
-# COLLIE
+# infoextract-cidoc (COLLIE)
 
 **Classful Ontology for Life-Events Information Extraction**
 
@@ -14,269 +14,225 @@
 
 ![COLLIE logo](collie-logo.png)
 
-A developer-friendly toolkit for working with the **CIDOC CRM v7.1.3** in modern data workflows. COLLIE provides complete Pydantic models (99 classes, 322 properties), Markdown renderers, and Cypher emitters that bridge the gap between conceptual rigor and developer usability.
+A developer-friendly toolkit for working with the **CIDOC CRM v7.1.3** in modern data workflows. infoextract-cidoc provides complete Pydantic models (99 classes, 322 properties), LangStruct-powered AI extraction, Markdown renderers, and Cypher emitters that bridge the gap between conceptual rigor and developer usability.
 
-## 🎯 Why COLLIE?
+## Why infoextract-cidoc?
 
-Cultural heritage and information extraction projects often need a **CRM-compliant backbone** without the overhead of RDF stacks. COLLIE:
+Cultural heritage and information extraction projects often need a **CRM-compliant backbone** without the overhead of RDF stacks. infoextract-cidoc:
 
-- ✅ Keeps the conceptual rigor of CIDOC CRM
-- ✅ Provides lean, open-world Pydantic validation  
-- ✅ Outputs formats directly usable by LLMs (Markdown) and LPGs (Cypher)
-- ✅ Prioritizes ergonomics and performance for real-world extraction pipelines
-- ✅ Zero RDF/OWL/JSON-LD dependencies
+- Keeps the conceptual rigor of CIDOC CRM
+- Provides lean, open-world Pydantic validation
+- Outputs formats directly usable by LLMs (Markdown) and LPGs (Cypher)
+- Prioritizes ergonomics and performance for real-world extraction pipelines
+- Zero RDF/OWL/JSON-LD dependencies
 
-## 🚀 Quick Start
+## Quick Start
 
-> **📖 For a comprehensive getting started guide, see [QUICKSTART.md](QUICKSTART.md)**
+> For a comprehensive getting started guide, see [QUICKSTART.md](QUICKSTART.md)
 
 ### Installation
 
 ```bash
-# Using uv (recommended)
-uv add collie
+pip install infoextract-cidoc
 
-# Or with pip
-pip install collie
+# With GraphForge graph database integration:
+pip install infoextract-cidoc[graphforge]
+
+# Using uv:
+uv add infoextract-cidoc
 ```
 
-### Basic Usage
+### AI Extraction (New Pipeline)
 
 ```python
-from collie.models.generated.e_classes import EE22_HumanMadeObject
-from collie.io.to_markdown import to_markdown, MarkdownStyle
-from collie.io.to_cypher import generate_cypher_script
+from infoextract_cidoc.extraction import LangStructExtractor, resolve_extraction, map_to_crm_entities
+from infoextract_cidoc.io.to_markdown import to_markdown, MarkdownStyle
+
+# Extract from text (set GOOGLE_API_KEY or LANGSTRUCT_DEFAULT_MODEL env var)
+extractor = LangStructExtractor()
+lite_result = extractor.extract(
+    "Albert Einstein was born on March 14, 1879, in Ulm, Germany. "
+    "He won the Nobel Prize in Physics in 1921."
+)
+
+# Resolve to stable UUIDs
+extraction_result = resolve_extraction(lite_result)
+
+# Map to CIDOC CRM entities
+crm_entities, crm_relations = map_to_crm_entities(extraction_result)
+
+# Render to Markdown
+for entity in crm_entities:
+    print(to_markdown(entity, MarkdownStyle.CARD))
+```
+
+### CRM Models (No AI Needed)
+
+```python
+from infoextract_cidoc.models.generated.e_classes import EE22_HumanMadeObject
+from infoextract_cidoc.io.to_markdown import to_markdown, MarkdownStyle
+from infoextract_cidoc.io.to_cypher import generate_cypher_script
 
 # Create a CRM entity (string IDs are automatically converted to UUIDs)
 vase = EE22_HumanMadeObject(
-    id="obj_001",  # Automatically converted to deterministic UUID
+    id="obj_001",
     label="Ancient Greek Vase",
     type=["E55:Vessel", "E55:Ceramic"]
 )
 
-# Render as Markdown for LLM consumption
+# Render as Markdown
 markdown = to_markdown(vase, MarkdownStyle.CARD)
-print(markdown)
 
 # Generate Cypher for Neo4j/Memgraph
 cypher = generate_cypher_script([vase])
-print(cypher)
 ```
 
-## 📋 Core Features
+## CLI
 
-### 🤖 **AI-Powered Information Extraction**
-- PydanticAI-powered text analysis for automatic entity extraction
-- Intelligent parsing of biographical, historical, and cultural texts
-- Automatic relationship detection between entities
-- Support for complex narrative structures and temporal relationships
+```bash
+# Extract entities from text
+infoextract-cidoc extract --text "Marie Curie was born in Warsaw in 1867."
 
-### 🏗️ **Pydantic Models**
+# Extract from file
+infoextract-cidoc extract --file biography.txt --output ./output/
+
+# Run complete workflow
+infoextract-cidoc workflow --file biography.txt --all --output results/
+
+# Run Einstein demo
+infoextract-cidoc demo --einstein
+```
+
+## Core Features
+
+### AI-Powered Information Extraction
+- **LangStruct pipeline** for single-pass entity and relationship extraction
+- **Entity Resolution** with stable UUID5 identifiers and deduplication
+- **Relationship Resolution** with broken link detection and logging
+- **CRM Mapping** to E21 Person, E5 Event, E53 Place, E22 Object, E52 Time-Span
+- DSPy optimization support for fine-tuning extraction quality
+- Works with any LiteLLM-compatible model (Gemini, OpenAI, Anthropic, etc.)
+
+### Pydantic Models
 - Complete CIDOC CRM v7.1.3 coverage (99 E-classes, 322 P-properties)
 - Flexible UUID handling with automatic string-to-UUID conversion
 - Canonical JSON schema with stable IDs and explicit cross-references
 - Auto-generated from curated YAML specifications
-- Deterministic UUID generation maintains consistency across runs
 
 #### Class Naming Convention
 
-Collie uses a consistent naming pattern for generated Python classes:
-
-- **Official CIDOC CRM**: `E1`, `E2`, `E22`, `E96` (class codes)
-- **Collie Python Classes**: `EE1_CRMEntity`, `EE2_TemporalEntity`, `EE22_HumanMadeObject`, `EE96_Purchase`
+- **Official CIDOC CRM**: `E1`, `E22`, `E96` (class codes)
+- **Python Classes**: `EE1_CRMEntity`, `EE22_HumanMadeObject`, `EE96_Purchase`
 - **Pattern**: `E{code}_{label_without_spaces}`
 
-**Examples:**
-- `E1` "CRM Entity" → `EE1_CRMEntity`
-- `E22` "Human-Made Object" → `EE22_HumanMadeObject`  
-- `E96` "Purchase" → `EE96_Purchase`
-
-The `EE` prefix identifies Collie-generated Python classes for CIDOC CRM Entities, making them easily distinguishable from the official CRM class codes.
-
-### 📝 **Markdown Renderers**
+### Markdown Renderers
 - **Entity Cards**: Concise summaries optimized for LLM prompts
 - **Detailed Narratives**: Rich descriptions with full context
 - **Tabular Summaries**: Structured data presentation
-- **Style Profiles**: Configurable output formatting
 
-### 🔗 **NetworkX Integration**
+### NetworkX Integration
 - Direct conversion from CRM entities to NetworkX graphs
-- Built-in social network analysis algorithms
-- Community detection and centrality measures
+- Built-in social network analysis (centrality, communities)
 - Temporal network analysis for historical data
-- Interactive visualization capabilities
 
-### 📊 **Visualization & Analysis**
-- Interactive network plots with matplotlib and plotly
-- Customizable node and edge styling based on CRM classes
-- Timeline visualization for temporal relationships
-- Export capabilities for presentations and reports
+### Output Formats
+- **Markdown** (4 styles): entity cards, detailed, tabular, narrative
+- **Cypher**: idempotent MERGE/UNWIND scripts for Neo4j/Memgraph
+- **NetworkX**: graph objects for programmatic analysis
+- **GraphForge** (optional): `pip install infoextract-cidoc[graphforge]`
 
-### 🔗 **Cypher Emitters**
-- Idempotent MERGE/UNWIND scripts for graph databases
-- Neo4j and Memgraph compatible
-- Batched operations for performance
-- Constraint helpers and relationship builders
-
-### ✅ **Validation Framework**
+### Validation Framework
 - Cardinality enforcement (configurable from warnings to strict)
 - Type alignment validation
-- Quantifier rules and typing constraints
 - Extensible validation profiles
 
-## 📓 Interactive Jupyter Notebook Demo
-
-> **🎯 For hands-on exploration, try our comprehensive Jupyter notebook: [`COLLIE_Demo_Notebook.ipynb`](COLLIE_Demo_Notebook.ipynb)**
-
-The notebook provides an interactive walkthrough of the complete COLLIE workflow with:
-- **Step-by-step execution** of all 10 workflow steps
-- **Live visualizations** and network analysis
-- **Canonical JSON serialization** demonstration
-- **Advanced examples** including batch processing
-- **Real-time output** generation and file management
-
-Perfect for learning, experimentation, and understanding how COLLIE enables async/future processing workflows!
-
-## 🔄 Complete Workflow
+## Complete Workflow
 
 ```python
-from collie.extraction import InformationExtractor
-from collie.io.to_networkx import to_networkx_graph
-from collie.visualization import plot_network_graph
+from infoextract_cidoc.extraction import LangStructExtractor, resolve_extraction, map_to_crm_entities
+from infoextract_cidoc.io.to_networkx import to_networkx_graph
+from infoextract_cidoc.io.to_cypher import generate_cypher_script
+from infoextract_cidoc.visualization import plot_network_graph
 
-# 1. Extract entities from source text using PydanticAI
-extractor = InformationExtractor()
-extraction_result = await extractor.extract_from_text("""
-Albert Einstein was born on March 14, 1879, in Ulm, Germany. 
+# 1. Extract entities via LangStruct
+extractor = LangStructExtractor()
+lite_result = await extractor.extract_async("""
+Albert Einstein was born on March 14, 1879, in Ulm, Germany.
 He developed the theory of relativity and won the Nobel Prize in 1921.
 """)
 
-# 2. Convert to CRM entities
-from collie.models.base import CRMEntity
-crm_entities = []
-for entity in extraction_result.entities:
-    crm_entity = CRMEntity(
-        id=str(entity.id),
-        class_code=entity.class_code,
-        label=entity.label,
-        notes=entity.description
-    )
-    crm_entities.append(crm_entity)
+# 2. Resolve and map to CRM
+extraction_result = resolve_extraction(lite_result)
+crm_entities, crm_relations = map_to_crm_entities(extraction_result)
 
-# 3. Serialize as canonical JSON (important for async/future processing)
+# 3. Serialize as canonical JSON
 json_data = [entity.model_dump(mode='json') for entity in crm_entities]
 
-# 4. Render into Markdown for analysis and reporting
-markdown_report = render_table(crm_entities)
-
-# 5. Convert to NetworkX graph for social network analysis
+# 4. Convert to NetworkX graph for social network analysis
 graph = to_networkx_graph(crm_entities)
 
-# 6. Perform network analysis
-centrality = nx.degree_centrality(graph)
-communities = nx.community.greedy_modularity_communities(graph)
-
-# 7. Visualize the network
+# 5. Visualize the network
 plot_network_graph(graph, title="Einstein's Life Network")
 
-# 8. Export to Cypher for graph database persistence (optional)
+# 6. Export to Cypher for graph database persistence
 cypher_script = generate_cypher_script(crm_entities)
 ```
 
-## 📊 Example Output
-
-### Markdown Card
-```markdown
-## 🏺 Ancient Greek Vase
-**Type**: E22 Man-Made Object  
-**Categories**: Vessel, Ceramic  
-**Current Location**: Metropolitan Museum of Art  
-**Production**: 5th Century BCE, Athens, Greece  
-
-A beautifully preserved amphora from the 5th century BCE...
-```
-
-### Cypher Script
-```cypher
-MERGE (e22:E22_Man_Made_Object {id: "192f3e61-b22d-4f94-a2cf-c6ae1418ee83"})
-SET e22.label = "Ancient Greek Vase",
-    e22.type = ["E55:Vessel", "E55:Ceramic"]
-```
-
-## 🏛️ CIDOC CRM Background
-
-The CIDOC Conceptual Reference Model (CIDOC CRM) is a formal ontology designed to facilitate the integration, mediation and interchange of heterogeneous cultural heritage information. COLLIE implements CRM v7.1.3 with a focus on:
-
-- **Semantic interoperability** across different data sources
-- **Formal ontology** for cultural heritage documentation
-- **Extensible framework** for specialized communities
-- **Developer-friendly** implementation without RDF complexity
-
-## 📁 Project Structure
+## Project Structure
 
 ```
-collie/
-├── models/           # Pydantic CRM models
-│   ├── base.py      # Base classes and utilities
-│   └── generated/   # Auto-generated E-classes
-├── io/              # Input/output modules
-│   ├── to_markdown.py  # Markdown renderers
-│   └── to_cypher.py    # Cypher emitters
-├── validators/      # Validation framework
-├── codegen/         # YAML → Pydantic generation
-├── examples/        # Sample data and workflows
-└── tests/           # Comprehensive test suite
+src/infoextract_cidoc/
+├── extraction/           # AI extraction pipeline
+│   ├── lite_schema.py   # LangStruct output schema
+│   ├── resolution.py    # Entity/relationship resolution
+│   ├── crm_mapper.py    # CRM mapping layer
+│   └── langstruct_extractor.py  # LangStructExtractor
+├── models/               # Pydantic CRM models
+│   ├── base.py          # CRMEntity, CRMRelation
+│   └── generated/       # Auto-generated E-classes (99)
+├── io/                   # Output modules
+│   ├── to_markdown.py   # Markdown renderers
+│   ├── to_cypher.py     # Cypher emitters
+│   ├── to_networkx/     # NetworkX conversion
+│   └── to_graphforge.py # GraphForge (optional)
+├── validators/           # Validation framework
+├── visualization/        # matplotlib/plotly plots
+├── codegen/              # YAML -> Pydantic generation
+└── tests/                # Test suite (77 tests)
 ```
 
-## 🧪 Testing
+## Testing
 
 ```bash
-# Run all tests (32 tests, all passing)
-uv run pytest
-
-# Run specific test suites
-uv run pytest src/collie/tests/unit/
-uv run pytest src/collie/tests/golden/
-
-# Format and lint with modern tooling
-uv run ruff format
-uv run ruff check --fix
-
-# Check code quality
-uv run ruff check
+make test           # Run all tests
+make test-unit      # Unit tests only
+make coverage       # With coverage report
+make pre-push       # Full CI: lint + type-check + security + coverage
 ```
 
-## 📚 Documentation
+## Documentation
 
-- **[Mission Statement](docs/mission.md)** - Project goals and philosophy
-- **[Development Plan](docs/plan.md)** - Technical roadmap and architecture
-- **[HOWTOs](src/collie/docs/HOWTOs.md)** - Comprehensive modeling guide
+- **[Quickstart](QUICKSTART.md)** - Getting started guide
+- **[Contributing](CONTRIBUTING.md)** - Development workflow
+- **[Changelog](CHANGELOG.md)** - Version history
+- **[HOWTOs](docs/HOWTOs.md)** - Comprehensive modeling guide
 - **[CIDOC CRM Standard](docs/cidoc-crm-standard.md)** - Official specification
 
-## 🤝 Contributing
+## Project Status
 
-We welcome contributions! Please see our [development guidelines](docs/plan.md) and:
+- **Phase 1**: Complete - Core CIDOC CRM implementation
+- **Phase 2**: Complete - LangStruct extraction pipeline, validation, full CRM coverage
+- **Phase 3**: Planned - Profile packs and additional analysis tools
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes with tests
-4. Submit a pull request
+**Current Coverage**: 99 E-classes, 322 P-properties (complete CRM 7.1.3)
+**Test Status**: 77 tests passing (100% success rate)
+**CI/CD**: GitHub Actions with uv, ruff, mypy, bandit, codecov
 
-## 📈 Project Status
-
-- **Phase 1**: ✅ Complete - Core CIDOC CRM implementation
-- **Phase 2**: ✅ Complete - Advanced validation, performance, complete CRM coverage, and robust testing
-- **Phase 3**: 📋 Planned - Profile packs and additional analysis tools
-
-**Current Coverage**: 99 E-classes, 322 P-properties (complete CRM 7.1.3)  
-**Test Status**: 32 tests passing (100% success rate)  
-**CI/CD**: Modern GitHub Actions workflow with uv and ruff
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - CIDOC CRM Working Group for the foundational ontology
 - Pydantic team for the excellent validation framework
@@ -284,4 +240,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ for the cultural heritage and information extraction community**
+**Made with care for the cultural heritage and information extraction community**

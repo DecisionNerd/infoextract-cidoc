@@ -1,353 +1,227 @@
-# COLLIE Quickstart Guide
+# infoextract-cidoc Quickstart Guide
 
-Get up and running with COLLIE in minutes! This guide will walk you through the complete AI-powered cultural heritage information extraction and analysis workflow.
+Get up and running with infoextract-cidoc in minutes.
 
-## 🚀 What is COLLIE?
+## What is infoextract-cidoc?
 
-COLLIE (Classful Ontology for Life-Events Information Extraction) is a comprehensive toolkit that combines:
+infoextract-cidoc (COLLIE) is a toolkit that combines:
 
-- **AI-Powered Extraction**: Uses PydanticAI to extract entities and relationships from unstructured text
-- **CIDOC CRM Compliance**: Full implementation of the CIDOC CRM v7.1.3 ontology (99 classes, 322 properties)
+- **LangStruct Extraction**: Single-pass entity and relationship extraction from unstructured text
+- **CIDOC CRM Compliance**: Full implementation of CIDOC CRM v7.1.3 (99 classes, 322 properties)
 - **NetworkX Analysis**: Social network analysis with centrality measures and community detection
-- **Interactive Visualizations**: Both static matplotlib plots and interactive Plotly visualizations
-- **Multiple Output Formats**: JSON, Markdown, Cypher, and visualization files
+- **Multiple Output Formats**: Markdown, Cypher (Neo4j/Memgraph), NetworkX, GraphForge
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Python 3.13+
-- Google API Key (for AI extraction)
-- Git
+- An LLM API key (Google Gemini, OpenAI, Anthropic, or any LiteLLM-compatible provider)
 
-## ⚡ Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/decisionnerd/collie.git
-   cd collie
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   # Install uv if you haven't already
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   
-   # Install COLLIE and dependencies
-   uv sync
-   ```
-
-3. **Set up your API key:**
-   ```bash
-   # Create .env file
-   echo "GOOGLE_API_KEY=your-api-key-here" > .env
-   ```
-   
-   Get your Google API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
-
-## 🎯 Quick Start Examples
-
-### 1. Interactive Jupyter Notebook Demo
-
-> **🚀 Best for learning and experimentation: [`COLLIE_Demo_Notebook.ipynb`](COLLIE_Demo_Notebook.ipynb)**
-
-The notebook provides a complete interactive walkthrough with:
-- **Step-by-step execution** of all workflow components
-- **Live visualizations** and network analysis
-- **Canonical JSON serialization** demonstration
-- **Advanced examples** including batch processing
-- **Real-time output** generation
-
-Perfect for understanding how COLLIE works and experimenting with different texts!
-
-### 2. Run the Einstein Demo
-
-The fastest way to see COLLIE in action:
+## Installation
 
 ```bash
-uv run python -m collie.main demo --einstein
+pip install infoextract-cidoc
+
+# With GraphForge support:
+pip install infoextract-cidoc[graphforge]
+
+# Development install:
+git clone https://github.com/decisionnerd/infoextract-cidoc.git
+cd infoextract-cidoc
+uv sync
 ```
 
-This will:
-- Extract entities from Einstein's biography using AI
-- Convert them to CIDOC CRM entities
-- Generate Markdown reports
-- Create NetworkX graphs
-- Perform social network analysis
-- Generate visualizations
-- Export to Cypher scripts
-
-### 2. Extract Entities from Your Own Text
+## API Key Setup
 
 ```bash
-uv run python -m collie.main extract --text "Albert Einstein was born in Ulm, Germany in 1879. He developed the theory of relativity and won the Nobel Prize in 1921." --output my_results/
+# Google Gemini (default model)
+export GOOGLE_API_KEY="your-api-key-here"
+
+# Or add to a .env file:
+echo "GOOGLE_API_KEY=your-key" > .env
+
+# Override the model:
+export LANGSTRUCT_DEFAULT_MODEL="openai/gpt-4o-mini"
+```
+
+## Quick Start Examples
+
+### 1. Run the Einstein Demo
+
+The fastest way to see the full pipeline in action:
+
+```bash
+infoextract-cidoc demo --einstein
+```
+
+This runs the complete workflow: extract -> CRM mapping -> Markdown -> NetworkX -> visualization -> Cypher.
+
+### 2. Extract Entities from Text
+
+```bash
+infoextract-cidoc extract --text "Marie Curie was born in Warsaw in 1867 and received the Nobel Prize in 1903."
 ```
 
 ### 3. Run Complete Workflow
 
 ```bash
-uv run python -m collie.main workflow --text "Your text here" --all --output complete_analysis/
+infoextract-cidoc workflow --file biography.txt --all --output results/
 ```
 
-## 🔧 CLI Commands Reference
+## Python API
 
-### Extract Command
-Extract entities from text using AI:
+### Basic Extraction
+
+```python
+from infoextract_cidoc.extraction import LangStructExtractor, resolve_extraction, map_to_crm_entities
+
+extractor = LangStructExtractor()
+
+# Step 1: Extract (LangStruct fills LiteExtractionResult schema)
+lite_result = extractor.extract(
+    "Marie Curie was born in Warsaw in 1867. "
+    "She received the Nobel Prize in Physics in 1903."
+)
+
+# Step 2: Resolve (assign stable UUIDs, filter broken links)
+extraction_result = resolve_extraction(lite_result)
+
+# Step 3: Map to CRM
+entities, relations = map_to_crm_entities(extraction_result)
+
+print(f"Extracted {len(entities)} entities and {len(relations)} relations")
+```
+
+### Async Extraction
+
+```python
+import asyncio
+from infoextract_cidoc.extraction import LangStructExtractor, resolve_extraction, map_to_crm_entities
+
+async def extract(text: str):
+    extractor = LangStructExtractor()
+    lite_result = await extractor.extract_async(text)
+    extraction_result = resolve_extraction(lite_result)
+    return map_to_crm_entities(extraction_result)
+
+entities, relations = asyncio.run(extract("..."))
+```
+
+### Output Formats
+
+```python
+from infoextract_cidoc.io.to_markdown import to_markdown, MarkdownStyle, render_table
+from infoextract_cidoc.io.to_cypher import generate_cypher_script
+from infoextract_cidoc.io.to_networkx import to_networkx_graph, calculate_centrality_measures
+
+# Markdown
+for entity in entities:
+    print(to_markdown(entity, MarkdownStyle.CARD))
+
+# Summary table
+print(render_table(entities))
+
+# Cypher for Neo4j/Memgraph
+cypher = generate_cypher_script(entities)
+with open("entities.cypher", "w") as f:
+    f.write(cypher)
+
+# NetworkX graph
+graph = to_networkx_graph(entities)
+centrality = calculate_centrality_measures(graph)
+```
+
+### CRM Models Without AI
+
+```python
+from infoextract_cidoc.models.generated.e_classes import EE22_HumanMadeObject, EE21_Person
+from infoextract_cidoc.models.base import CRMRelation
+from infoextract_cidoc.io.to_cypher import generate_cypher_script
+
+person = EE21_Person(label="Marie Curie")
+obj = EE22_HumanMadeObject(label="Nobel Prize", type=["E55:Award"])
+
+cypher = generate_cypher_script([person, obj])
+```
+
+## Extraction Pipeline Explained
+
+The pipeline has three stages:
+
+```
+Text
+  -> LangStructExtractor   # LLM fills LiteExtractionResult schema
+  -> resolve_extraction    # Stage A: assign stable UUID5 IDs
+                           # Stage B: resolve relationship refs, drop broken links
+  -> map_to_crm_entities   # LiteEntity -> CRMEntity (E21/E5/E53/E22/E52)
+  -> Outputs               # Markdown / Cypher / NetworkX / GraphForge
+```
+
+### LiteEntity vs CRMEntity
+
+`LiteEntity` uses simple `ref_id` strings (e.g. `"person_1"`) so the LLM can consistently reference entities in relationships. The resolution stage converts these to stable UUID5 identifiers and deduplicates by label.
+
+## Model Configuration
+
+```python
+# Use a specific model
+extractor = LangStructExtractor(model="openai/gpt-4o-mini")
+
+# Use env var
+import os
+os.environ["LANGSTRUCT_DEFAULT_MODEL"] = "anthropic/claude-3-haiku-20240307"
+extractor = LangStructExtractor()
+
+# Batch extraction
+results = extractor.extract_batch([text1, text2, text3])
+```
+
+## Visualization
+
+```python
+from infoextract_cidoc.io.to_networkx import (
+    to_networkx_graph, calculate_centrality_measures, find_communities
+)
+from infoextract_cidoc.visualization import plot_network_graph
+
+graph = to_networkx_graph(entities)
+centrality = calculate_centrality_measures(graph)
+communities = find_communities(graph)
+
+# Static matplotlib plot
+plot_network_graph(
+    graph,
+    title="Entity Network",
+    save_path="network.png",
+    show_plot=False
+)
+```
+
+## GraphForge Integration
+
+Requires `pip install infoextract-cidoc[graphforge]`.
+
+```python
+from infoextract_cidoc.io.to_graphforge import to_graphforge_graph, to_graphforge_cypher
+
+graph = to_graphforge_graph(entities, relations)
+cypher = to_graphforge_cypher(entities, relations)
+```
+
+## Development Commands
 
 ```bash
-collie extract [OPTIONS]
-
-Options:
-  --text TEXT              Text to extract entities from
-  --file FILE              File containing text to extract entities from
-  --output, -o OUTPUT       Output directory (default: output)
-  --confidence CONFIDENCE  Minimum confidence threshold (default: 0.5)
-  --format {json,markdown,both}  Output format (default: both)
+make test          # Run all tests
+make lint          # Run ruff
+make format        # Auto-format with ruff
+make type-check    # Run mypy
+make security      # Run bandit
+make pre-push      # Full CI gate
+make docs-serve    # Serve docs locally
 ```
 
-**Examples:**
-```bash
-# Extract from text
-collie extract --text "Einstein was born in Germany" --output results/
+## Next Steps
 
-# Extract from file
-collie extract --file biography.txt --format json --confidence 0.7
-
-# Extract with high confidence
-collie extract --text "Your text" --confidence 0.8 --format both
-```
-
-### Analyze Command
-Analyze extracted entities with NetworkX:
-
-```bash
-collie analyze --input INPUT [OPTIONS]
-
-Options:
-  --input, -i INPUT        Input file with extracted entities
-  --output, -o OUTPUT      Output directory (default: analysis)
-  --visualize             Create visualizations
-  --interactive           Create interactive plots
-  --export-cypher         Export to Cypher script
-  --centrality            Calculate centrality measures
-  --communities           Find communities
-```
-
-**Examples:**
-```bash
-# Full analysis
-collie analyze --input results/extraction_result.json --all
-
-# Just visualization
-collie analyze --input results/extraction_result.json --visualize --interactive
-
-# Centrality analysis
-collie analyze --input results/extraction_result.json --centrality --communities
-```
-
-### Workflow Command
-Run complete end-to-end pipeline:
-
-```bash
-collie workflow [OPTIONS]
-
-Options:
-  --text TEXT              Text to process
-  --file FILE              File containing text to process
-  --output, -o OUTPUT      Output directory (default: workflow_output)
-  --all                    Run all analysis steps
-  --visualize              Create visualizations
-  --interactive            Create interactive plots
-  --export-cypher          Export to Cypher script
-  --confidence CONFIDENCE  Minimum confidence threshold (default: 0.5)
-```
-
-**Examples:**
-```bash
-# Complete workflow
-collie workflow --text "Your text" --all --output complete_results/
-
-# Workflow with custom confidence
-collie workflow --file document.txt --confidence 0.8 --visualize
-
-# Minimal workflow (just extraction)
-collie workflow --text "Your text" --output minimal_results/
-```
-
-### Demo Command
-Run demo examples:
-
-```bash
-collie demo [OPTIONS]
-
-Options:
-  --einstein              Run Einstein biography demo
-  --sample                Run sample text demo
-  --output, -o OUTPUT     Output directory (default: demo_output)
-```
-
-**Examples:**
-```bash
-# Einstein demo
-collie demo --einstein
-
-# Sample text demo
-collie demo --sample --output my_demo/
-```
-
-## 📊 Understanding the Output
-
-### Directory Structure
-```
-output/
-├── extraction_result.json      # Raw AI extraction results
-├── canonical_entities.json     # Canonical JSON for async/future processing
-├── extraction_result.md        # Human-readable entity table
-├── markdown/                   # Individual entity cards
-│   ├── entity_1_E21.md
-│   ├── entity_2_E53.md
-│   └── ...
-├── plots/                      # Visualizations
-│   ├── network_overview.png    # Static network plot
-│   └── network_overview.png # Static network plot
-├── network.cypher             # Cypher script for graph databases
-└── workflow_summary.md         # Complete analysis summary
-```
-
-### Key Files Explained
-
-- **`extraction_result.json`**: Raw AI extraction with confidence scores
-- **`canonical_entities.json`**: Canonical JSON format for async/future processing (UUIDs as strings, ready for graph databases)
-- **`extraction_result.md`**: Clean table of extracted entities
-- **`network_overview.png`**: Static visualization of entity relationships
-- **`network_overview.png`**: Static network visualization
-- **`network.cypher`**: Ready-to-run script for Neo4j or Memgraph
-- **`workflow_summary.md`**: Complete analysis report
-
-## 🧠 AI-Powered Extraction
-
-COLLIE uses PydanticAI to intelligently extract:
-
-### Entity Types (CIDOC CRM Classes)
-- **E21 Person**: People mentioned in the text
-- **E53 Place**: Locations and geographical entities
-- **E5 Event**: Events, activities, and occurrences
-- **E22 Man-Made Object**: Artifacts, documents, artworks
-- **E52 Time-Span**: Temporal periods and dates
-- **E41 Appellation**: Names, titles, and identifiers
-
-### Relationship Types (CIDOC CRM Properties)
-- **P74**: has residence (person → place)
-- **P7**: took place at (event → place)
-- **P4**: has time-span (event → time-span)
-- **P108**: produced by (object → person)
-- **P11**: had participant (event → person)
-
-## 📈 Network Analysis Features
-
-### Centrality Measures
-- **Degree Centrality**: Most connected entities
-- **Betweenness Centrality**: Entities that bridge different parts of the network
-- **Closeness Centrality**: Entities closest to all others
-- **PageRank**: Importance based on network structure
-
-### Community Detection
-- **Greedy Modularity**: Find natural groupings in the network
-- **Louvain Algorithm**: Optimize community structure
-
-### Network Statistics
-- **Density**: How connected the network is
-- **Clustering**: How tightly connected local neighborhoods are
-- **Path Length**: Average distance between entities
-
-## 🎨 Visualization Options
-
-### Static Plots (matplotlib)
-- Clean, publication-ready network diagrams
-- Color-coded by entity type
-- Node sizes based on centrality
-- Edge thickness based on relationship strength
-
-### Static Plots (Matplotlib)
-- High-quality network visualizations
-- Clear entity and relationship display
-- Customizable styling and layouts
-- Export to PNG for sharing
-
-## 🔗 Integration with Graph Databases
-
-The generated Cypher scripts work with:
-
-- **Neo4j**: Most popular graph database
-- **Memgraph**: High-performance graph database
-- **Amazon Neptune**: Cloud-based graph database
-
-Example Cypher output:
-```cypher
-// Create entities
-CREATE (e1:E21 {id: "person-1", label: "Albert Einstein"})
-CREATE (e2:E53 {id: "place-1", label: "Ulm"})
-
-// Create relationships
-CREATE (e1)-[:P74]->(e2)  // Einstein has residence in Ulm
-```
-
-## 🧪 Testing Your Setup
-
-Run the test suite to verify everything works:
-
-```bash
-uv run pytest src/collie/tests/ -v
-```
-
-You should see all 47 tests pass, including:
-- Unit tests for core functionality
-- NetworkX integration tests
-- Visualization tests
-- Complete workflow tests
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-1. **"GOOGLE_API_KEY environment variable is required"**
-   - Make sure you've created a `.env` file with your API key
-   - Verify the key is valid and has the right permissions
-
-2. **"ModuleNotFoundError: No module named 'scipy'"**
-   - Run `uv sync` to install all dependencies
-   - Make sure you're using the virtual environment
-
-3. **Tests failing**
-   - Check that all dependencies are installed: `uv sync`
-   - Verify Python version is 3.13+
-
-4. **Empty extraction results**
-   - Try lowering the confidence threshold: `--confidence 0.3`
-   - Check that your text contains recognizable entities
-   - Verify your API key has sufficient quota
-
-### Getting Help
-
-- Check the [README.md](README.md) for detailed documentation
-- Review [docs/mission.md](docs/mission.md) for project philosophy
-- Look at [docs/plan.md](docs/plan.md) for technical architecture
-- Run `collie --help` for command reference
-
-## 🎯 Next Steps
-
-Now that you're up and running:
-
-1. **Try your own data**: Extract entities from your own texts
-2. **Explore visualizations**: View the static PNG plots
-3. **Import to graph databases**: Use the Cypher scripts with Neo4j
-4. **Customize analysis**: Adjust confidence thresholds and analysis parameters
-5. **Integrate with workflows**: Use COLLIE in your data processing pipelines
-
-## 📚 Additional Resources
-
-- **Complete Documentation**: [README.md](README.md)
-- **Project Mission**: [docs/mission.md](docs/mission.md)
-- **Technical Plan**: [docs/plan.md](docs/plan.md)
-- **Testing Guide**: [docs/testing.md](docs/testing.md)
-- **CIDOC CRM Specification**: [Official CIDOC CRM Documentation](https://cidoc-crm.org/)
-
-Happy analyzing! 🎉
+- Read the full [API Reference](docs/reference/api.md)
+- Explore [CIDOC CRM Models](docs/guide/crm-models.md)
+- See [Output Formats](docs/guide/output-formats.md)
+- Check [CONTRIBUTING.md](CONTRIBUTING.md) to contribute

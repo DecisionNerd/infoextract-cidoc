@@ -1,0 +1,23 @@
+name: Changelog Check
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check CHANGELOG updated
+        run: |
+          if git diff --name-only origin/main...HEAD | grep -q "CHANGELOG.md"; then
+            echo "CHANGELOG.md was updated."
+          else
+            echo "ERROR: CHANGELOG.md was not updated in this PR."
+            echo "Please add an entry under [Unreleased] in CHANGELOG.md."
+            exit 1
+          fi
