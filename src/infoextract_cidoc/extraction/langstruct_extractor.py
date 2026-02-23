@@ -9,7 +9,7 @@ from typing import Any
 
 from infoextract_cidoc.extraction.lite_schema import LiteExtractionResult
 
-_DEFAULT_MODEL = "gemini/gemini-2.5-flash"
+_DEFAULT_MODEL = "gemini/gemini-3-flash-preview"
 
 SYSTEM_PROMPT = """You are a CIDOC CRM expert extracting structured information from text.
 
@@ -75,6 +75,8 @@ class LangStructExtractor:
                 schema=LiteExtractionResult,
                 model=self._model,
                 system_prompt=SYSTEM_PROMPT,
+                use_sources=False,
+                max_tokens=65536,
             )
         return self._extractor
 
@@ -88,7 +90,8 @@ class LangStructExtractor:
             LiteExtractionResult with entities and relationships.
         """
         extractor = self._get_extractor()
-        return extractor(text)
+        result = extractor.extract(text)
+        return LiteExtractionResult(**result.entities)
 
     async def extract_async(self, text: str) -> LiteExtractionResult:
         """Extract entities and relationships from text (asynchronous).
