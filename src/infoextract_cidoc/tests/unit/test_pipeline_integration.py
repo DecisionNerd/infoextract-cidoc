@@ -17,7 +17,7 @@ from infoextract_cidoc.io.to_markdown import MarkdownStyle, render_table, to_mar
 from infoextract_cidoc.io.to_networkx import to_networkx_graph
 
 
-@pytest.fixture()
+@pytest.fixture
 def einstein_lite_result() -> LiteExtractionResult:
     """Fixture simulating what LangStruct would extract from Einstein text."""
     return LiteExtractionResult(
@@ -83,22 +83,28 @@ def einstein_lite_result() -> LiteExtractionResult:
 
 @pytest.mark.integration
 class TestPipelineIntegration:
-    def test_full_pipeline_entity_count(self, einstein_lite_result: LiteExtractionResult) -> None:
+    def test_full_pipeline_entity_count(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
         extraction_result = resolve_extraction(einstein_lite_result)
         entities, relations = map_to_crm_entities(extraction_result)
         assert len(entities) == 4
         assert len(relations) == 3
 
-    def test_full_pipeline_entity_types(self, einstein_lite_result: LiteExtractionResult) -> None:
+    def test_full_pipeline_entity_types(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
         extraction_result = resolve_extraction(einstein_lite_result)
         entities, _ = map_to_crm_entities(extraction_result)
         codes = {e.class_code for e in entities}
-        assert "E21" in codes   # Person
-        assert "E53" in codes   # Place
-        assert "E5" in codes    # Event
-        assert "E52" in codes   # TimeSpan
+        assert "E21" in codes  # Person
+        assert "E53" in codes  # Place
+        assert "E5" in codes  # Event
+        assert "E52" in codes  # TimeSpan
 
-    def test_full_pipeline_stable_ids(self, einstein_lite_result: LiteExtractionResult) -> None:
+    def test_full_pipeline_stable_ids(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
         """Running the pipeline twice should produce the same UUIDs."""
         r1 = resolve_extraction(einstein_lite_result)
         r2 = resolve_extraction(einstein_lite_result)
@@ -106,7 +112,9 @@ class TestPipelineIntegration:
         ids2 = {e.id for e in r2.entities}
         assert ids1 == ids2
 
-    def test_pipeline_to_markdown(self, einstein_lite_result: LiteExtractionResult) -> None:
+    def test_pipeline_to_markdown(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
         extraction_result = resolve_extraction(einstein_lite_result)
         entities, _ = map_to_crm_entities(extraction_result)
         for entity in entities:
@@ -115,7 +123,9 @@ class TestPipelineIntegration:
         table = render_table(entities)
         assert "Albert Einstein" in table
 
-    def test_pipeline_to_cypher(self, einstein_lite_result: LiteExtractionResult) -> None:
+    def test_pipeline_to_cypher(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
         extraction_result = resolve_extraction(einstein_lite_result)
         entities, _ = map_to_crm_entities(extraction_result)
         cypher = generate_cypher_script(entities)
@@ -123,7 +133,9 @@ class TestPipelineIntegration:
         # The Cypher emitter uses parameterized queries; check for CRM structure
         assert "CRM" in cypher or "class_code" in cypher
 
-    def test_pipeline_to_networkx(self, einstein_lite_result: LiteExtractionResult) -> None:
+    def test_pipeline_to_networkx(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
         extraction_result = resolve_extraction(einstein_lite_result)
         entities, _ = map_to_crm_entities(extraction_result)
         graph = to_networkx_graph(entities)
@@ -152,6 +164,7 @@ class TestPipelineIntegration:
     def test_extractor_exports(self) -> None:
         """Verify all expected symbols are exported from the extraction module."""
         from infoextract_cidoc import extraction
+
         assert hasattr(extraction, "LangStructExtractor")
         assert hasattr(extraction, "resolve_extraction")
         assert hasattr(extraction, "map_to_crm_entities")

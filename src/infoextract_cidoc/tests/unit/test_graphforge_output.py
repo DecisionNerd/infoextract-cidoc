@@ -1,14 +1,14 @@
 """Unit tests for GraphForge output module."""
 
-from unittest.mock import MagicMock, patch
 import uuid
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from infoextract_cidoc.models.base import CRMEntity, CRMRelation
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_entities() -> list:
     return [
         CRMEntity(
@@ -28,7 +28,7 @@ def sample_entities() -> list:
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_relations(sample_entities) -> list:
     return [
         CRMRelation(
@@ -46,7 +46,9 @@ class TestGraphForgeOutput:
     ) -> None:
         with patch.dict("sys.modules", {"graphforge": None}):
             from importlib import reload
+
             import infoextract_cidoc.io.to_graphforge as module
+
             # Force re-evaluation of import
             with pytest.raises(ImportError, match="graphforge is required"):
                 module._require_graphforge()
@@ -60,10 +62,14 @@ class TestGraphForgeOutput:
 
         with patch.dict("sys.modules", {"graphforge": mock_gf}):
             from importlib import reload
+
             import infoextract_cidoc.io.to_graphforge as gf_module
+
             # Patch _require_graphforge to return our mock
             with patch.object(gf_module, "_require_graphforge", return_value=mock_gf):
-                result = gf_module.to_graphforge_graph(sample_entities, sample_relations)
+                result = gf_module.to_graphforge_graph(
+                    sample_entities, sample_relations
+                )
 
         assert result is mock_graph
         assert mock_graph.add_node.call_count == 2

@@ -6,36 +6,36 @@ for NetworkX graphs containing CRM entities and relationships.
 Interactive visualizations are designed for Jupyter notebook use.
 """
 
+from .export import (
+    create_network_summary,
+    export_plot,
+)
 from .plotting import (
+    create_interactive_plot,
+    plot_centrality_network,
+    plot_community_network,
     plot_network_graph,
     plot_temporal_network,
-    plot_community_network,
-    plot_centrality_network,
-    create_interactive_plot,
 )
 from .styling import (
-    get_node_colors,
-    get_edge_colors,
-    get_node_sizes,
-    get_layout_positions,
     create_legend,
-)
-from .export import (
-    export_plot,
-    create_network_summary,
+    get_edge_colors,
+    get_layout_positions,
+    get_node_colors,
+    get_node_sizes,
 )
 
 __all__ = [
-    "plot_network_graph",
-    "plot_temporal_network", 
-    "plot_community_network",
-    "plot_centrality_network",
     "create_interactive_plot",
-    "get_node_colors",
-    "get_edge_colors",
-    "get_node_sizes",
-    "get_layout_positions",
     "create_legend",
-    "export_plot",
     "create_network_summary",
+    "export_plot",
+    "get_edge_colors",
+    "get_layout_positions",
+    "get_node_colors",
+    "get_node_sizes",
+    "plot_centrality_network",
+    "plot_community_network",
+    "plot_network_graph",
+    "plot_temporal_network",
 ]

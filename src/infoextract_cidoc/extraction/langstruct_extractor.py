@@ -54,7 +54,9 @@ class LangStructExtractor:
     """
 
     def __init__(self, model: str | None = None) -> None:
-        self._model = model or os.environ.get("LANGSTRUCT_DEFAULT_MODEL", _DEFAULT_MODEL)
+        self._model = model or os.environ.get(
+            "LANGSTRUCT_DEFAULT_MODEL", _DEFAULT_MODEL
+        )
         self._extractor: Any = None
 
     def _get_extractor(self) -> Any:

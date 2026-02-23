@@ -6,7 +6,11 @@ Validates that relationships align with property domain/range constraints.
 import logging
 from typing import Any
 
-from infoextract_cidoc.models.base import CRMEntity, CRMValidationError, CRMValidationWarning
+from infoextract_cidoc.models.base import (
+    CRMEntity,
+    CRMValidationError,
+    CRMValidationWarning,
+)
 from infoextract_cidoc.properties import DOMAIN, P
 
 from .quantifiers import ValidationSeverity

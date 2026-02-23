@@ -5,36 +5,36 @@ This module provides conversion from CRM entities to NetworkX graphs
 and social network analysis capabilities.
 """
 
-from .graph_builder import (
-    to_networkx_graph,
-    build_graph_from_entities,
-    add_relationships_to_graph,
-    create_temporal_graph,
-)
 from .analysis import (
+    analyze_temporal_patterns,
     calculate_centrality_measures,
     find_communities,
-    analyze_temporal_patterns,
     get_network_statistics,
 )
 from .converters import (
     entities_to_networkx,
-    relationships_to_edges,
-    extract_node_attributes,
     extract_edge_attributes,
+    extract_node_attributes,
+    relationships_to_edges,
+)
+from .graph_builder import (
+    add_relationships_to_graph,
+    build_graph_from_entities,
+    create_temporal_graph,
+    to_networkx_graph,
 )
 
 __all__ = [
-    "to_networkx_graph",
-    "build_graph_from_entities", 
     "add_relationships_to_graph",
-    "create_temporal_graph",
-    "calculate_centrality_measures",
-    "find_communities",
     "analyze_temporal_patterns",
-    "get_network_statistics",
+    "build_graph_from_entities",
+    "calculate_centrality_measures",
+    "create_temporal_graph",
     "entities_to_networkx",
-    "relationships_to_edges",
-    "extract_node_attributes",
     "extract_edge_attributes",
+    "extract_node_attributes",
+    "find_communities",
+    "get_network_statistics",
+    "relationships_to_edges",
+    "to_networkx_graph",
 ]

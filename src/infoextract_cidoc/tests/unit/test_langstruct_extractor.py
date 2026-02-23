@@ -9,7 +9,7 @@ from infoextract_cidoc.extraction.langstruct_extractor import LangStructExtracto
 from infoextract_cidoc.extraction.lite_schema import LiteEntity, LiteExtractionResult
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_lite_result() -> LiteExtractionResult:
     return LiteExtractionResult(
         entities=[
@@ -38,7 +38,9 @@ class TestLangStructExtractor:
         mock_ls_instance = MagicMock(return_value=mock_lite_result)
         mock_ls_class = MagicMock(return_value=mock_ls_instance)
 
-        with patch.dict("sys.modules", {"langstruct": MagicMock(LangStruct=mock_ls_class)}):
+        with patch.dict(
+            "sys.modules", {"langstruct": MagicMock(LangStruct=mock_ls_class)}
+        ):
             extractor = LangStructExtractor()
             result = extractor.extract("Einstein was born in Ulm.")
 
@@ -49,7 +51,9 @@ class TestLangStructExtractor:
         mock_ls_instance = MagicMock(return_value=mock_lite_result)
         mock_ls_class = MagicMock(return_value=mock_ls_instance)
 
-        with patch.dict("sys.modules", {"langstruct": MagicMock(LangStruct=mock_ls_class)}):
+        with patch.dict(
+            "sys.modules", {"langstruct": MagicMock(LangStruct=mock_ls_class)}
+        ):
             extractor = LangStructExtractor()
             results = extractor.extract_batch(["text 1", "text 2"])
 
@@ -67,7 +71,9 @@ class TestLangStructExtractor:
         mock_ls_instance = MagicMock(return_value=mock_lite_result)
         mock_ls_class = MagicMock(return_value=mock_ls_instance)
 
-        with patch.dict("sys.modules", {"langstruct": MagicMock(LangStruct=mock_ls_class)}):
+        with patch.dict(
+            "sys.modules", {"langstruct": MagicMock(LangStruct=mock_ls_class)}
+        ):
             extractor = LangStructExtractor()
             result = asyncio.run(extractor.extract_async("Einstein was born in Ulm."))
 

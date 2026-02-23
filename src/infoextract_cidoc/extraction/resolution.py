@@ -11,10 +11,7 @@ import logging
 import uuid
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    pass
-
-from infoextract_cidoc.extraction.lite_schema import LiteExtractionResult, LiteEntity
+from infoextract_cidoc.extraction.lite_schema import LiteEntity, LiteExtractionResult
 from infoextract_cidoc.extraction.models import (
     EventExtraction,
     ExtractedEntity,

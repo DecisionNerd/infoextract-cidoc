@@ -47,12 +47,8 @@ class LiteEntity(BaseModel):
 class LiteRelationship(BaseModel):
     """A lightweight relationship between two extracted entities."""
 
-    source_ref: str = Field(
-        description="The ref_id of the source entity."
-    )
-    target_ref: str = Field(
-        description="The ref_id of the target entity."
-    )
+    source_ref: str = Field(description="The ref_id of the source entity.")
+    target_ref: str = Field(description="The ref_id of the target entity.")
     property_code: str = Field(
         description="CIDOC CRM property code (e.g. 'P98', 'P7', 'P14')."
     )

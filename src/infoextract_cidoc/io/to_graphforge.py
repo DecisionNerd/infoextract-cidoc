@@ -16,6 +16,7 @@ def _require_graphforge() -> Any:
     """Import graphforge or raise a helpful error."""
     try:
         import graphforge  # type: ignore[import]
+
         return graphforge
     except ImportError as e:
         msg = (

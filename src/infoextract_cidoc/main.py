@@ -87,12 +87,16 @@ async def complete_workflow_demo(
     print("\nStep 1: Extracting entities via LangStruct pipeline")
     print("-" * 40)
 
-    lite_result, extraction_result, crm_entities, crm_relations = await _run_extraction(text)
+    lite_result, extraction_result, crm_entities, crm_relations = await _run_extraction(
+        text
+    )
 
     # Apply confidence threshold filter
     from infoextract_cidoc.models.base import CRMEntity
+
     crm_entities = [
-        e for e in crm_entities
+        e
+        for e in crm_entities
         if not hasattr(e, "confidence") or True  # CRMEntity doesn't have confidence
     ]
     # Filter at the extraction_result level
@@ -142,7 +146,9 @@ async def complete_workflow_demo(
     print("-" * 40)
 
     graph = to_networkx_graph(crm_entities)
-    print(f"Created NetworkX graph with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges")
+    print(
+        f"Created NetworkX graph with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges"
+    )
 
     # Step 5: Network Analysis
     print("\nStep 5: Network Analysis")
@@ -255,7 +261,9 @@ async def handle_extract_command(args: argparse.Namespace) -> None:
 
     print(f"Extracting entities from {'file' if args.file else 'text'}...")
 
-    lite_result, extraction_result, crm_entities, crm_relations = await _run_extraction(text)
+    lite_result, extraction_result, crm_entities, crm_relations = await _run_extraction(
+        text
+    )
 
     # Apply confidence filter
     filtered_entities = [
@@ -265,7 +273,9 @@ async def handle_extract_command(args: argparse.Namespace) -> None:
         r for r in extraction_result.relationships if r.confidence >= args.confidence
     ]
 
-    print(f"Extracted {len(filtered_entities)} entities and {len(filtered_relationships)} relationships")
+    print(
+        f"Extracted {len(filtered_entities)} entities and {len(filtered_relationships)} relationships"
+    )
 
     output_dir = Path(args.output)
     output_dir.mkdir(exist_ok=True)
@@ -277,7 +287,9 @@ async def handle_extract_command(args: argparse.Namespace) -> None:
         }
         with open(output_dir / "extraction_result.json", "w") as f:
             json.dump(result_data, f, indent=2)
-        print(f"Saved raw extraction results to {output_dir / 'extraction_result.json'}")
+        print(
+            f"Saved raw extraction results to {output_dir / 'extraction_result.json'}"
+        )
 
         canonical_json = [entity.model_dump(mode="json") for entity in crm_entities]
         with open(output_dir / "canonical_entities.json", "w") as f:
@@ -304,6 +316,7 @@ async def handle_analyze_command(args: argparse.Namespace) -> None:
         data = json.load(f)
 
     from infoextract_cidoc.models.base import CRMEntity
+
     entities = []
 
     if isinstance(data, list):
@@ -329,7 +342,9 @@ async def handle_analyze_command(args: argparse.Namespace) -> None:
     output_dir.mkdir(exist_ok=True)
 
     graph = to_networkx_graph(entities)
-    print(f"Created NetworkX graph with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges")
+    print(
+        f"Created NetworkX graph with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges"
+    )
 
     if args.centrality:
         print("Calculating centrality measures...")
@@ -431,39 +446,84 @@ Examples:
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Extract command
-    extract_parser = subparsers.add_parser("extract", help="Extract entities from text using AI")
+    extract_parser = subparsers.add_parser(
+        "extract", help="Extract entities from text using AI"
+    )
     extract_parser.add_argument("--text", help="Text to extract entities from")
-    extract_parser.add_argument("--file", help="File containing text to extract entities from")
-    extract_parser.add_argument("--output", "-o", default="output", help="Output directory")
-    extract_parser.add_argument("--confidence", type=float, default=0.5, help="Minimum confidence threshold")
-    extract_parser.add_argument("--format", choices=["json", "markdown", "both"], default="both", help="Output format")
+    extract_parser.add_argument(
+        "--file", help="File containing text to extract entities from"
+    )
+    extract_parser.add_argument(
+        "--output", "-o", default="output", help="Output directory"
+    )
+    extract_parser.add_argument(
+        "--confidence", type=float, default=0.5, help="Minimum confidence threshold"
+    )
+    extract_parser.add_argument(
+        "--format",
+        choices=["json", "markdown", "both"],
+        default="both",
+        help="Output format",
+    )
 
     # Analyze command
     analyze_parser = subparsers.add_parser("analyze", help="Analyze extracted entities")
-    analyze_parser.add_argument("--input", "-i", required=True, help="Input file with extracted entities")
-    analyze_parser.add_argument("--output", "-o", default="analysis", help="Output directory")
-    analyze_parser.add_argument("--visualize", action="store_true", help="Create visualizations")
-    analyze_parser.add_argument("--interactive", action="store_true", help="Create interactive plots")
-    analyze_parser.add_argument("--export-cypher", action="store_true", help="Export to Cypher script")
-    analyze_parser.add_argument("--centrality", action="store_true", help="Calculate centrality measures")
-    analyze_parser.add_argument("--communities", action="store_true", help="Find communities")
+    analyze_parser.add_argument(
+        "--input", "-i", required=True, help="Input file with extracted entities"
+    )
+    analyze_parser.add_argument(
+        "--output", "-o", default="analysis", help="Output directory"
+    )
+    analyze_parser.add_argument(
+        "--visualize", action="store_true", help="Create visualizations"
+    )
+    analyze_parser.add_argument(
+        "--interactive", action="store_true", help="Create interactive plots"
+    )
+    analyze_parser.add_argument(
+        "--export-cypher", action="store_true", help="Export to Cypher script"
+    )
+    analyze_parser.add_argument(
+        "--centrality", action="store_true", help="Calculate centrality measures"
+    )
+    analyze_parser.add_argument(
+        "--communities", action="store_true", help="Find communities"
+    )
 
     # Workflow command (complete pipeline)
     workflow_parser = subparsers.add_parser("workflow", help="Run complete workflow")
     workflow_parser.add_argument("--text", help="Text to process")
     workflow_parser.add_argument("--file", help="File containing text to process")
-    workflow_parser.add_argument("--output", "-o", default="workflow_output", help="Output directory")
-    workflow_parser.add_argument("--all", action="store_true", help="Run all analysis steps")
-    workflow_parser.add_argument("--visualize", action="store_true", help="Create visualizations")
-    workflow_parser.add_argument("--interactive", action="store_true", help="Create interactive plots")
-    workflow_parser.add_argument("--export-cypher", action="store_true", help="Export to Cypher script")
-    workflow_parser.add_argument("--confidence", type=float, default=0.5, help="Minimum confidence threshold")
+    workflow_parser.add_argument(
+        "--output", "-o", default="workflow_output", help="Output directory"
+    )
+    workflow_parser.add_argument(
+        "--all", action="store_true", help="Run all analysis steps"
+    )
+    workflow_parser.add_argument(
+        "--visualize", action="store_true", help="Create visualizations"
+    )
+    workflow_parser.add_argument(
+        "--interactive", action="store_true", help="Create interactive plots"
+    )
+    workflow_parser.add_argument(
+        "--export-cypher", action="store_true", help="Export to Cypher script"
+    )
+    workflow_parser.add_argument(
+        "--confidence", type=float, default=0.5, help="Minimum confidence threshold"
+    )
 
     # Demo commands
     demo_parser = subparsers.add_parser("demo", help="Run demo examples")
-    demo_parser.add_argument("--einstein", action="store_true", help="Run Einstein biography demo")
-    demo_parser.add_argument("--sample", action="store_true", help="Run sample text demo")
-    demo_parser.add_argument("--output", "-o", default="demo_output", help="Output directory")
+    demo_parser.add_argument(
+        "--einstein", action="store_true", help="Run Einstein biography demo"
+    )
+    demo_parser.add_argument(
+        "--sample", action="store_true", help="Run sample text demo"
+    )
+    demo_parser.add_argument(
+        "--output", "-o", default="demo_output", help="Output directory"
+    )
 
     args = parser.parse_args()
 

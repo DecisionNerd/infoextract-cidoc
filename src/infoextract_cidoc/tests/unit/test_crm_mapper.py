@@ -4,17 +4,17 @@ import uuid
 
 import pytest
 
+from infoextract_cidoc.extraction.crm_mapper import map_to_crm_entities
 from infoextract_cidoc.extraction.lite_schema import (
     LiteEntity,
     LiteExtractionResult,
     LiteRelationship,
 )
-from infoextract_cidoc.extraction.crm_mapper import map_to_crm_entities
 from infoextract_cidoc.extraction.resolution import resolve_extraction
 from infoextract_cidoc.models.base import CRMEntity, CRMRelation
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_extraction_result():
     lite_result = LiteExtractionResult(
         entities=[
@@ -63,6 +63,7 @@ class TestMapToCrmEntities:
 
     def test_empty_result(self) -> None:
         from infoextract_cidoc.extraction.models import ExtractionResult
+
         empty = ExtractionResult(entities=[], relationships=[])
         entities, relations = map_to_crm_entities(empty)
         assert entities == []

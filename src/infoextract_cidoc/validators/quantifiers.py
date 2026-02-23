@@ -7,7 +7,11 @@ import logging
 from enum import Enum
 from typing import Any
 
-from infoextract_cidoc.models.base import CRMEntity, CRMValidationError, CRMValidationWarning
+from infoextract_cidoc.models.base import (
+    CRMEntity,
+    CRMValidationError,
+    CRMValidationWarning,
+)
 from infoextract_cidoc.properties import P
 
 logger = logging.getLogger(__name__)
