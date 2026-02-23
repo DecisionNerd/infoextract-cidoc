@@ -23,7 +23,7 @@ def mock_lite_result() -> LiteExtractionResult:
 class TestLangStructExtractor:
     def test_default_model(self) -> None:
         extractor = LangStructExtractor()
-        assert extractor.model == "gemini/gemini-2.5-flash"
+        assert extractor.model == "gemini/gemini-3-flash-preview"
 
     def test_custom_model(self) -> None:
         extractor = LangStructExtractor(model="openai/gpt-4o-mini")
@@ -35,7 +35,10 @@ class TestLangStructExtractor:
         assert extractor.model == "anthropic/claude-3-haiku"
 
     def test_extract_calls_langstruct(self, mock_lite_result) -> None:
-        mock_ls_instance = MagicMock(return_value=mock_lite_result)
+        mock_extract_result = MagicMock()
+        mock_extract_result.entities = mock_lite_result.model_dump()
+        mock_ls_instance = MagicMock()
+        mock_ls_instance.extract.return_value = mock_extract_result
         mock_ls_class = MagicMock(return_value=mock_ls_instance)
 
         with patch.dict(
@@ -44,11 +47,14 @@ class TestLangStructExtractor:
             extractor = LangStructExtractor()
             result = extractor.extract("Einstein was born in Ulm.")
 
-        assert result is mock_lite_result
-        mock_ls_instance.assert_called_once_with("Einstein was born in Ulm.")
+        assert result == mock_lite_result
+        mock_ls_instance.extract.assert_called_once_with("Einstein was born in Ulm.")
 
     def test_extract_batch(self, mock_lite_result) -> None:
-        mock_ls_instance = MagicMock(return_value=mock_lite_result)
+        mock_extract_result = MagicMock()
+        mock_extract_result.entities = mock_lite_result.model_dump()
+        mock_ls_instance = MagicMock()
+        mock_ls_instance.extract.return_value = mock_extract_result
         mock_ls_class = MagicMock(return_value=mock_ls_instance)
 
         with patch.dict(
@@ -58,7 +64,7 @@ class TestLangStructExtractor:
             results = extractor.extract_batch(["text 1", "text 2"])
 
         assert len(results) == 2
-        assert all(r is mock_lite_result for r in results)
+        assert all(r == mock_lite_result for r in results)
 
     def test_missing_langstruct_raises(self) -> None:
         with patch.dict("sys.modules", {"langstruct": None}):
@@ -68,7 +74,10 @@ class TestLangStructExtractor:
                 extractor.extract("text")
 
     def test_extract_async(self, mock_lite_result) -> None:
-        mock_ls_instance = MagicMock(return_value=mock_lite_result)
+        mock_extract_result = MagicMock()
+        mock_extract_result.entities = mock_lite_result.model_dump()
+        mock_ls_instance = MagicMock()
+        mock_ls_instance.extract.return_value = mock_extract_result
         mock_ls_class = MagicMock(return_value=mock_ls_instance)
 
         with patch.dict(
@@ -77,4 +86,4 @@ class TestLangStructExtractor:
             extractor = LangStructExtractor()
             result = asyncio.run(extractor.extract_async("Einstein was born in Ulm."))
 
-        assert result is mock_lite_result
+        assert result == mock_lite_result
