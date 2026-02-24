@@ -5,8 +5,6 @@ This module tests the new NetworkX integration, visualization,
 and complete workflow functionality.
 """
 
-from pathlib import Path
-
 import networkx as nx
 import pytest
 

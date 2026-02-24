@@ -5,7 +5,7 @@ These models define the structure for extracting CIDOC CRM entities and relation
 from unstructured text using AI-powered analysis.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field

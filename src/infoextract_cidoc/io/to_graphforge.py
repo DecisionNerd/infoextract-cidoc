@@ -15,15 +15,15 @@ if TYPE_CHECKING:
 def _require_graphforge() -> Any:
     """Import graphforge or raise a helpful error."""
     try:
-        import graphforge  # type: ignore[import]
-
-        return graphforge
+        import graphforge  # type: ignore[import]  # noqa: PLC0415
     except ImportError as e:
         msg = (
             "graphforge is required for GraphForge output. "
             "Install it with: pip install infoextract-cidoc[graphforge]"
         )
         raise ImportError(msg) from e
+    else:
+        return graphforge
 
 
 def to_graphforge_graph(

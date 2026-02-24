@@ -6,10 +6,9 @@ CRM entities and relationships.
 """
 
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import networkx as nx
-import pandas as pd
 
 
 def calculate_centrality_measures(
@@ -104,16 +103,16 @@ def find_communities(
         except nx.NetworkXError:
             communities = []
     else:
-        raise ValueError(f"Unknown community detection algorithm: {algorithm}")
+        msg = f"Unknown community detection algorithm: {algorithm}"
+        raise ValueError(msg)
 
     # Filter communities by minimum size
-    filtered_communities = [
+    return [
         list(community)
         for community in communities
         if len(community) >= min_community_size
     ]
 
-    return filtered_communities
 
 
 def analyze_temporal_patterns(

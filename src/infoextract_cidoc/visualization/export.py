@@ -6,9 +6,8 @@ network summaries in various formats.
 """
 
 import json
-import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -39,7 +38,7 @@ def export_plot(
         None
     """
     # Ensure directory exists
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    Path(filepath).parent.mkdir(parents=True, exist_ok=True)
 
     # Save figure
     fig.savefig(
@@ -112,12 +111,12 @@ def export_network_data(
         None
     """
     # Ensure directory exists
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    Path(filepath).parent.mkdir(parents=True, exist_ok=True)
 
     if format == "json":
         # Export as JSON
         data = nx.node_link_data(graph)
-        with open(filepath, "w") as f:
+        with Path(filepath).open("w") as f:
             json.dump(data, f, indent=2)
 
     elif format == "gexf":
@@ -133,7 +132,8 @@ def export_network_data(
         _export_to_csv(graph, filepath, include_attributes)
 
     else:
-        raise ValueError(f"Unsupported format: {format}")
+        msg = f"Unsupported format: {format}"
+        raise ValueError(msg)
 
 
 def create_network_report(
@@ -167,7 +167,7 @@ def create_network_report(
         plots_dir.mkdir(exist_ok=True)
 
         # Basic network plot
-        fig = plt.figure(figsize=(12, 8))
+        plt.figure(figsize=(12, 8))
         pos = nx.spring_layout(graph)
         nx.draw(
             graph,
@@ -208,7 +208,7 @@ def create_network_report(
     if include_summary:
         summary = create_network_summary(graph)
         summary_file = output_path / "summary.json"
-        with open(summary_file, "w") as f:
+        with summary_file.open("w") as f:
             json.dump(summary, f, indent=2)
 
     return str(output_path)

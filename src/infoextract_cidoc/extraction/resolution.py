@@ -11,7 +11,6 @@ import logging
 import uuid
 from typing import TYPE_CHECKING
 
-from infoextract_cidoc.extraction.lite_schema import LiteEntity, LiteExtractionResult
 from infoextract_cidoc.extraction.models import (
     EventExtraction,
     ExtractedEntity,
@@ -22,6 +21,12 @@ from infoextract_cidoc.extraction.models import (
     PlaceExtraction,
     TimeExtraction,
 )
+
+if TYPE_CHECKING:
+    from infoextract_cidoc.extraction.lite_schema import (
+        LiteEntity,
+        LiteExtractionResult,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -161,6 +166,7 @@ def resolve_extraction(lite_result: LiteExtractionResult) -> ExtractionResult:
                 property_code=lite_rel.property_code,
                 property_label=lite_rel.property_label,
                 confidence=lite_rel.confidence,
+                source_text=lite_rel.source_snippet,
             )
         )
 

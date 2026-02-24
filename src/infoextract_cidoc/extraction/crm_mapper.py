@@ -2,16 +2,15 @@
 
 from __future__ import annotations
 
-from infoextract_cidoc.extraction.models import (
-    EventExtraction,
-    ExtractedEntity,
-    ExtractionResult,
-    ObjectExtraction,
-    PersonExtraction,
-    PlaceExtraction,
-    TimeExtraction,
-)
+from typing import TYPE_CHECKING
+
 from infoextract_cidoc.models.base import CRMEntity, CRMRelation
+
+if TYPE_CHECKING:
+    from infoextract_cidoc.extraction.models import (
+        ExtractedEntity,
+        ExtractionResult,
+    )
 
 
 def _entity_to_crm(entity: ExtractedEntity) -> CRMEntity:
@@ -21,6 +20,7 @@ def _entity_to_crm(entity: ExtractedEntity) -> CRMEntity:
         class_code=entity.class_code,
         label=entity.label,
         notes=entity.description,
+        source_text=entity.source_text,
         type=[entity.class_code],
     )
 
@@ -43,6 +43,7 @@ def map_to_crm_entities(
             src=rel.source_id,
             type=rel.property_code,
             tgt=rel.target_id,
+            source_text=rel.source_text,
         )
         for rel in result.relationships
     ]

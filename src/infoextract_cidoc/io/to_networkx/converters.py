@@ -4,8 +4,7 @@ Utility functions for converting between CRM entities and NetworkX formats.
 This module provides helper functions for data conversion and attribute extraction.
 """
 
-from typing import Any, Dict, List, Optional, Tuple
-from uuid import UUID
+from typing import Any
 
 import networkx as nx
 
@@ -48,9 +47,9 @@ def entities_to_networkx(
 
         if include_all_attributes:
             entity_dict = entity.dict()
-            for key, value in entity_dict.items():
-                if key not in [node_id_field, "class_code"]:
-                    node_data[key] = value
+            node_data.update(
+                {k: v for k, v in entity_dict.items() if k not in [node_id_field, "class_code"]}
+            )
 
         node_data_list.append(node_data)
 
@@ -302,7 +301,8 @@ def merge_graphs(
         elif merge_strategy == "intersection":
             merged_graph = nx.intersection(merged_graph, graph)
         else:
-            raise ValueError(f"Unknown merge strategy: {merge_strategy}")
+            msg = f"Unknown merge strategy: {merge_strategy}"
+            raise ValueError(msg)
 
     return merged_graph
 
@@ -324,7 +324,7 @@ def export_graph_to_dataframe(
     Returns:
         Tuple of (nodes_df, edges_df) DataFrames
     """
-    import pandas as pd
+    import pandas as pd  # noqa: PLC0415
 
     # Export nodes
     nodes_data = []

@@ -107,7 +107,13 @@ def _render_card(
     if entity.notes:
         body_lines.append(f"- **Notes**: {entity.notes}")
 
-    return header + "\n\n" + "\n".join(body_lines)
+    result = header + "\n\n" + "\n".join(body_lines)
+
+    # Add source attribution as italic blockquote
+    if entity.source_text:
+        result += f"\n\n> *{entity.source_text}*"
+
+    return result
 
 
 def _render_detailed(
@@ -222,6 +228,9 @@ def _render_narrative(
     if entity.notes:
         narrative += f"\n\n{entity.notes}"
 
+    if entity.source_text:
+        narrative += f"\n\n> *{entity.source_text}*"
+
     return narrative
 
 
@@ -260,6 +269,7 @@ def _get_friendly_property_name(
         "label": "Label",
         "type": "Type",
         "notes": "Notes",
+        "source_text": "Source",
         "timespan": "Time-Span",
         "took_place_at": "Location",
         "current_location": "Location",

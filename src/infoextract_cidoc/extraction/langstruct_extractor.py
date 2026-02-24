@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import asyncio
 import os
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from infoextract_cidoc.extraction.lite_schema import LiteExtractionResult
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 _DEFAULT_MODEL = "gemini/gemini-3-flash-preview"
 
@@ -63,7 +65,9 @@ class LangStructExtractor:
         """Lazily initialize the LangStruct extractor."""
         if self._extractor is None:
             try:
-                from langstruct import LangStruct  # type: ignore[import]
+                from langstruct import (  # noqa: PLC0415
+                    LangStruct,  # type: ignore[import]
+                )
             except ImportError as e:
                 msg = (
                     "langstruct is required for LangStructExtractor. "
@@ -75,7 +79,7 @@ class LangStructExtractor:
                 schema=LiteExtractionResult,
                 model=self._model,
                 system_prompt=SYSTEM_PROMPT,
-                use_sources=False,
+                use_sources=True,
                 max_tokens=65536,
             )
         return self._extractor

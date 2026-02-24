@@ -5,8 +5,6 @@ This module provides functions for customizing the appearance
 of network plots and creating consistent styling.
 """
 
-from typing import Any, Dict, List, Optional, Tuple
-
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -375,11 +373,7 @@ def get_color_palette(
     # Repeat or truncate palette to get desired number of colors
     if len(palette) >= n_colors:
         return palette[:n_colors]
-    # Repeat the palette to get enough colors
-    repeated_palette = []
-    for i in range(n_colors):
-        repeated_palette.append(palette[i % len(palette)])
-    return repeated_palette
+    return [palette[i % len(palette)] for i in range(n_colors)]
 
 
 def apply_style(

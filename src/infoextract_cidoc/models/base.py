@@ -27,6 +27,10 @@ class CRMEntity(BaseModel):
     class_code: str = Field(..., description="CIDOC CRM E-class code")
     label: str | None = Field(None, description="Human-readable label")
     notes: str | None = Field(None, description="Additional textual notes")
+    source_text: str | None = Field(
+        None,
+        description="Source text snippet from which this entity was extracted",
+    )
     type: list[str] = Field(default_factory=list, description="Type assignments")
 
     @validator("id", pre=True)
@@ -72,6 +76,10 @@ class CRMRelation(BaseModel):
     tgt: UUID = Field(..., description="Target entity ID")
     props: dict[str, Any] | None = Field(
         None, description="Additional relationship properties"
+    )
+    source_text: str | None = Field(
+        None,
+        description="Source text snippet from which this relationship was extracted",
     )
 
     @validator("src", "tgt", pre=True)

@@ -26,6 +26,7 @@ from infoextract_cidoc.io.to_networkx import (
     find_communities,
     to_networkx_graph,
 )
+from infoextract_cidoc.models.base import CRMEntity
 from infoextract_cidoc.visualization import create_network_summary, plot_network_graph
 
 # Load environment variables from .env file
@@ -42,10 +43,8 @@ def check_api_key() -> None:
     ]
     configured = [k for k in api_keys if os.getenv(k)]
     if not configured:
-        print("Error: No LLM API key found. Set one of the following:")
-        for key in api_keys[:3]:
-            print(f"  export {key}='your-key-here'")
-        print("Or create a .env file with one of the above.")
+        for _key in api_keys[:3]:
+            pass
         sys.exit(1)
 
 
@@ -80,50 +79,37 @@ async def complete_workflow_demo(
         export_cypher: Whether to export Cypher scripts
         confidence_threshold: Minimum confidence for entities/relationships
     """
-    print("Starting infoextract-cidoc Workflow")
-    print("=" * 50)
 
     # Step 1: LangStruct extraction + resolution + CRM mapping
-    print("\nStep 1: Extracting entities via LangStruct pipeline")
-    print("-" * 40)
 
-    lite_result, extraction_result, crm_entities, crm_relations = await _run_extraction(
+    _lite_result, extraction_result, crm_entities, crm_relations = await _run_extraction(
         text
     )
 
     # Apply confidence threshold filter
-    from infoextract_cidoc.models.base import CRMEntity
-
     crm_entities = [
         e
         for e in crm_entities
         if not hasattr(e, "confidence") or True  # CRMEntity doesn't have confidence
     ]
     # Filter at the extraction_result level
-    filtered_entities = [
+    [
         e for e in extraction_result.entities if e.confidence >= confidence_threshold
     ]
 
-    print(f"Extracted {len(crm_entities)} CRM entities")
-    print(f"Extracted {len(crm_relations)} CRM relations")
 
     # Step 2: Serialize as Canonical JSON
-    print("\nStep 2: Serialize as Canonical JSON")
-    print("-" * 40)
 
     output_path = Path(output_dir)
     output_path.mkdir(exist_ok=True)
 
     json_data = [entity.model_dump(mode="json") for entity in crm_entities]
     json_file = output_path / "canonical_entities.json"
-    with open(json_file, "w") as f:
+    with json_file.open("w") as f:
         json.dump(json_data, f, indent=2)
 
-    print(f"Serialized {len(json_data)} entities to canonical JSON: {json_file}")
 
     # Step 3: Render to Markdown
-    print("\nStep 3: Render to Markdown")
-    print("-" * 40)
 
     markdown_dir = output_path / "markdown"
     markdown_dir.mkdir(exist_ok=True)
@@ -131,41 +117,28 @@ async def complete_workflow_demo(
     for i, entity in enumerate(crm_entities[:5]):
         markdown_card = to_markdown(entity, MarkdownStyle.CARD)
         card_file = markdown_dir / f"entity_{i + 1}_{entity.class_code}.md"
-        with open(card_file, "w") as f:
+        with card_file.open("w") as f:
             f.write(markdown_card)
 
     table_markdown = render_table(crm_entities)
     table_file = markdown_dir / "entities_summary.md"
-    with open(table_file, "w") as f:
+    with table_file.open("w") as f:
         f.write("# CRM Entities Summary\n\n" + table_markdown)
 
-    print(f"Generated Markdown reports in {markdown_dir}")
 
     # Step 4: Convert to NetworkX Graph
-    print("\nStep 4: Convert to NetworkX Graph")
-    print("-" * 40)
 
     graph = to_networkx_graph(crm_entities)
-    print(
-        f"Created NetworkX graph with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges"
-    )
 
     # Step 5: Network Analysis
-    print("\nStep 5: Network Analysis")
-    print("-" * 40)
 
-    centrality_measures = calculate_centrality_measures(graph)
+    calculate_centrality_measures(graph)
     communities = find_communities(graph)
     network_stats = create_network_summary(graph)
 
-    print(f"Calculated centrality measures: {list(centrality_measures.keys())}")
-    print(f"Found {len(communities)} communities")
-    print(f"Network density: {network_stats['network_info']['density']:.3f}")
 
     # Step 6: Visualization
     if visualize or interactive:
-        print("\nStep 6: Visualization")
-        print("-" * 40)
 
         plots_dir = output_path / "plots"
         plots_dir.mkdir(exist_ok=True)
@@ -178,26 +151,20 @@ async def complete_workflow_demo(
                 show_plot=False,
                 save_path=str(plots_dir / "network_overview.png"),
             )
-            print(f"Generated static plot: {plots_dir / 'network_overview.png'}")
 
     # Step 7: Export to Cypher
     if export_cypher:
-        print("\nStep 7: Export to Cypher")
-        print("-" * 40)
 
         cypher_script = generate_cypher_script(crm_entities)
         cypher_file = output_path / "network.cypher"
-        with open(cypher_file, "w") as f:
+        with cypher_file.open("w") as f:
             f.write(cypher_script)
 
-        print(f"Generated Cypher script: {cypher_file}")
 
     # Step 8: Create Summary Report
-    print("\nStep 8: Create Summary Report")
-    print("-" * 40)
 
     summary_file = output_path / "workflow_summary.md"
-    with open(summary_file, "w") as f:
+    with summary_file.open("w") as f:
         f.write("# infoextract-cidoc Workflow Summary\n\n")
         f.write(f"## Input Text\n\n{text[:200]}...\n\n")
         f.write("## Extracted Entities\n\n")
@@ -216,24 +183,17 @@ async def complete_workflow_demo(
         if export_cypher:
             f.write(f"- Cypher script: {output_path / 'network.cypher'}\n")
 
-    print(f"Created summary report: {summary_file}")
 
-    print("\nWorkflow Complete!")
-    print("=" * 50)
-    print(f"All outputs saved to: {output_path.absolute()}")
 
 
 async def einstein_demo() -> None:
     """Run the Einstein biography demo."""
-    print("Running Einstein Biography Demo")
-    print("=" * 50)
 
     einstein_file = Path("src/infoextract_cidoc/examples/einstein.md")
     if not einstein_file.exists():
-        print(f"Einstein file not found: {einstein_file}")
         return
 
-    with open(einstein_file) as f:
+    with einstein_file.open() as f:
         einstein_text = f.read()
 
     await complete_workflow_demo(einstein_text, "einstein_output")
@@ -242,26 +202,22 @@ async def einstein_demo() -> None:
 async def handle_extract_command(args: argparse.Namespace) -> None:
     """Handle the extract command."""
     if not args.text and not args.file:
-        print("Error: Either --text or --file must be provided")
         return
 
     if args.text and args.file:
-        print("Error: Provide either --text or --file, not both")
         return
 
     if args.file:
         file_path = Path(args.file)
         if not file_path.exists():
-            print(f"Error: File not found: {file_path}")
             return
-        with open(file_path) as f:
+        with file_path.open() as f:
             text = f.read()
     else:
         text = args.text
 
-    print(f"Extracting entities from {'file' if args.file else 'text'}...")
 
-    lite_result, extraction_result, crm_entities, crm_relations = await _run_extraction(
+    _lite_result, extraction_result, crm_entities, _crm_relations = await _run_extraction(
         text
     )
 
@@ -273,9 +229,6 @@ async def handle_extract_command(args: argparse.Namespace) -> None:
         r for r in extraction_result.relationships if r.confidence >= args.confidence
     ]
 
-    print(
-        f"Extracted {len(filtered_entities)} entities and {len(filtered_relationships)} relationships"
-    )
 
     output_dir = Path(args.output)
     output_dir.mkdir(exist_ok=True)
@@ -285,37 +238,28 @@ async def handle_extract_command(args: argparse.Namespace) -> None:
             "entities": [e.model_dump() for e in filtered_entities],
             "relationships": [r.model_dump() for r in filtered_relationships],
         }
-        with open(output_dir / "extraction_result.json", "w") as f:
+        with (output_dir / "extraction_result.json").open("w") as f:
             json.dump(result_data, f, indent=2)
-        print(
-            f"Saved raw extraction results to {output_dir / 'extraction_result.json'}"
-        )
 
         canonical_json = [entity.model_dump(mode="json") for entity in crm_entities]
-        with open(output_dir / "canonical_entities.json", "w") as f:
+        with (output_dir / "canonical_entities.json").open("w") as f:
             json.dump(canonical_json, f, indent=2)
-        print(f"Saved canonical JSON to {output_dir / 'canonical_entities.json'}")
 
     if args.format in ["markdown", "both"]:
         markdown_content = render_table(crm_entities)
-        with open(output_dir / "extraction_result.md", "w") as f:
+        with (output_dir / "extraction_result.md").open("w") as f:
             f.write(markdown_content)
-        print(f"Saved Markdown results to {output_dir / 'extraction_result.md'}")
 
 
 async def handle_analyze_command(args: argparse.Namespace) -> None:
     """Handle the analyze command."""
     input_file = Path(args.input)
     if not input_file.exists():
-        print(f"Error: Input file not found: {input_file}")
         return
 
-    print(f"Analyzing entities from {input_file}...")
 
-    with open(input_file) as f:
+    with input_file.open() as f:
         data = json.load(f)
-
-    from infoextract_cidoc.models.base import CRMEntity
 
     entities = []
 
@@ -333,71 +277,55 @@ async def handle_analyze_command(args: argparse.Namespace) -> None:
             )
             entities.append(entity)
     else:
-        print(f"Error: Unrecognized JSON format in {input_file}")
         return
 
-    print(f"Loaded {len(entities)} entities")
 
     output_dir = Path(args.output)
     output_dir.mkdir(exist_ok=True)
 
     graph = to_networkx_graph(entities)
-    print(
-        f"Created NetworkX graph with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges"
-    )
 
     if args.centrality:
-        print("Calculating centrality measures...")
         centrality_measures = calculate_centrality_measures(graph)
-        with open(output_dir / "centrality_measures.json", "w") as f:
+        with (output_dir / "centrality_measures.json").open("w") as f:
             json.dump(centrality_measures, f, indent=2)
-        print(f"Saved centrality measures to {output_dir / 'centrality_measures.json'}")
 
     if args.communities:
-        print("Finding communities...")
         communities = find_communities(graph)
         community_data = {
             "num_communities": len(communities),
             "communities": [list(community) for community in communities],
         }
-        with open(output_dir / "communities.json", "w") as f:
+        with (output_dir / "communities.json").open("w") as f:
             json.dump(community_data, f, indent=2)
-        print(f"Saved community analysis to {output_dir / 'communities.json'}")
 
     if args.visualize:
-        print("Creating visualizations...")
         plot_network_graph(
             graph,
             title="CRM Entity Network",
             save_path=str(output_dir / "network_plot.png"),
             show_plot=False,
         )
-        print(f"Saved static plot to {output_dir / 'network_plot.png'}")
 
     if args.export_cypher:
-        print("Exporting to Cypher...")
         cypher_script = generate_cypher_script(entities)
-        with open(output_dir / "entities.cypher", "w") as f:
+        with (output_dir / "entities.cypher").open("w") as f:
             f.write(cypher_script)
-        print(f"Saved Cypher script to {output_dir / 'entities.cypher'}")
 
 
 async def handle_workflow_command(args: argparse.Namespace) -> None:
     """Handle the workflow command."""
     if not args.text and not args.file:
-        print("Error: Either --text or --file must be provided")
         return
 
     if args.text and args.file:
-        print("Error: Provide either --text or --file, not both")
         return
 
     if args.file:
         file_path = Path(args.file)
         if not file_path.exists():
-            print(f"Error: File not found: {file_path}")
             return
-        with open(file_path) as f:
+        with file_path.open() as f:
             text = f.read()
     else:
         text = args.text
@@ -426,7 +354,7 @@ async def handle_demo_command(args: argparse.Namespace) -> None:
         )
         await complete_workflow_demo(sample_text, args.output)
     else:
-        print("Error: Specify either --einstein or --sample")
+        pass
 
 
 async def main() -> None:

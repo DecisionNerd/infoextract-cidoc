@@ -5,13 +5,10 @@ This module provides various plotting functions for visualizing
 NetworkX graphs containing CRM entities and relationships.
 """
 
-from typing import Any, Dict, List, Optional, Tuple
-
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-import plotly.express as px
 import plotly.graph_objects as go
 
 
@@ -350,7 +347,7 @@ def create_interactive_plot(
     edge_trace = go.Scatter(
         x=edge_x,
         y=edge_y,
-        line=dict(width=edge_width_multiplier, color="#888"),
+        line={"width": edge_width_multiplier, "color": "#888"},
         hoverinfo="none",
         mode="lines",
     )
@@ -397,38 +394,37 @@ def create_interactive_plot(
         hovertext=node_hovertext,
         text=node_text,
         textposition="middle center",
-        marker=dict(
-            size=node_sizes, color=node_colors, line=dict(width=2, color="white")
-        ),
+        marker={
+            "size": node_sizes, "color": node_colors, "line": {"width": 2, "color": "white"}
+        },
     )
 
     # Create figure
-    fig = go.Figure(
+    return go.Figure(
         data=[edge_trace, node_trace],
         layout=go.Layout(
-            title=dict(text=title, font=dict(size=16)),
+            title={"text": title, "font": {"size": 16}},
             showlegend=False,
             hovermode="closest",
-            margin=dict(b=20, l=5, r=5, t=40),
+            margin={"b": 20, "l": 5, "r": 5, "t": 40},
             annotations=[
-                dict(
-                    text="Interactive CRM Network Visualization",
-                    showarrow=False,
-                    xref="paper",
-                    yref="paper",
-                    x=0.005,
-                    y=-0.002,
-                    xanchor="left",
-                    yanchor="bottom",
-                    font=dict(color="#888", size=12),
-                )
+                {
+                    "text": "Interactive CRM Network Visualization",
+                    "showarrow": False,
+                    "xref": "paper",
+                    "yref": "paper",
+                    "x": 0.005,
+                    "y": -0.002,
+                    "xanchor": "left",
+                    "yanchor": "bottom",
+                    "font": {"color": "#888", "size": 12},
+                }
             ],
-            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+            xaxis={"showgrid": False, "zeroline": False, "showticklabels": False},
+            yaxis={"showgrid": False, "zeroline": False, "showticklabels": False},
         ),
     )
 
-    return fig
 
 
 # Helper functions

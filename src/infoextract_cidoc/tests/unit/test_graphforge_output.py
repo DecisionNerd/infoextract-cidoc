@@ -45,8 +45,6 @@ class TestGraphForgeOutput:
         self, sample_entities, sample_relations
     ) -> None:
         with patch.dict("sys.modules", {"graphforge": None}):
-            from importlib import reload
-
             import infoextract_cidoc.io.to_graphforge as module
 
             # Force re-evaluation of import
@@ -61,8 +59,6 @@ class TestGraphForgeOutput:
         mock_gf.Graph.return_value = mock_graph
 
         with patch.dict("sys.modules", {"graphforge": mock_gf}):
-            from importlib import reload
-
             import infoextract_cidoc.io.to_graphforge as gf_module
 
             # Patch _require_graphforge to return our mock

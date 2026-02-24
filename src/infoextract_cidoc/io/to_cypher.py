@@ -27,6 +27,7 @@ def emit_nodes(entities: Iterable[CRMEntity]) -> dict[str, list[dict[str, Any]]]
             "class_code": entity.class_code,
             "label": entity.label,
             "notes": entity.notes,
+            "source_text": entity.source_text,
             "type": entity.type,
         }
         # Remove None values
@@ -165,6 +166,9 @@ def _generate_node_script(nodes: list[dict[str, Any]], batch_size: int) -> str:
         script_parts.append("SET x.label = coalesce(n.label, x.label)")
         script_parts.append("SET x.class_code = n.class_code")
         script_parts.append("SET x.notes = coalesce(n.notes, x.notes)")
+        script_parts.append(
+            "SET x.source_text = coalesce(n.source_text, x.source_text)"
+        )
         script_parts.append("SET x.type = coalesce(n.type, x.type);")
         script_parts.append("")
 

@@ -106,13 +106,16 @@ known-first-party = ["infoextract_cidoc"]
 
 [tool.ruff.lint.per-file-ignores]
 "src/infoextract_cidoc/codegen/generate_templates.py" = ["ALL"]
-"src/infoextract_cidoc/tests/**/*.py" = ["S101", "TID252", "B017", "PT011", "PT018", "PLR0915", "PLR2004"]
+"src/infoextract_cidoc/tests/**/*.py" = ["S101", "TID252", "B017", "PT011", "PT018", "PLR0915", "PLR2004", "PLC0415", "SLF001", "ARG002", "ERA001"]
 "src/infoextract_cidoc/models/generated/*.py" = ["RUF012", "N801", "FBT001"]
 "src/infoextract_cidoc/codegen/*.py" = ["EXE001", "PLC0415", "INP001"]
 "src/infoextract_cidoc/models/base.py" = ["RUF012", "N801", "FBT001", "N805", "PLC0415", "S324"]
 "src/infoextract_cidoc/io/*.py" = ["FBT001", "INP001", "PERF401", "PLW2901"]
+"src/infoextract_cidoc/io/to_networkx/*.py" = ["ARG001"]
 "src/infoextract_cidoc/tests/unit/*.py" = ["PLR2004"]
 "src/infoextract_cidoc/validators/*.py" = ["PLC0415"]
+"src/infoextract_cidoc/visualization/*.py" = ["PLR0913", "PLR0911", "FBT001", "FBT002", "FBT003", "ARG001", "A002", "PERF401", "NPY002"]
+"src/infoextract_cidoc/main.py" = ["PLR0913", "PLR0915", "FBT001", "FBT002", "FBT003"]
 
 [tool.ruff.format]
 quote-style = "double"

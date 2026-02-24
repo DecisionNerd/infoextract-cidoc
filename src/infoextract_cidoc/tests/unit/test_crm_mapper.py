@@ -1,7 +1,5 @@
 """Unit tests for CRM mapping layer."""
 
-import uuid
-
 import pytest
 
 from infoextract_cidoc.extraction.crm_mapper import map_to_crm_entities
@@ -36,12 +34,12 @@ def sample_extraction_result():
 @pytest.mark.unit
 class TestMapToCrmEntities:
     def test_returns_crm_entities(self, sample_extraction_result) -> None:
-        entities, relations = map_to_crm_entities(sample_extraction_result)
+        entities, _relations = map_to_crm_entities(sample_extraction_result)
         assert len(entities) == 2
         assert all(isinstance(e, CRMEntity) for e in entities)
 
     def test_returns_crm_relations(self, sample_extraction_result) -> None:
-        entities, relations = map_to_crm_entities(sample_extraction_result)
+        _entities, relations = map_to_crm_entities(sample_extraction_result)
         assert len(relations) == 1
         assert all(isinstance(r, CRMRelation) for r in relations)
 

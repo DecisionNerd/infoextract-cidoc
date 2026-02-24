@@ -3,7 +3,6 @@
 import pytest
 
 from infoextract_cidoc.extraction import (
-    LangStructExtractor,
     map_to_crm_entities,
     resolve_extraction,
 )
@@ -170,3 +169,71 @@ class TestPipelineIntegration:
         assert hasattr(extraction, "map_to_crm_entities")
         assert hasattr(extraction, "LiteExtractionResult")
         assert hasattr(extraction, "ExtractionResult")
+
+    def test_source_text_propagates_to_crm(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
+        """source_snippet on LiteEntity/LiteRelationship must survive to CRM layer."""
+        extraction_result = resolve_extraction(einstein_lite_result)
+
+        # Verify source_text on ExtractedEntity
+        person = next(e for e in extraction_result.entities if e.class_code == "E21")
+        assert person.source_text == "Albert Einstein was born on March 14, 1879"
+
+        place = next(e for e in extraction_result.entities if e.class_code == "E53")
+        assert place.source_text == "born ... in Ulm"
+
+        # Verify source_text on CRMEntity
+        entities, _relations = map_to_crm_entities(extraction_result)
+        crm_person = next(e for e in entities if e.class_code == "E21")
+        assert crm_person.source_text == "Albert Einstein was born on March 14, 1879"
+
+        crm_place = next(e for e in entities if e.class_code == "E53")
+        assert crm_place.source_text == "born ... in Ulm"
+
+        # Entities without source_snippet should have None
+        crm_event = next(e for e in entities if e.class_code == "E5")
+        assert crm_event.source_text is None
+
+    def test_source_text_in_markdown_card(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
+        """source_text should appear as a blockquote in card-style Markdown."""
+        extraction_result = resolve_extraction(einstein_lite_result)
+        entities, _ = map_to_crm_entities(extraction_result)
+        crm_person = next(e for e in entities if e.class_code == "E21")
+        card = to_markdown(crm_person, MarkdownStyle.CARD)
+        assert "Albert Einstein was born on March 14, 1879" in card
+        assert card.count(">") >= 1  # blockquote present
+
+    def test_source_text_in_cypher_script(
+        self, einstein_lite_result: LiteExtractionResult
+    ) -> None:
+        """source_text should be emitted as a node property in Cypher output."""
+        extraction_result = resolve_extraction(einstein_lite_result)
+        entities, _ = map_to_crm_entities(extraction_result)
+        cypher = generate_cypher_script(entities)
+        assert "source_text" in cypher
+
+    def test_relationship_source_text_propagates(self) -> None:
+        """source_snippet on LiteRelationship must survive to CRMRelation."""
+        lite_result = LiteExtractionResult(
+            entities=[
+                LiteEntity(ref_id="person_1", entity_type="Person", label="Einstein"),
+                LiteEntity(ref_id="place_1", entity_type="Place", label="Ulm"),
+            ],
+            relationships=[
+                LiteRelationship(
+                    source_ref="person_1",
+                    target_ref="place_1",
+                    property_code="P98",
+                    property_label="was born",
+                    source_snippet="Einstein was born in Ulm",
+                ),
+            ],
+        )
+        extraction_result = resolve_extraction(lite_result)
+        assert extraction_result.relationships[0].source_text == "Einstein was born in Ulm"
+
+        _, crm_relations = map_to_crm_entities(extraction_result)
+        assert crm_relations[0].source_text == "Einstein was born in Ulm"

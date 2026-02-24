@@ -5,16 +5,11 @@ This module provides utilities to convert CRM entities and relationships
 into NetworkX graphs for social network analysis.
 """
 
-from typing import Any, Dict, List, Optional, Tuple
-from uuid import UUID
+from typing import Any
 
 import networkx as nx
 
-from infoextract_cidoc.extraction.models import (
-    ExtractedEntity,
-    ExtractedRelationship,
-    ExtractionResult,
-)
+from infoextract_cidoc.extraction.models import ExtractionResult
 from infoextract_cidoc.models.base import CRMEntity, CRMRelation
 
 
@@ -41,10 +36,7 @@ def to_networkx_graph(
     """
     # Create appropriate graph type
     if directed:
-        if multigraph:
-            graph = nx.MultiDiGraph()
-        else:
-            graph = nx.DiGraph()
+        graph = nx.MultiDiGraph() if multigraph else nx.DiGraph()
     elif multigraph:
         graph = nx.MultiGraph()
     else:
@@ -63,9 +55,9 @@ def to_networkx_graph(
                 }
             )
             # Add any additional attributes
-            for key, value in entity.dict().items():
-                if key not in ["id", "class_code", "label", "notes", "type"]:
-                    node_data[key] = value
+            node_data.update(
+                {k: v for k, v in entity.dict().items() if k not in ["id", "class_code", "label", "notes", "type"]}
+            )
 
         graph.add_node(str(entity.id), **node_data)
 

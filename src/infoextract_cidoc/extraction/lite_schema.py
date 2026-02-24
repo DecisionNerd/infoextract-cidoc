@@ -61,6 +61,10 @@ class LiteRelationship(BaseModel):
         le=1.0,
         description="Confidence score for this relationship (0.0 to 1.0).",
     )
+    source_snippet: str | None = Field(
+        default=None,
+        description="The relevant text snippet from the source that supports this relationship.",
+    )
 
 
 class LiteExtractionResult(BaseModel):
