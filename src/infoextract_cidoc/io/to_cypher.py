@@ -181,7 +181,7 @@ def _generate_relationship_script(rels: list[dict[str, Any]], batch_size: int) -
         return ""
 
     # Group relationships by type
-    rels_by_type = {}
+    rels_by_type: dict[str, list[dict[str, Any]]] = {}
     for rel in rels:
         rel_type = rel["type"]
         if rel_type not in rels_by_type:
@@ -229,7 +229,7 @@ def generate_cypher_parameters(
 
     # Add relationship parameters
     if rel_data["rels"]:
-        rels_by_type = {}
+        rels_by_type: dict[str, list[dict[str, Any]]] = {}
         for rel in rel_data["rels"]:
             rel_type = rel["type"]
             if rel_type not in rels_by_type:

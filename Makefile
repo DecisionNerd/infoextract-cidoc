@@ -51,6 +51,8 @@ docs-build:
 codegen:
 	uv run python src/infoextract_cidoc/codegen/generate_models.py
 	uv run ruff format src/infoextract_cidoc/models/generated/e_classes.py
+	uv run python src/infoextract_cidoc/codegen/generate_properties.py
+	uv run ruff format src/infoextract_cidoc/properties.py
 
 # --- Cleanup ---
 

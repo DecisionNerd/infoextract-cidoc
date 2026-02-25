@@ -5,6 +5,8 @@ This module provides various plotting functions for visualizing
 NetworkX graphs containing CRM entities and relationships.
 """
 
+from typing import Any
+
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -209,7 +211,7 @@ def plot_community_network(
     pos = nx.spring_layout(graph)
 
     # Color nodes by community
-    colors = plt.cm.Set3(np.linspace(0, 1, len(communities)))
+    colors = plt.cm.Set3(np.linspace(0, 1, len(communities)))  # type: ignore[attr-defined]
 
     for i, community in enumerate(communities):
         community_subgraph = graph.subgraph(community)
@@ -395,7 +397,9 @@ def create_interactive_plot(
         text=node_text,
         textposition="middle center",
         marker={
-            "size": node_sizes, "color": node_colors, "line": {"width": 2, "color": "white"}
+            "size": node_sizes,
+            "color": node_colors,
+            "line": {"width": 2, "color": "white"},
         },
     )
 
@@ -426,23 +430,20 @@ def create_interactive_plot(
     )
 
 
-
 # Helper functions
 
 
-def _get_layout_positions(
-    graph: nx.Graph, layout: str
-) -> dict[str, tuple[float, float]]:
+def _get_layout_positions(graph: nx.Graph, layout: str) -> dict[str, Any]:
     """Get node positions using specified layout algorithm."""
     if layout == "spring":
-        return nx.spring_layout(graph)
+        return nx.spring_layout(graph)  # type: ignore[no-any-return]
     if layout == "circular":
-        return nx.circular_layout(graph)
+        return nx.circular_layout(graph)  # type: ignore[no-any-return]
     if layout == "hierarchical":
-        return nx.nx_agraph.graphviz_layout(graph, prog="dot")
+        return nx.nx_agraph.graphviz_layout(graph, prog="dot")  # type: ignore[no-any-return]
     if layout == "random":
-        return nx.random_layout(graph)
-    return nx.spring_layout(graph)
+        return nx.random_layout(graph)  # type: ignore[no-any-return]
+    return nx.spring_layout(graph)  # type: ignore[no-any-return]
 
 
 def _get_node_colors(graph: nx.Graph, color_scheme: str) -> list[str]:
@@ -505,13 +506,11 @@ def _create_legend(ax: plt.Axes, graph: nx.Graph, color_scheme: str) -> None:
             ax.legend(handles=legend_elements, loc="upper right")
 
 
-def _get_temporal_layout(
-    graph: nx.Graph, time_attribute: str
-) -> dict[str, tuple[float, float]]:
+def _get_temporal_layout(graph: nx.Graph, time_attribute: str) -> dict[str, Any]:
     """Get layout positions based on temporal information."""
     # This is a simplified implementation
     # In practice, you would parse temporal data and position nodes accordingly
-    return nx.spring_layout(graph)
+    return nx.spring_layout(graph)  # type: ignore[no-any-return]
 
 
 def _add_timeline_axis(ax: plt.Axes, graph: nx.Graph, time_attribute: str) -> None:

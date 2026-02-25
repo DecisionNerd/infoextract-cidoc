@@ -51,8 +51,8 @@ def enforce_quantifier(
         logger.warning("Unknown property code: %s", p_code)
         return
 
-    quantifier = P[p_code]["quantifier"]
-    domain = P[p_code]["domain"]
+    quantifier = str(P[p_code]["quantifier"])
+    domain = str(P[p_code]["domain"])
 
     # Check if entity class matches domain
     if entity.class_code != domain:
@@ -226,7 +226,7 @@ def validate_batch_quantifiers(
     for entity in entities:
         messages = validate_entity_quantifiers(entity, severity)
         if messages:
-            results[entity.id] = messages
+            results[str(entity.id)] = messages
 
     return results
 

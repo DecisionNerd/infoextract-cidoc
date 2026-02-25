@@ -57,8 +57,14 @@ class CRMEntity(BaseModel):
                 return UUID(v)
             except ValueError:
                 # If string is not a valid UUID, create a deterministic UUID from the string
-                namespace = UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")  # DNS namespace
-                return UUID(hashlib.md5(f"{namespace}{v}".encode()).hexdigest())
+                namespace = UUID(
+                    "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+                )  # DNS namespace
+                return UUID(
+                    hashlib.md5(
+                        f"{namespace}{v}".encode(), usedforsecurity=False
+                    ).hexdigest()
+                )
         return v
 
 

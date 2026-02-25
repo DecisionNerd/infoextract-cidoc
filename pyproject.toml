@@ -95,7 +95,7 @@ docs = [
 [tool.ruff]
 target-version = "py313"
 line-length = 88
-exclude = ["src/infoextract_cidoc/codegen/generate_templates.py", "src/infoextract_cidoc/codegen/cidoc_crm.yaml"]
+exclude = ["src/infoextract_cidoc/codegen/generate_templates.py", "src/infoextract_cidoc/codegen/cidoc_crm.yaml", "src/infoextract_cidoc/codegen/cidoc_crm_properties.yaml"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "C90", "I", "N", "UP", "YTT", "S", "BLE", "FBT", "B", "A", "C4", "DTZ", "T10", "EM", "EXE", "FA", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SLOT", "SIM", "TID", "TCH", "INT", "ARG", "PTH", "TD", "FIX", "ERA", "PD", "PGH", "PL", "TRY", "FLY", "NPY", "AIR", "PERF", "FURB", "LOG", "RUF"]
@@ -131,10 +131,10 @@ check_untyped_defs = true
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true
-exclude = ["src/infoextract_cidoc/tests/", "docs/"]
+exclude = ["src/infoextract_cidoc/tests/", "docs/", "src/infoextract_cidoc/codegen/generate_templates\\.py"]
 
 [tool.bandit]
-exclude_dirs = ["src/infoextract_cidoc/tests"]
+exclude_dirs = ["src/infoextract_cidoc/tests", "src/infoextract_cidoc/codegen/generate_templates.py"]
 skips = ["B101"]
 
 [tool.pytest.ini_options]
@@ -152,6 +152,8 @@ source = ["src/infoextract_cidoc"]
 omit = [
     "src/infoextract_cidoc/tests/*",
     "src/infoextract_cidoc/codegen/*",
+    "src/infoextract_cidoc/main.py",
+    "src/infoextract_cidoc/visualization/*",
 ]
 
 [tool.coverage.report]

@@ -5,6 +5,8 @@ This module provides functions for customizing the appearance
 of network plots and creating consistent styling.
 """
 
+from typing import Any
+
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -55,7 +57,7 @@ def get_node_colors(
             degree = degrees.get(node, 0)
             # Use a colormap to map degree to color
             normalized_degree = degree / max_degree
-            color = plt.cm.viridis(normalized_degree)
+            color = plt.cm.viridis(normalized_degree)  # type: ignore[attr-defined]
             colors.append(color)
 
     elif color_scheme == "centrality":
@@ -181,7 +183,7 @@ def get_layout_positions(
     *,
     seed: int | None = None,
     iterations: int = 50,
-) -> dict[str, tuple[float, float]]:
+) -> dict[str, Any]:
     """
     Get node positions using specified layout algorithm.
 
@@ -198,23 +200,23 @@ def get_layout_positions(
         np.random.seed(seed)
 
     if layout == "spring":
-        return nx.spring_layout(graph, iterations=iterations, seed=seed)
+        return nx.spring_layout(graph, iterations=iterations, seed=seed)  # type: ignore[no-any-return]
     if layout == "circular":
-        return nx.circular_layout(graph)
+        return nx.circular_layout(graph)  # type: ignore[no-any-return]
     if layout == "hierarchical":
         try:
-            return nx.nx_agraph.graphviz_layout(graph, prog="dot")
+            return nx.nx_agraph.graphviz_layout(graph, prog="dot")  # type: ignore[no-any-return]
         except ImportError:
             # Fallback to spring layout if graphviz is not available
-            return nx.spring_layout(graph, iterations=iterations, seed=seed)
+            return nx.spring_layout(graph, iterations=iterations, seed=seed)  # type: ignore[no-any-return]
     elif layout == "random":
-        return nx.random_layout(graph, seed=seed)
+        return nx.random_layout(graph, seed=seed)  # type: ignore[no-any-return]
     elif layout == "kamada_kawai":
-        return nx.kamada_kawai_layout(graph)
+        return nx.kamada_kawai_layout(graph)  # type: ignore[no-any-return]
     elif layout == "spectral":
-        return nx.spectral_layout(graph)
+        return nx.spectral_layout(graph)  # type: ignore[no-any-return]
     else:
-        return nx.spring_layout(graph, iterations=iterations, seed=seed)
+        return nx.spring_layout(graph, iterations=iterations, seed=seed)  # type: ignore[no-any-return]
 
 
 def create_legend(

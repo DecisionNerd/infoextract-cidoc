@@ -114,7 +114,6 @@ def find_communities(
     ]
 
 
-
 def analyze_temporal_patterns(
     graph: nx.Graph,
     *,
@@ -130,7 +129,7 @@ def analyze_temporal_patterns(
     Returns:
         Dictionary containing temporal analysis results
     """
-    temporal_analysis = {
+    temporal_analysis: dict[str, Any] = {
         "nodes_with_temporal_info": 0,
         "temporal_coverage": 0.0,
         "time_span": None,
@@ -202,7 +201,7 @@ def get_network_statistics(graph: nx.Graph) -> dict[str, Any]:
         }
 
     # Entity type distribution
-    entity_types = defaultdict(int)
+    entity_types: defaultdict[str, int] = defaultdict(int)
     for node_id in graph.nodes():
         node_data = graph.nodes[node_id]
         class_code = node_data.get("class_code", "Unknown")
@@ -211,7 +210,7 @@ def get_network_statistics(graph: nx.Graph) -> dict[str, Any]:
     stats["entity_type_distribution"] = dict(entity_types)
 
     # Relationship type distribution
-    relationship_types = defaultdict(int)
+    relationship_types: defaultdict[str, int] = defaultdict(int)
     for edge in graph.edges(data=True):
         edge_data = edge[2]
         property_code = edge_data.get("property_code", "Unknown")

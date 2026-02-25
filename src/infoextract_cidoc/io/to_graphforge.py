@@ -81,4 +81,4 @@ def to_graphforge_cypher(
         ImportError: If graphforge is not installed.
     """
     graph = to_graphforge_graph(entities, relations)
-    return graph.to_cypher()
+    return str(graph.to_cypher())
