@@ -28,9 +28,7 @@ def _topological_order(sv: SchemaView) -> list[str]:
             in_degree[name] += 1
             children[cls.is_a].append(name)
 
-    queue: deque[str] = deque(
-        name for name, degree in in_degree.items() if degree == 0
-    )
+    queue: deque[str] = deque(name for name, degree in in_degree.items() if degree == 0)
     order: list[str] = []
     while queue:
         node = queue.popleft()
@@ -69,7 +67,7 @@ def _generate_class(sv: SchemaView, class_name: str) -> str:
     description = (cls.description or f"{code}: {class_name}").replace('"', '\\"')
 
     return (
-        f'class {class_name}({parent}):\n'
+        f"class {class_name}({parent}):\n"
         f'    """{description}"""\n'
         f"\n"
         f'    class_code: str = "{code}"\n'

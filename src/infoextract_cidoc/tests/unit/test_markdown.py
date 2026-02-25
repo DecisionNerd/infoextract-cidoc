@@ -86,9 +86,7 @@ class TestMarkdownRendering:
 
     def test_aliases_usage(self):
         """Test that aliases are used when provided."""
-        entity = E22_HumanMadeObject(
-            id=uuid4(), class_code="E22", label="Ancient Vase"
-        )
+        entity = E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Ancient Vase")
 
         aliases = {"E22": "Artifact", "current_location": "Location"}
 
@@ -100,9 +98,7 @@ class TestMarkdownRendering:
 
     def test_show_codes_option(self):
         """Test show_codes option."""
-        entity = E22_HumanMadeObject(
-            id=uuid4(), class_code="E22", label="Ancient Vase"
-        )
+        entity = E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Ancient Vase")
 
         # With codes
         markdown_with_codes = to_markdown(entity, MarkdownStyle.CARD, show_codes=True)
