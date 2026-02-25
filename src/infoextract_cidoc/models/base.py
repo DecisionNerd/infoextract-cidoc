@@ -3,10 +3,11 @@ Base CRM entity model and core wrappers.
 Provides the foundation for all CIDOC CRM E-class models.
 """
 
+import hashlib
 from typing import Any
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class CRMEntity(BaseModel):
@@ -21,6 +22,20 @@ class CRMEntity(BaseModel):
     - type: list of type assignments
     """
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "description": "Base CIDOC CRM entity",
+            "examples": [
+                {
+                    "id": "obj_001",
+                    "class_code": "E22",
+                    "label": "Ancient Vase",
+                    "type": ["E55:Vessel", "E55:Ceramic"],
+                }
+            ],
+        }
+    )
+
     id: UUID = Field(
         default_factory=uuid4, description="Unique identifier for this entity"
     )
@@ -33,35 +48,24 @@ class CRMEntity(BaseModel):
     )
     type: list[str] = Field(default_factory=list, description="Type assignments")
 
-    @validator("id", pre=True)
-    def convert_string_to_uuid(cls, v):
+    @field_validator("id", mode="before")
+    @classmethod
+    def convert_string_to_uuid(cls, v: Any) -> Any:
         """Convert string IDs to UUIDs for backward compatibility."""
         if isinstance(v, str):
             try:
                 return UUID(v)
             except ValueError:
                 # If string is not a valid UUID, create a deterministic UUID from the string
-                # This ensures the same string always produces the same UUID
-                import hashlib
-
                 namespace = UUID(
                     "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
                 )  # DNS namespace
-                return UUID(hashlib.md5(f"{namespace}{v}".encode()).hexdigest())
+                return UUID(
+                    hashlib.md5(
+                        f"{namespace}{v}".encode(), usedforsecurity=False
+                    ).hexdigest()
+                )
         return v
-
-    class Config:
-        json_schema_extra = {
-            "description": "Base CIDOC CRM entity",
-            "examples": [
-                {
-                    "id": "obj_001",
-                    "class_code": "E22",
-                    "label": "Ancient Vase",
-                    "type": ["E55:Vessel", "E55:Ceramic"],
-                }
-            ],
-        }
 
 
 class CRMRelation(BaseModel):
@@ -70,6 +74,20 @@ class CRMRelation(BaseModel):
 
     Used internally for relationship expansion and Cypher emission.
     """
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "description": "CRM relationship between entities",
+            "examples": [
+                {
+                    "src": "obj_001",
+                    "type": "P108",
+                    "tgt": "prod_001",
+                    "props": {"role": "E55:Painter"},
+                }
+            ],
+        }
+    )
 
     src: UUID = Field(..., description="Source entity ID")
     type: str = Field(..., description="P-property code (e.g., 'P108')")
@@ -82,29 +100,16 @@ class CRMRelation(BaseModel):
         description="Source text snippet from which this relationship was extracted",
     )
 
-    @validator("src", "tgt", pre=True)
-    def convert_string_to_uuid(cls, v):
+    @field_validator("src", "tgt", mode="before")
+    @classmethod
+    def convert_string_to_uuid(cls, v: Any) -> Any:
         """Convert string IDs to UUIDs for backward compatibility."""
         if isinstance(v, str):
             try:
                 return UUID(v)
             except ValueError:
-                # If string is not a valid UUID, generate a new one
                 return uuid4()
         return v
-
-    class Config:
-        json_schema_extra = {
-            "description": "CRM relationship between entities",
-            "examples": [
-                {
-                    "src": "obj_001",
-                    "type": "P108",
-                    "tgt": "prod_001",
-                    "props": {"role": "E55:Painter"},
-                }
-            ],
-        }
 
 
 class CRMValidationError(Exception):
@@ -128,11 +133,12 @@ class E5_Event(CRMEntity):
     timespan: UUID | None = Field(None, description="Time-span entity ID")
     took_place_at: UUID | None = Field(None, description="Place entity ID")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E5: Event",
             "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
         }
+    )
 
 
 class E7_Activity(E5_Event):
@@ -140,11 +146,12 @@ class E7_Activity(E5_Event):
 
     class_code: str = "E7"
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E7: Activity",
             "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
         }
+    )
 
 
 class E12_Production(E7_Activity):
@@ -152,11 +159,12 @@ class E12_Production(E7_Activity):
 
     class_code: str = "E12"
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E12: Production",
             "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
         }
+    )
 
 
 class E8_Acquisition(E7_Activity):
@@ -164,11 +172,12 @@ class E8_Acquisition(E7_Activity):
 
     class_code: str = "E8"
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E8: Acquisition",
             "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
         }
+    )
 
 
 class E22_HumanMadeObject(CRMEntity):
@@ -182,8 +191,8 @@ class E22_HumanMadeObject(CRMEntity):
     )
     produced_by: UUID | None = Field(None, description="Production event entity ID")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E22: Human-Made Object",
             "canonical_fields": [
                 "label",
@@ -193,6 +202,7 @@ class E22_HumanMadeObject(CRMEntity):
                 "produced_by",
             ],
         }
+    )
 
 
 class E21_Person(CRMEntity):
@@ -205,11 +215,12 @@ class E21_Person(CRMEntity):
         None, description="Current location entity ID"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E21: Person",
             "canonical_fields": ["label", "type", "notes", "current_location"],
         }
+    )
 
 
 class E74_Group(CRMEntity):
@@ -217,11 +228,12 @@ class E74_Group(CRMEntity):
 
     class_code: str = "E74"
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E74: Group",
             "canonical_fields": ["label", "type", "notes"],
         }
+    )
 
 
 class E53_Place(CRMEntity):
@@ -229,11 +241,12 @@ class E53_Place(CRMEntity):
 
     class_code: str = "E53"
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E53: Place",
             "canonical_fields": ["label", "type", "notes"],
         }
+    )
 
 
 class E52_TimeSpan(CRMEntity):
@@ -247,8 +260,8 @@ class E52_TimeSpan(CRMEntity):
     )
     end_of_the_end: UUID | None = Field(None, description="End time primitive ID")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E52: Time-Span",
             "canonical_fields": [
                 "label",
@@ -258,6 +271,7 @@ class E52_TimeSpan(CRMEntity):
                 "end_of_the_end",
             ],
         }
+    )
 
 
 class E42_Identifier(CRMEntity):
@@ -265,11 +279,12 @@ class E42_Identifier(CRMEntity):
 
     class_code: str = "E42"
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E42: Identifier",
             "canonical_fields": ["label", "type", "notes"],
         }
+    )
 
 
 class E35_Title(CRMEntity):
@@ -277,8 +292,9 @@ class E35_Title(CRMEntity):
 
     class_code: str = "E35"
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "description": "CIDOC CRM E35: Title",
             "canonical_fields": ["label", "type", "notes"],
         }
+    )

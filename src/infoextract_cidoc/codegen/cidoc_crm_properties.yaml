@@ -1,0 +1,3890 @@
+id: https://cidoc-crm.org/schemas/cidoc_crm_properties_v7.1.3
+name: cidoc_crm_properties
+description: CIDOC CRM v7.1.3 P-property slots — generated from codegen/specs/crm_properties.yaml
+imports:
+- linkml:types
+- ./cidoc_crm
+prefixes:
+  linkml: https://w3id.org/linkml/
+  crm: https://cidoc-crm.org/
+slots:
+  P1_is_identified_by:
+    domain: E1_CRMEntity
+    range: E41_Appellation
+    inverse: P1i_identifies
+    multivalued: true
+    aliases:
+    - IS_IDENTIFIED_BY
+    annotations:
+      crm_code: P1
+      crm_label: is identified by
+      quantifier: 0..*
+      notes: Identifies an entity with an appellation
+  P2_has_type:
+    domain: E1_CRMEntity
+    range: E55_Type
+    inverse: P2i_is_type_of
+    multivalued: true
+    aliases:
+    - HAS_TYPE
+    annotations:
+      crm_code: P2
+      crm_label: has type
+      quantifier: 0..*
+      notes: Assigns a type to an entity
+  P3_has_note:
+    domain: E1_CRMEntity
+    range: E62_String
+    inverse: P3i_is_note_of
+    multivalued: true
+    aliases:
+    - HAS_NOTE
+    annotations:
+      crm_code: P3
+      crm_label: has note
+      quantifier: 0..*
+      notes: Adds a textual note to an entity
+  P4_has_time_span:
+    domain: E2_TemporalEntity
+    range: E52_TimeSpan
+    inverse: P4i_is_time_span_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_TIME_SPAN
+    annotations:
+      crm_code: P4
+      crm_label: has time-span
+      quantifier: 0..1
+      notes: Associates a temporal entity with its time-span
+  P7_took_place_at:
+    domain: E5_Event
+    range: E53_Place
+    inverse: P7i_witnessed
+    multivalued: true
+    aliases:
+    - TOOK_PLACE_AT
+    annotations:
+      crm_code: P7
+      crm_label: took place at
+      quantifier: 0..*
+      notes: Specifies where an event took place
+  P11_had_participant:
+    domain: E5_Event
+    range: E39_Actor
+    inverse: P11i_participated_in
+    multivalued: true
+    aliases:
+    - HAD_PARTICIPANT
+    annotations:
+      crm_code: P11
+      crm_label: had participant
+      quantifier: 0..*
+      notes: Identifies participants in an event
+  P53_has_current_or_former_location:
+    domain: E18_PhysicalThing
+    range: E53_Place
+    inverse: P53i_is_current_or_former_location_of
+    multivalued: true
+    aliases:
+    - HAS_CURRENT_LOCATION
+    annotations:
+      crm_code: P53
+      crm_label: has current or former location
+      quantifier: 0..*
+      notes: Specifies the current or former location of a physical thing
+  P79_beginning_is_qualified_by:
+    domain: E52_TimeSpan
+    range: E61_TimePrimitive
+    inverse: P79i_qualifies_beginning_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - BEGIN_OF_THE_BEGIN
+    annotations:
+      crm_code: P79
+      crm_label: beginning is qualified by
+      quantifier: 0..1
+      notes: Qualifies the beginning of a time-span
+  P80_end_is_qualified_by:
+    domain: E52_TimeSpan
+    range: E61_TimePrimitive
+    inverse: P80i_qualifies_end_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - END_OF_THE_END
+    annotations:
+      crm_code: P80
+      crm_label: end is qualified by
+      quantifier: 0..1
+      notes: Qualifies the end of a time-span
+  P108_was_produced_by:
+    domain: E22_HumanMadeObject
+    range: E12_Production
+    inverse: P108i_produced
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - WAS_PRODUCED_BY
+    annotations:
+      crm_code: P108
+      crm_label: was produced by
+      quantifier: 0..1
+      notes: Links a human-made object to its production event
+  P108i_produced:
+    domain: E12_Production
+    range: E22_HumanMadeObject
+    inverse: P108_was_produced_by
+    multivalued: true
+    aliases:
+    - PRODUCED
+    annotations:
+      crm_code: P108i
+      crm_label: produced
+      quantifier: 0..*
+      notes: Inverse of was produced by
+  P1i_identifies:
+    domain: E41_Appellation
+    range: E1_CRMEntity
+    inverse: P1_is_identified_by
+    multivalued: true
+    aliases:
+    - IDENTIFIES
+    annotations:
+      crm_code: P1i
+      crm_label: identifies
+      quantifier: 0..*
+      notes: Inverse of is identified by
+  P2i_is_type_of:
+    domain: E55_Type
+    range: E1_CRMEntity
+    inverse: P2_has_type
+    multivalued: true
+    aliases:
+    - IS_TYPE_OF
+    annotations:
+      crm_code: P2i
+      crm_label: is type of
+      quantifier: 0..*
+      notes: Inverse of has type
+  P3i_is_note_of:
+    domain: E62_String
+    range: E1_CRMEntity
+    inverse: P3_has_note
+    multivalued: true
+    aliases:
+    - IS_NOTE_OF
+    annotations:
+      crm_code: P3i
+      crm_label: is note of
+      quantifier: 0..*
+      notes: Inverse of has note
+  P4i_is_time_span_of:
+    domain: E52_TimeSpan
+    range: E2_TemporalEntity
+    inverse: P4_has_time_span
+    multivalued: true
+    aliases:
+    - IS_TIME_SPAN_OF
+    annotations:
+      crm_code: P4i
+      crm_label: is time-span of
+      quantifier: 0..*
+      notes: Inverse of has time-span
+  P7i_witnessed:
+    domain: E53_Place
+    range: E5_Event
+    inverse: P7_took_place_at
+    multivalued: true
+    aliases:
+    - WITNESSED
+    annotations:
+      crm_code: P7i
+      crm_label: witnessed
+      quantifier: 0..*
+      notes: Inverse of took place at
+  P11i_participated_in:
+    domain: E39_Actor
+    range: E5_Event
+    inverse: P11_had_participant
+    multivalued: true
+    aliases:
+    - PARTICIPATED_IN
+    annotations:
+      crm_code: P11i
+      crm_label: participated in
+      quantifier: 0..*
+      notes: Inverse of had participant
+  P53i_is_current_or_former_location_of:
+    domain: E53_Place
+    range: E18_PhysicalThing
+    inverse: P53_has_current_or_former_location
+    multivalued: true
+    aliases:
+    - IS_CURRENT_LOCATION_OF
+    annotations:
+      crm_code: P53i
+      crm_label: is current or former location of
+      quantifier: 0..*
+      notes: Inverse of has current or former location
+  P79i_qualifies_beginning_of:
+    domain: E61_TimePrimitive
+    range: E52_TimeSpan
+    inverse: P79_beginning_is_qualified_by
+    multivalued: true
+    aliases:
+    - QUALIFIES_BEGINNING_OF
+    annotations:
+      crm_code: P79i
+      crm_label: qualifies beginning of
+      quantifier: 0..*
+      notes: Inverse of beginning is qualified by
+  P80i_qualifies_end_of:
+    domain: E61_TimePrimitive
+    range: E52_TimeSpan
+    inverse: P80_end_is_qualified_by
+    multivalued: true
+    aliases:
+    - QUALIFIES_END_OF
+    annotations:
+      crm_code: P80i
+      crm_label: qualifies end of
+      quantifier: 0..*
+      notes: Inverse of end is qualified by
+  P5_consists_of:
+    domain: E18_PhysicalThing
+    range: E18_PhysicalThing
+    inverse: P5i_forms_part_of
+    multivalued: true
+    aliases:
+    - CONSISTS_OF
+    annotations:
+      crm_code: P5
+      crm_label: consists of
+      quantifier: 0..*
+      notes: Physical thing consists of other physical things
+  P5i_forms_part_of:
+    domain: E18_PhysicalThing
+    range: E18_PhysicalThing
+    inverse: P5_consists_of
+    multivalued: true
+    aliases:
+    - FORMS_PART_OF
+    annotations:
+      crm_code: P5i
+      crm_label: forms part of
+      quantifier: 0..*
+      notes: Inverse of consists of
+  P8_took_place_on_or_before:
+    domain: E5_Event
+    range: E61_TimePrimitive
+    inverse: P8i_was_the_latest_time_of
+    multivalued: true
+    aliases:
+    - TOOK_PLACE_ON_OR_BEFORE
+    annotations:
+      crm_code: P8
+      crm_label: took place on or before
+      quantifier: 0..*
+      notes: Event took place on or before a specific time
+  P8i_was_the_latest_time_of:
+    domain: E61_TimePrimitive
+    range: E5_Event
+    inverse: P8_took_place_on_or_before
+    multivalued: true
+    aliases:
+    - WAS_THE_LATEST_TIME_OF
+    annotations:
+      crm_code: P8i
+      crm_label: was the latest time of
+      quantifier: 0..*
+      notes: Inverse of took place on or before
+  P9_consists_of:
+    domain: E4_Period
+    range: E4_Period
+    inverse: P9i_forms_part_of
+    multivalued: true
+    aliases:
+    - CONSISTS_OF
+    annotations:
+      crm_code: P9
+      crm_label: consists of
+      quantifier: 0..*
+      notes: Period consists of other periods
+  P9i_forms_part_of:
+    domain: E4_Period
+    range: E4_Period
+    inverse: P9_consists_of
+    multivalued: true
+    aliases:
+    - FORMS_PART_OF
+    annotations:
+      crm_code: P9i
+      crm_label: forms part of
+      quantifier: 0..*
+      notes: Inverse of consists of
+  P10_falls_within:
+    domain: E4_Period
+    range: E4_Period
+    inverse: P10i_contains
+    multivalued: true
+    aliases:
+    - FALLS_WITHIN
+    annotations:
+      crm_code: P10
+      crm_label: falls within
+      quantifier: 0..*
+      notes: Period falls within another period
+  P10i_contains:
+    domain: E4_Period
+    range: E4_Period
+    inverse: P10_falls_within
+    multivalued: true
+    aliases:
+    - CONTAINS
+    annotations:
+      crm_code: P10i
+      crm_label: contains
+      quantifier: 0..*
+      notes: Inverse of falls within
+  P12_occurred_in_the_presence_of:
+    domain: E5_Event
+    range: E77_PersistentItem
+    inverse: P12i_was_present_at
+    multivalued: true
+    aliases:
+    - OCCURRED_IN_THE_PRESENCE_OF
+    annotations:
+      crm_code: P12
+      crm_label: occurred in the presence of
+      quantifier: 0..*
+      notes: Event occurred in the presence of a persistent item
+  P12i_was_present_at:
+    domain: E77_PersistentItem
+    range: E5_Event
+    inverse: P12_occurred_in_the_presence_of
+    multivalued: true
+    aliases:
+    - WAS_PRESENT_AT
+    annotations:
+      crm_code: P12i
+      crm_label: was present at
+      quantifier: 0..*
+      notes: Inverse of occurred in the presence of
+  P13_destroyed:
+    domain: E6_Destruction
+    range: E18_PhysicalThing
+    inverse: P13i_was_destroyed_by
+    multivalued: true
+    aliases:
+    - DESTROYED
+    annotations:
+      crm_code: P13
+      crm_label: destroyed
+      quantifier: 0..*
+      notes: Destruction event destroyed a physical thing
+  P13i_was_destroyed_by:
+    domain: E18_PhysicalThing
+    range: E6_Destruction
+    inverse: P13_destroyed
+    multivalued: true
+    aliases:
+    - WAS_DESTROYED_BY
+    annotations:
+      crm_code: P13i
+      crm_label: was destroyed by
+      quantifier: 0..*
+      notes: Inverse of destroyed
+  P14_carried_out_by:
+    domain: E7_Activity
+    range: E39_Actor
+    inverse: P14i_performed
+    multivalued: true
+    aliases:
+    - CARRIED_OUT_BY
+    annotations:
+      crm_code: P14
+      crm_label: carried out by
+      quantifier: 0..*
+      notes: Activity was carried out by an actor
+  P14i_performed:
+    domain: E39_Actor
+    range: E7_Activity
+    inverse: P14_carried_out_by
+    multivalued: true
+    aliases:
+    - PERFORMED
+    annotations:
+      crm_code: P14i
+      crm_label: performed
+      quantifier: 0..*
+      notes: Inverse of carried out by
+  P15_was_influenced_by:
+    domain: E7_Activity
+    range: E1_CRMEntity
+    inverse: P15i_influenced
+    multivalued: true
+    aliases:
+    - WAS_INFLUENCED_BY
+    annotations:
+      crm_code: P15
+      crm_label: was influenced by
+      quantifier: 0..*
+      notes: Activity was influenced by another entity
+  P15i_influenced:
+    domain: E1_CRMEntity
+    range: E7_Activity
+    inverse: P15_was_influenced_by
+    multivalued: true
+    aliases:
+    - INFLUENCED
+    annotations:
+      crm_code: P15i
+      crm_label: influenced
+      quantifier: 0..*
+      notes: Inverse of was influenced by
+  P16_used_specific_object:
+    domain: E7_Activity
+    range: E19_PhysicalObject
+    inverse: P16i_was_used_for
+    multivalued: true
+    aliases:
+    - USED_SPECIFIC_OBJECT
+    annotations:
+      crm_code: P16
+      crm_label: used specific object
+      quantifier: 0..*
+      notes: Activity used a specific physical object
+  P16i_was_used_for:
+    domain: E19_PhysicalObject
+    range: E7_Activity
+    inverse: P16_used_specific_object
+    multivalued: true
+    aliases:
+    - WAS_USED_FOR
+    annotations:
+      crm_code: P16i
+      crm_label: was used for
+      quantifier: 0..*
+      notes: Inverse of used specific object
+  P17_was_motivated_by:
+    domain: E7_Activity
+    range: E1_CRMEntity
+    inverse: P17i_motivated
+    multivalued: true
+    aliases:
+    - WAS_MOTIVATED_BY
+    annotations:
+      crm_code: P17
+      crm_label: was motivated by
+      quantifier: 0..*
+      notes: Activity was motivated by another entity
+  P17i_motivated:
+    domain: E1_CRMEntity
+    range: E7_Activity
+    inverse: P17_was_motivated_by
+    multivalued: true
+    aliases:
+    - MOTIVATED
+    annotations:
+      crm_code: P17i
+      crm_label: motivated
+      quantifier: 0..*
+      notes: Inverse of was motivated by
+  P19_was_intended_use:
+    domain: E7_Activity
+    range: E55_Type
+    inverse: P19i_was_use_of
+    multivalued: true
+    aliases:
+    - WAS_INTENDED_USE
+    annotations:
+      crm_code: P19
+      crm_label: was intended use
+      quantifier: 0..*
+      notes: Activity was intended for a specific use
+  P19i_was_use_of:
+    domain: E55_Type
+    range: E7_Activity
+    inverse: P19_was_intended_use
+    multivalued: true
+    aliases:
+    - WAS_USE_OF
+    annotations:
+      crm_code: P19i
+      crm_label: was use of
+      quantifier: 0..*
+      notes: Inverse of was intended use
+  P20_had_specific_purpose:
+    domain: E7_Activity
+    range: E5_Event
+    inverse: P20i_was_purpose_of
+    multivalued: true
+    aliases:
+    - HAD_SPECIFIC_PURPOSE
+    annotations:
+      crm_code: P20
+      crm_label: had specific purpose
+      quantifier: 0..*
+      notes: Activity had a specific purpose
+  P20i_was_purpose_of:
+    domain: E5_Event
+    range: E7_Activity
+    inverse: P20_had_specific_purpose
+    multivalued: true
+    aliases:
+    - WAS_PURPOSE_OF
+    annotations:
+      crm_code: P20i
+      crm_label: was purpose of
+      quantifier: 0..*
+      notes: Inverse of had specific purpose
+  P21_had_general_purpose:
+    domain: E7_Activity
+    range: E55_Type
+    inverse: P21i_was_purpose_of
+    multivalued: true
+    aliases:
+    - HAD_GENERAL_PURPOSE
+    annotations:
+      crm_code: P21
+      crm_label: had general purpose
+      quantifier: 0..*
+      notes: Activity had a general purpose
+  P21i_was_purpose_of:
+    domain: E55_Type
+    range: E7_Activity
+    inverse: P21_had_general_purpose
+    multivalued: true
+    aliases:
+    - WAS_PURPOSE_OF
+    annotations:
+      crm_code: P21i
+      crm_label: was purpose of
+      quantifier: 0..*
+      notes: Inverse of had general purpose
+  P22_transferred_title_to:
+    domain: E8_Acquisition
+    range: E39_Actor
+    inverse: P22i_acquired_title_through
+    multivalued: true
+    aliases:
+    - TRANSFERRED_TITLE_TO
+    annotations:
+      crm_code: P22
+      crm_label: transferred title to
+      quantifier: 0..*
+      notes: Acquisition transferred title to an actor
+  P22i_acquired_title_through:
+    domain: E39_Actor
+    range: E8_Acquisition
+    inverse: P22_transferred_title_to
+    multivalued: true
+    aliases:
+    - ACQUIRED_TITLE_THROUGH
+    annotations:
+      crm_code: P22i
+      crm_label: acquired title through
+      quantifier: 0..*
+      notes: Inverse of transferred title to
+  P23_transferred_title_from:
+    domain: E8_Acquisition
+    range: E39_Actor
+    inverse: P23i_surrendered_title_through
+    multivalued: true
+    aliases:
+    - TRANSFERRED_TITLE_FROM
+    annotations:
+      crm_code: P23
+      crm_label: transferred title from
+      quantifier: 0..*
+      notes: Acquisition transferred title from an actor
+  P23i_surrendered_title_through:
+    domain: E39_Actor
+    range: E8_Acquisition
+    inverse: P23_transferred_title_from
+    multivalued: true
+    aliases:
+    - SURRENDERED_TITLE_THROUGH
+    annotations:
+      crm_code: P23i
+      crm_label: surrendered title through
+      quantifier: 0..*
+      notes: Inverse of transferred title from
+  P24_transferred_title_of:
+    domain: E8_Acquisition
+    range: E18_PhysicalThing
+    inverse: P24i_changed_ownership_through
+    multivalued: true
+    aliases:
+    - TRANSFERRED_TITLE_OF
+    annotations:
+      crm_code: P24
+      crm_label: transferred title of
+      quantifier: 0..*
+      notes: Acquisition transferred title of a physical thing
+  P24i_changed_ownership_through:
+    domain: E18_PhysicalThing
+    range: E8_Acquisition
+    inverse: P24_transferred_title_of
+    multivalued: true
+    aliases:
+    - CHANGED_OWNERSHIP_THROUGH
+    annotations:
+      crm_code: P24i
+      crm_label: changed ownership through
+      quantifier: 0..*
+      notes: Inverse of transferred title of
+  P25_moved:
+    domain: E9_Move
+    range: E18_PhysicalThing
+    inverse: P25i_moved_by
+    multivalued: true
+    aliases:
+    - MOVED
+    annotations:
+      crm_code: P25
+      crm_label: moved
+      quantifier: 0..*
+      notes: Move event moved a physical thing
+  P25i_moved_by:
+    domain: E18_PhysicalThing
+    range: E9_Move
+    inverse: P25_moved
+    multivalued: true
+    aliases:
+    - MOVED_BY
+    annotations:
+      crm_code: P25i
+      crm_label: moved by
+      quantifier: 0..*
+      notes: Inverse of moved
+  P26_moved_to:
+    domain: E9_Move
+    range: E53_Place
+    inverse: P26i_was_destination_of
+    multivalued: true
+    aliases:
+    - MOVED_TO
+    annotations:
+      crm_code: P26
+      crm_label: moved to
+      quantifier: 0..*
+      notes: Move event moved to a place
+  P26i_was_destination_of:
+    domain: E53_Place
+    range: E9_Move
+    inverse: P26_moved_to
+    multivalued: true
+    aliases:
+    - WAS_DESTINATION_OF
+    annotations:
+      crm_code: P26i
+      crm_label: was destination of
+      quantifier: 0..*
+      notes: Inverse of moved to
+  P27_moved_from:
+    domain: E9_Move
+    range: E53_Place
+    inverse: P27i_was_origin_of
+    multivalued: true
+    aliases:
+    - MOVED_FROM
+    annotations:
+      crm_code: P27
+      crm_label: moved from
+      quantifier: 0..*
+      notes: Move event moved from a place
+  P27i_was_origin_of:
+    domain: E53_Place
+    range: E9_Move
+    inverse: P27_moved_from
+    multivalued: true
+    aliases:
+    - WAS_ORIGIN_OF
+    annotations:
+      crm_code: P27i
+      crm_label: was origin of
+      quantifier: 0..*
+      notes: Inverse of moved from
+  P28_custody_surrendered_by:
+    domain: E10_TransferOfCustody
+    range: E39_Actor
+    inverse: P28i_surrendered_custody_through
+    multivalued: true
+    aliases:
+    - CUSTODY_SURRENDERED_BY
+    annotations:
+      crm_code: P28
+      crm_label: custody surrendered by
+      quantifier: 0..*
+      notes: Transfer of custody surrendered by an actor
+  P28i_surrendered_custody_through:
+    domain: E39_Actor
+    range: E10_TransferOfCustody
+    inverse: P28_custody_surrendered_by
+    multivalued: true
+    aliases:
+    - SURRENDERED_CUSTODY_THROUGH
+    annotations:
+      crm_code: P28i
+      crm_label: surrendered custody through
+      quantifier: 0..*
+      notes: Inverse of custody surrendered by
+  P29_custody_received_by:
+    domain: E10_TransferOfCustody
+    range: E39_Actor
+    inverse: P29i_received_custody_through
+    multivalued: true
+    aliases:
+    - CUSTODY_RECEIVED_BY
+    annotations:
+      crm_code: P29
+      crm_label: custody received by
+      quantifier: 0..*
+      notes: Transfer of custody received by an actor
+  P29i_received_custody_through:
+    domain: E39_Actor
+    range: E10_TransferOfCustody
+    inverse: P29_custody_received_by
+    multivalued: true
+    aliases:
+    - RECEIVED_CUSTODY_THROUGH
+    annotations:
+      crm_code: P29i
+      crm_label: received custody through
+      quantifier: 0..*
+      notes: Inverse of custody received by
+  P30_transferred_custody_of:
+    domain: E10_TransferOfCustody
+    range: E18_PhysicalThing
+    inverse: P30i_custody_transferred_through
+    multivalued: true
+    aliases:
+    - TRANSFERRED_CUSTODY_OF
+    annotations:
+      crm_code: P30
+      crm_label: transferred custody of
+      quantifier: 0..*
+      notes: Transfer of custody transferred custody of a physical thing
+  P30i_custody_transferred_through:
+    domain: E18_PhysicalThing
+    range: E10_TransferOfCustody
+    inverse: P30_transferred_custody_of
+    multivalued: true
+    aliases:
+    - CUSTODY_TRANSFERRED_THROUGH
+    annotations:
+      crm_code: P30i
+      crm_label: custody transferred through
+      quantifier: 0..*
+      notes: Inverse of transferred custody of
+  P31_has_modified:
+    domain: E11_Modification
+    range: E18_PhysicalThing
+    inverse: P31i_was_modified_by
+    multivalued: true
+    aliases:
+    - HAS_MODIFIED
+    annotations:
+      crm_code: P31
+      crm_label: has modified
+      quantifier: 0..*
+      notes: Modification event has modified a physical thing
+  P31i_was_modified_by:
+    domain: E18_PhysicalThing
+    range: E11_Modification
+    inverse: P31_has_modified
+    multivalued: true
+    aliases:
+    - WAS_MODIFIED_BY
+    annotations:
+      crm_code: P31i
+      crm_label: was modified by
+      quantifier: 0..*
+      notes: Inverse of has modified
+  P32_used_general_technique:
+    domain: E7_Activity
+    range: E55_Type
+    inverse: P32i_was_technique_of
+    multivalued: true
+    aliases:
+    - USED_GENERAL_TECHNIQUE
+    annotations:
+      crm_code: P32
+      crm_label: used general technique
+      quantifier: 0..*
+      notes: Activity used a general technique
+  P32i_was_technique_of:
+    domain: E55_Type
+    range: E7_Activity
+    inverse: P32_used_general_technique
+    multivalued: true
+    aliases:
+    - WAS_TECHNIQUE_OF
+    annotations:
+      crm_code: P32i
+      crm_label: was technique of
+      quantifier: 0..*
+      notes: Inverse of used general technique
+  P33_used_specific_technique:
+    domain: E7_Activity
+    range: E29_DesignOrProcedure
+    inverse: P33i_was_used_by
+    multivalued: true
+    aliases:
+    - USED_SPECIFIC_TECHNIQUE
+    annotations:
+      crm_code: P33
+      crm_label: used specific technique
+      quantifier: 0..*
+      notes: Activity used a specific technique
+  P33i_was_used_by:
+    domain: E29_DesignOrProcedure
+    range: E7_Activity
+    inverse: P33_used_specific_technique
+    multivalued: true
+    aliases:
+    - WAS_USED_BY
+    annotations:
+      crm_code: P33i
+      crm_label: was used by
+      quantifier: 0..*
+      notes: Inverse of used specific technique
+  P34_concerned:
+    domain: E14_ConditionAssessment
+    range: E18_PhysicalThing
+    inverse: P34i_was_assessed_by
+    multivalued: true
+    aliases:
+    - CONCERNED
+    annotations:
+      crm_code: P34
+      crm_label: concerned
+      quantifier: 0..*
+      notes: Condition assessment concerned a physical thing
+  P34i_was_assessed_by:
+    domain: E18_PhysicalThing
+    range: E14_ConditionAssessment
+    inverse: P34_concerned
+    multivalued: true
+    aliases:
+    - WAS_ASSESSED_BY
+    annotations:
+      crm_code: P34i
+      crm_label: was assessed by
+      quantifier: 0..*
+      notes: Inverse of concerned
+  P35_has_identified:
+    domain: E15_IdentifierAssignment
+    range: E1_CRMEntity
+    inverse: P35i_was_identified_by
+    multivalued: true
+    aliases:
+    - HAS_IDENTIFIED
+    annotations:
+      crm_code: P35
+      crm_label: has identified
+      quantifier: 0..*
+      notes: Identifier assignment has identified an entity
+  P35i_was_identified_by:
+    domain: E1_CRMEntity
+    range: E15_IdentifierAssignment
+    inverse: P35_has_identified
+    multivalued: true
+    aliases:
+    - WAS_IDENTIFIED_BY
+    annotations:
+      crm_code: P35i
+      crm_label: was identified by
+      quantifier: 0..*
+      notes: Inverse of has identified
+  P37_assigned:
+    domain: E13_AttributeAssignment
+    range: E1_CRMEntity
+    inverse: P37i_was_assigned_by
+    multivalued: true
+    aliases:
+    - ASSIGNED
+    annotations:
+      crm_code: P37
+      crm_label: assigned
+      quantifier: 0..*
+      notes: Attribute assignment assigned to an entity
+  P37i_was_assigned_by:
+    domain: E1_CRMEntity
+    range: E13_AttributeAssignment
+    inverse: P37_assigned
+    multivalued: true
+    aliases:
+    - WAS_ASSIGNED_BY
+    annotations:
+      crm_code: P37i
+      crm_label: was assigned by
+      quantifier: 0..*
+      notes: Inverse of assigned
+  P38_deassigned:
+    domain: E13_AttributeAssignment
+    range: E1_CRMEntity
+    inverse: P38i_was_deassigned_by
+    multivalued: true
+    aliases:
+    - DEASSIGNED
+    annotations:
+      crm_code: P38
+      crm_label: deassigned
+      quantifier: 0..*
+      notes: Attribute assignment deassigned from an entity
+  P38i_was_deassigned_by:
+    domain: E1_CRMEntity
+    range: E13_AttributeAssignment
+    inverse: P38_deassigned
+    multivalued: true
+    aliases:
+    - WAS_DEASSIGNED_BY
+    annotations:
+      crm_code: P38i
+      crm_label: was deassigned by
+      quantifier: 0..*
+      notes: Inverse of deassigned
+  P39_measured:
+    domain: E16_Measurement
+    range: E1_CRMEntity
+    inverse: P39i_was_measured_by
+    multivalued: true
+    aliases:
+    - MEASURED
+    annotations:
+      crm_code: P39
+      crm_label: measured
+      quantifier: 0..*
+      notes: Measurement measured an entity
+  P39i_was_measured_by:
+    domain: E1_CRMEntity
+    range: E16_Measurement
+    inverse: P39_measured
+    multivalued: true
+    aliases:
+    - WAS_MEASURED_BY
+    annotations:
+      crm_code: P39i
+      crm_label: was measured by
+      quantifier: 0..*
+      notes: Inverse of measured
+  P40_observed_dimension:
+    domain: E16_Measurement
+    range: E54_Dimension
+    inverse: P40i_was_observed_in
+    multivalued: true
+    aliases:
+    - OBSERVED_DIMENSION
+    annotations:
+      crm_code: P40
+      crm_label: observed dimension
+      quantifier: 0..*
+      notes: Measurement observed a dimension
+  P40i_was_observed_in:
+    domain: E54_Dimension
+    range: E16_Measurement
+    inverse: P40_observed_dimension
+    multivalued: true
+    aliases:
+    - WAS_OBSERVED_IN
+    annotations:
+      crm_code: P40i
+      crm_label: was observed in
+      quantifier: 0..*
+      notes: Inverse of observed dimension
+  P41_classified:
+    domain: E17_TypeAssignment
+    range: E1_CRMEntity
+    inverse: P41i_was_classified_by
+    multivalued: true
+    aliases:
+    - CLASSIFIED
+    annotations:
+      crm_code: P41
+      crm_label: classified
+      quantifier: 0..*
+      notes: Type assignment classified an entity
+  P41i_was_classified_by:
+    domain: E1_CRMEntity
+    range: E17_TypeAssignment
+    inverse: P41_classified
+    multivalued: true
+    aliases:
+    - WAS_CLASSIFIED_BY
+    annotations:
+      crm_code: P41i
+      crm_label: was classified by
+      quantifier: 0..*
+      notes: Inverse of classified
+  P42_assigned:
+    domain: E17_TypeAssignment
+    range: E55_Type
+    inverse: P42i_was_assigned_by
+    multivalued: true
+    aliases:
+    - ASSIGNED
+    annotations:
+      crm_code: P42
+      crm_label: assigned
+      quantifier: 0..*
+      notes: Type assignment assigned a type
+  P42i_was_assigned_by:
+    domain: E55_Type
+    range: E17_TypeAssignment
+    inverse: P42_assigned
+    multivalued: true
+    aliases:
+    - WAS_ASSIGNED_BY
+    annotations:
+      crm_code: P42i
+      crm_label: was assigned by
+      quantifier: 0..*
+      notes: Inverse of assigned
+  P43_has_dimension:
+    domain: E70_Thing
+    range: E54_Dimension
+    inverse: P43i_is_dimension_of
+    multivalued: true
+    aliases:
+    - HAS_DIMENSION
+    annotations:
+      crm_code: P43
+      crm_label: has dimension
+      quantifier: 0..*
+      notes: Thing has a dimension
+  P43i_is_dimension_of:
+    domain: E54_Dimension
+    range: E70_Thing
+    inverse: P43_has_dimension
+    multivalued: true
+    aliases:
+    - IS_DIMENSION_OF
+    annotations:
+      crm_code: P43i
+      crm_label: is dimension of
+      quantifier: 0..*
+      notes: Inverse of has dimension
+  P44_has_condition:
+    domain: E18_PhysicalThing
+    range: E3_ConditionState
+    inverse: P44i_is_condition_of
+    multivalued: true
+    aliases:
+    - HAS_CONDITION
+    annotations:
+      crm_code: P44
+      crm_label: has condition
+      quantifier: 0..*
+      notes: Physical thing has a condition
+  P44i_is_condition_of:
+    domain: E3_ConditionState
+    range: E18_PhysicalThing
+    inverse: P44_has_condition
+    multivalued: true
+    aliases:
+    - IS_CONDITION_OF
+    annotations:
+      crm_code: P44i
+      crm_label: is condition of
+      quantifier: 0..*
+      notes: Inverse of has condition
+  P45_consists_of:
+    domain: E18_PhysicalThing
+    range: E18_PhysicalThing
+    inverse: P45i_is_incorporated_in
+    multivalued: true
+    aliases:
+    - CONSISTS_OF
+    annotations:
+      crm_code: P45
+      crm_label: consists of
+      quantifier: 0..*
+      notes: Physical thing consists of other physical things
+  P45i_is_incorporated_in:
+    domain: E18_PhysicalThing
+    range: E18_PhysicalThing
+    inverse: P45_consists_of
+    multivalued: true
+    aliases:
+    - IS_INCORPORATED_IN
+    annotations:
+      crm_code: P45i
+      crm_label: is incorporated in
+      quantifier: 0..*
+      notes: Inverse of consists of
+  P46_is_composed_of:
+    domain: E18_PhysicalThing
+    range: E18_PhysicalThing
+    inverse: P46i_forms_part_of
+    multivalued: true
+    aliases:
+    - IS_COMPOSED_OF
+    annotations:
+      crm_code: P46
+      crm_label: is composed of
+      quantifier: 0..*
+      notes: Physical thing is composed of other physical things
+  P46i_forms_part_of:
+    domain: E18_PhysicalThing
+    range: E18_PhysicalThing
+    inverse: P46_is_composed_of
+    multivalued: true
+    aliases:
+    - FORMS_PART_OF
+    annotations:
+      crm_code: P46i
+      crm_label: forms part of
+      quantifier: 0..*
+      notes: Inverse of is composed of
+  P48_has_preferred_identifier:
+    domain: E1_CRMEntity
+    range: E42_Identifier
+    inverse: P48i_is_preferred_identifier_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_PREFERRED_IDENTIFIER
+    annotations:
+      crm_code: P48
+      crm_label: has preferred identifier
+      quantifier: 0..1
+      notes: Entity has a preferred identifier
+  P48i_is_preferred_identifier_of:
+    domain: E42_Identifier
+    range: E1_CRMEntity
+    inverse: P48_has_preferred_identifier
+    multivalued: true
+    aliases:
+    - IS_PREFERRED_IDENTIFIER_OF
+    annotations:
+      crm_code: P48i
+      crm_label: is preferred identifier of
+      quantifier: 0..*
+      notes: Inverse of has preferred identifier
+  P49_has_former_or_current_keeper:
+    domain: E18_PhysicalThing
+    range: E39_Actor
+    inverse: P49i_is_former_or_current_keeper_of
+    multivalued: true
+    aliases:
+    - HAS_FORMER_OR_CURRENT_KEEPER
+    annotations:
+      crm_code: P49
+      crm_label: has former or current keeper
+      quantifier: 0..*
+      notes: Physical thing has former or current keeper
+  P49i_is_former_or_current_keeper_of:
+    domain: E39_Actor
+    range: E18_PhysicalThing
+    inverse: P49_has_former_or_current_keeper
+    multivalued: true
+    aliases:
+    - IS_FORMER_OR_CURRENT_KEEPER_OF
+    annotations:
+      crm_code: P49i
+      crm_label: is former or current keeper of
+      quantifier: 0..*
+      notes: Inverse of has former or current keeper
+  P50_has_current_keeper:
+    domain: E18_PhysicalThing
+    range: E39_Actor
+    inverse: P50i_is_current_keeper_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_CURRENT_KEEPER
+    annotations:
+      crm_code: P50
+      crm_label: has current keeper
+      quantifier: 0..1
+      notes: Physical thing has current keeper
+  P50i_is_current_keeper_of:
+    domain: E39_Actor
+    range: E18_PhysicalThing
+    inverse: P50_has_current_keeper
+    multivalued: true
+    aliases:
+    - IS_CURRENT_KEEPER_OF
+    annotations:
+      crm_code: P50i
+      crm_label: is current keeper of
+      quantifier: 0..*
+      notes: Inverse of has current keeper
+  P51_has_former_or_current_owner:
+    domain: E18_PhysicalThing
+    range: E39_Actor
+    inverse: P51i_is_former_or_current_owner_of
+    multivalued: true
+    aliases:
+    - HAS_FORMER_OR_CURRENT_OWNER
+    annotations:
+      crm_code: P51
+      crm_label: has former or current owner
+      quantifier: 0..*
+      notes: Physical thing has former or current owner
+  P51i_is_former_or_current_owner_of:
+    domain: E39_Actor
+    range: E18_PhysicalThing
+    inverse: P51_has_former_or_current_owner
+    multivalued: true
+    aliases:
+    - IS_FORMER_OR_CURRENT_OWNER_OF
+    annotations:
+      crm_code: P51i
+      crm_label: is former or current owner of
+      quantifier: 0..*
+      notes: Inverse of has former or current owner
+  P52_has_current_owner:
+    domain: E18_PhysicalThing
+    range: E39_Actor
+    inverse: P52i_is_current_owner_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_CURRENT_OWNER
+    annotations:
+      crm_code: P52
+      crm_label: has current owner
+      quantifier: 0..1
+      notes: Physical thing has current owner
+  P52i_is_current_owner_of:
+    domain: E39_Actor
+    range: E18_PhysicalThing
+    inverse: P52_has_current_owner
+    multivalued: true
+    aliases:
+    - IS_CURRENT_OWNER_OF
+    annotations:
+      crm_code: P52i
+      crm_label: is current owner of
+      quantifier: 0..*
+      notes: Inverse of has current owner
+  P54_has_current_permanent_location:
+    domain: E19_PhysicalObject
+    range: E53_Place
+    inverse: P54i_is_current_permanent_location_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_CURRENT_PERMANENT_LOCATION
+    annotations:
+      crm_code: P54
+      crm_label: has current permanent location
+      quantifier: 0..1
+      notes: Physical object has current permanent location
+  P54i_is_current_permanent_location_of:
+    domain: E53_Place
+    range: E19_PhysicalObject
+    inverse: P54_has_current_permanent_location
+    multivalued: true
+    aliases:
+    - IS_CURRENT_PERMANENT_LOCATION_OF
+    annotations:
+      crm_code: P54i
+      crm_label: is current permanent location of
+      quantifier: 0..*
+      notes: Inverse of has current permanent location
+  P55_has_current_location:
+    domain: E19_PhysicalObject
+    range: E53_Place
+    inverse: P55i_is_current_location_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_CURRENT_LOCATION
+    annotations:
+      crm_code: P55
+      crm_label: has current location
+      quantifier: 0..1
+      notes: Physical object has current location
+  P55i_is_current_location_of:
+    domain: E53_Place
+    range: E19_PhysicalObject
+    inverse: P55_has_current_location
+    multivalued: true
+    aliases:
+    - IS_CURRENT_LOCATION_OF
+    annotations:
+      crm_code: P55i
+      crm_label: is current location of
+      quantifier: 0..*
+      notes: Inverse of has current location
+  P56_bears_feature:
+    domain: E19_PhysicalObject
+    range: E26_PhysicalFeature
+    inverse: P56i_is_feature_of
+    multivalued: true
+    aliases:
+    - BEARS_FEATURE
+    annotations:
+      crm_code: P56
+      crm_label: bears feature
+      quantifier: 0..*
+      notes: Physical object bears a physical feature
+  P56i_is_feature_of:
+    domain: E26_PhysicalFeature
+    range: E19_PhysicalObject
+    inverse: P56_bears_feature
+    multivalued: true
+    aliases:
+    - IS_FEATURE_OF
+    annotations:
+      crm_code: P56i
+      crm_label: is feature of
+      quantifier: 0..*
+      notes: Inverse of bears feature
+  P57_has_number_of_parts:
+    domain: E19_PhysicalObject
+    range: E60_Number
+    inverse: P57i_is_number_of_parts_of
+    multivalued: true
+    aliases:
+    - HAS_NUMBER_OF_PARTS
+    annotations:
+      crm_code: P57
+      crm_label: has number of parts
+      quantifier: 0..*
+      notes: Physical object has number of parts
+  P57i_is_number_of_parts_of:
+    domain: E60_Number
+    range: E19_PhysicalObject
+    inverse: P57_has_number_of_parts
+    multivalued: true
+    aliases:
+    - IS_NUMBER_OF_PARTS_OF
+    annotations:
+      crm_code: P57i
+      crm_label: is number of parts of
+      quantifier: 0..*
+      notes: Inverse of has number of parts
+  P59_has_section:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P59i_is_located_on_or_within
+    multivalued: true
+    aliases:
+    - HAS_SECTION
+    annotations:
+      crm_code: P59
+      crm_label: has section
+      quantifier: 0..*
+      notes: Place has a section
+  P59i_is_located_on_or_within:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P59_has_section
+    multivalued: true
+    aliases:
+    - IS_LOCATED_ON_OR_WITHIN
+    annotations:
+      crm_code: P59i
+      crm_label: is located on or within
+      quantifier: 0..*
+      notes: Inverse of has section
+  P62_depicts:
+    domain: E36_VisualItem
+    range: E1_CRMEntity
+    inverse: P62i_is_depicted_by
+    multivalued: true
+    aliases:
+    - DEPICTS
+    annotations:
+      crm_code: P62
+      crm_label: depicts
+      quantifier: 0..*
+      notes: Visual item depicts an entity
+  P62i_is_depicted_by:
+    domain: E1_CRMEntity
+    range: E36_VisualItem
+    inverse: P62_depicts
+    multivalued: true
+    aliases:
+    - IS_DEPICTED_BY
+    annotations:
+      crm_code: P62i
+      crm_label: is depicted by
+      quantifier: 0..*
+      notes: Inverse of depicts
+  P65_shows_visual_item:
+    domain: E36_VisualItem
+    range: E36_VisualItem
+    inverse: P65i_is_shown_by
+    multivalued: true
+    aliases:
+    - SHOWS_VISUAL_ITEM
+    annotations:
+      crm_code: P65
+      crm_label: shows visual item
+      quantifier: 0..*
+      notes: Visual item shows another visual item
+  P65i_is_shown_by:
+    domain: E36_VisualItem
+    range: E36_VisualItem
+    inverse: P65_shows_visual_item
+    multivalued: true
+    aliases:
+    - IS_SHOWN_BY
+    annotations:
+      crm_code: P65i
+      crm_label: is shown by
+      quantifier: 0..*
+      notes: Inverse of shows visual item
+  P67_refers_to:
+    domain: E73_InformationObject
+    range: E1_CRMEntity
+    inverse: P67i_is_referred_to_by
+    multivalued: true
+    aliases:
+    - REFERS_TO
+    annotations:
+      crm_code: P67
+      crm_label: refers to
+      quantifier: 0..*
+      notes: Information object refers to an entity
+  P67i_is_referred_to_by:
+    domain: E1_CRMEntity
+    range: E73_InformationObject
+    inverse: P67_refers_to
+    multivalued: true
+    aliases:
+    - IS_REFERRED_TO_BY
+    annotations:
+      crm_code: P67i
+      crm_label: is referred to by
+      quantifier: 0..*
+      notes: Inverse of refers to
+  P68_foresees_use_of:
+    domain: E29_DesignOrProcedure
+    range: E19_PhysicalObject
+    inverse: P68i_use_foreseen_by
+    multivalued: true
+    aliases:
+    - FORESEES_USE_OF
+    annotations:
+      crm_code: P68
+      crm_label: foresees use of
+      quantifier: 0..*
+      notes: Design or procedure foresees use of physical object
+  P68i_use_foreseen_by:
+    domain: E19_PhysicalObject
+    range: E29_DesignOrProcedure
+    inverse: P68_foresees_use_of
+    multivalued: true
+    aliases:
+    - USE_FORESEEN_BY
+    annotations:
+      crm_code: P68i
+      crm_label: use foreseen by
+      quantifier: 0..*
+      notes: Inverse of foresees use of
+  P69_has_association_with:
+    domain: E39_Actor
+    range: E39_Actor
+    inverse: P69i_is_associated_with
+    multivalued: true
+    aliases:
+    - HAS_ASSOCIATION_WITH
+    annotations:
+      crm_code: P69
+      crm_label: has association with
+      quantifier: 0..*
+      notes: Actor has association with another actor
+  P69i_is_associated_with:
+    domain: E39_Actor
+    range: E39_Actor
+    inverse: P69_has_association_with
+    multivalued: true
+    aliases:
+    - IS_ASSOCIATED_WITH
+    annotations:
+      crm_code: P69i
+      crm_label: is associated with
+      quantifier: 0..*
+      notes: Inverse of has association with
+  P70_lists:
+    domain: E31_Document
+    range: E1_CRMEntity
+    inverse: P70i_is_listed_in
+    multivalued: true
+    aliases:
+    - LISTS
+    annotations:
+      crm_code: P70
+      crm_label: lists
+      quantifier: 0..*
+      notes: Document lists an entity
+  P70i_is_listed_in:
+    domain: E1_CRMEntity
+    range: E31_Document
+    inverse: P70_lists
+    multivalued: true
+    aliases:
+    - IS_LISTED_IN
+    annotations:
+      crm_code: P70i
+      crm_label: is listed in
+      quantifier: 0..*
+      notes: Inverse of lists
+  P71_lists:
+    domain: E31_Document
+    range: E1_CRMEntity
+    inverse: P71i_is_listed_in
+    multivalued: true
+    aliases:
+    - LISTS
+    annotations:
+      crm_code: P71
+      crm_label: lists
+      quantifier: 0..*
+      notes: Document lists an entity
+  P71i_is_listed_in:
+    domain: E1_CRMEntity
+    range: E31_Document
+    inverse: P71_lists
+    multivalued: true
+    aliases:
+    - IS_LISTED_IN
+    annotations:
+      crm_code: P71i
+      crm_label: is listed in
+      quantifier: 0..*
+      notes: Inverse of lists
+  P72_has_language:
+    domain: E33_LinguisticObject
+    range: E56_Language
+    inverse: P72i_is_language_of
+    multivalued: true
+    aliases:
+    - HAS_LANGUAGE
+    annotations:
+      crm_code: P72
+      crm_label: has language
+      quantifier: 0..*
+      notes: Linguistic object has language
+  P72i_is_language_of:
+    domain: E56_Language
+    range: E33_LinguisticObject
+    inverse: P72_has_language
+    multivalued: true
+    aliases:
+    - IS_LANGUAGE_OF
+    annotations:
+      crm_code: P72i
+      crm_label: is language of
+      quantifier: 0..*
+      notes: Inverse of has language
+  P73_has_translation:
+    domain: E33_LinguisticObject
+    range: E33_LinguisticObject
+    inverse: P73i_is_translation_of
+    multivalued: true
+    aliases:
+    - HAS_TRANSLATION
+    annotations:
+      crm_code: P73
+      crm_label: has translation
+      quantifier: 0..*
+      notes: Linguistic object has translation
+  P73i_is_translation_of:
+    domain: E33_LinguisticObject
+    range: E33_LinguisticObject
+    inverse: P73_has_translation
+    multivalued: true
+    aliases:
+    - IS_TRANSLATION_OF
+    annotations:
+      crm_code: P73i
+      crm_label: is translation of
+      quantifier: 0..*
+      notes: Inverse of has translation
+  P74_has_current_or_former_residence:
+    domain: E39_Actor
+    range: E53_Place
+    inverse: P74i_is_current_or_former_residence_of
+    multivalued: true
+    aliases:
+    - HAS_CURRENT_OR_FORMER_RESIDENCE
+    annotations:
+      crm_code: P74
+      crm_label: has current or former residence
+      quantifier: 0..*
+      notes: Actor has current or former residence
+  P74i_is_current_or_former_residence_of:
+    domain: E53_Place
+    range: E39_Actor
+    inverse: P74_has_current_or_former_residence
+    multivalued: true
+    aliases:
+    - IS_CURRENT_OR_FORMER_RESIDENCE_OF
+    annotations:
+      crm_code: P74i
+      crm_label: is current or former residence of
+      quantifier: 0..*
+      notes: Inverse of has current or former residence
+  P75_possesses:
+    domain: E39_Actor
+    range: E18_PhysicalThing
+    inverse: P75i_is_possessed_by
+    multivalued: true
+    aliases:
+    - POSSESSES
+    annotations:
+      crm_code: P75
+      crm_label: possesses
+      quantifier: 0..*
+      notes: Actor possesses a physical thing
+  P75i_is_possessed_by:
+    domain: E18_PhysicalThing
+    range: E39_Actor
+    inverse: P75_possesses
+    multivalued: true
+    aliases:
+    - IS_POSSESSED_BY
+    annotations:
+      crm_code: P75i
+      crm_label: is possessed by
+      quantifier: 0..*
+      notes: Inverse of possesses
+  P76_has_contact_point:
+    domain: E39_Actor
+    range: E51_ContactPoint
+    inverse: P76i_is_contact_point_of
+    multivalued: true
+    aliases:
+    - HAS_CONTACT_POINT
+    annotations:
+      crm_code: P76
+      crm_label: has contact point
+      quantifier: 0..*
+      notes: Actor has contact point
+  P76i_is_contact_point_of:
+    domain: E51_ContactPoint
+    range: E39_Actor
+    inverse: P76_has_contact_point
+    multivalued: true
+    aliases:
+    - IS_CONTACT_POINT_OF
+    annotations:
+      crm_code: P76i
+      crm_label: is contact point of
+      quantifier: 0..*
+      notes: Inverse of has contact point
+  P81_ongoing_through:
+    domain: E2_TemporalEntity
+    range: E61_TimePrimitive
+    inverse: P81i_ongoing_through
+    multivalued: true
+    aliases:
+    - ONGOING_THROUGH
+    annotations:
+      crm_code: P81
+      crm_label: ongoing through
+      quantifier: 0..*
+      notes: Temporal entity ongoing through time
+  P81i_ongoing_through:
+    domain: E61_TimePrimitive
+    range: E2_TemporalEntity
+    inverse: P81_ongoing_through
+    multivalued: true
+    aliases:
+    - ONGOING_THROUGH
+    annotations:
+      crm_code: P81i
+      crm_label: ongoing through
+      quantifier: 0..*
+      notes: Inverse of ongoing through
+  P82_at_some_time_within:
+    domain: E2_TemporalEntity
+    range: E61_TimePrimitive
+    inverse: P82i_at_some_time_within
+    multivalued: true
+    aliases:
+    - AT_SOME_TIME_WITHIN
+    annotations:
+      crm_code: P82
+      crm_label: at some time within
+      quantifier: 0..*
+      notes: Temporal entity at some time within
+  P82i_at_some_time_within:
+    domain: E61_TimePrimitive
+    range: E2_TemporalEntity
+    inverse: P82_at_some_time_within
+    multivalued: true
+    aliases:
+    - AT_SOME_TIME_WITHIN
+    annotations:
+      crm_code: P82i
+      crm_label: at some time within
+      quantifier: 0..*
+      notes: Inverse of at some time within
+  P86_falls_within:
+    domain: E4_Period
+    range: E4_Period
+    inverse: P86i_contains
+    multivalued: true
+    aliases:
+    - FALLS_WITHIN
+    annotations:
+      crm_code: P86
+      crm_label: falls within
+      quantifier: 0..*
+      notes: Period falls within another period
+  P86i_contains:
+    domain: E4_Period
+    range: E4_Period
+    inverse: P86_falls_within
+    multivalued: true
+    aliases:
+    - CONTAINS
+    annotations:
+      crm_code: P86i
+      crm_label: contains
+      quantifier: 0..*
+      notes: Inverse of falls within
+  P89_falls_within:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P89i_contains
+    multivalued: true
+    aliases:
+    - FALLS_WITHIN
+    annotations:
+      crm_code: P89
+      crm_label: falls within
+      quantifier: 0..*
+      notes: Place falls within another place
+  P89i_contains:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P89_falls_within
+    multivalued: true
+    aliases:
+    - CONTAINS
+    annotations:
+      crm_code: P89i
+      crm_label: contains
+      quantifier: 0..*
+      notes: Inverse of falls within
+  P90_has_value:
+    domain: E54_Dimension
+    range: E60_Number
+    inverse: P90i_is_value_of
+    multivalued: true
+    aliases:
+    - HAS_VALUE
+    annotations:
+      crm_code: P90
+      crm_label: has value
+      quantifier: 0..*
+      notes: Dimension has value
+  P90i_is_value_of:
+    domain: E60_Number
+    range: E54_Dimension
+    inverse: P90_has_value
+    multivalued: true
+    aliases:
+    - IS_VALUE_OF
+    annotations:
+      crm_code: P90i
+      crm_label: is value of
+      quantifier: 0..*
+      notes: Inverse of has value
+  P91_has_unit:
+    domain: E54_Dimension
+    range: E58_MeasurementUnit
+    inverse: P91i_is_unit_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_UNIT
+    annotations:
+      crm_code: P91
+      crm_label: has unit
+      quantifier: 0..1
+      notes: Dimension has unit
+  P91i_is_unit_of:
+    domain: E58_MeasurementUnit
+    range: E54_Dimension
+    inverse: P91_has_unit
+    multivalued: true
+    aliases:
+    - IS_UNIT_OF
+    annotations:
+      crm_code: P91i
+      crm_label: is unit of
+      quantifier: 0..*
+      notes: Inverse of has unit
+  P92_brought_into_existence:
+    domain: E63_BeginningOfExistence
+    range: E77_PersistentItem
+    inverse: P92i_was_brought_into_existence_by
+    multivalued: true
+    aliases:
+    - BROUGHT_INTO_EXISTENCE
+    annotations:
+      crm_code: P92
+      crm_label: brought into existence
+      quantifier: 0..*
+      notes: Beginning of existence brought into existence
+  P92i_was_brought_into_existence_by:
+    domain: E77_PersistentItem
+    range: E63_BeginningOfExistence
+    inverse: P92_brought_into_existence
+    multivalued: true
+    aliases:
+    - WAS_BROUGHT_INTO_EXISTENCE_BY
+    annotations:
+      crm_code: P92i
+      crm_label: was brought into existence by
+      quantifier: 0..*
+      notes: Inverse of brought into existence
+  P93_took_out_of_existence:
+    domain: E64_EndOfExistence
+    range: E77_PersistentItem
+    inverse: P93i_was_taken_out_of_existence_by
+    multivalued: true
+    aliases:
+    - TOOK_OUT_OF_EXISTENCE
+    annotations:
+      crm_code: P93
+      crm_label: took out of existence
+      quantifier: 0..*
+      notes: End of existence took out of existence
+  P93i_was_taken_out_of_existence_by:
+    domain: E77_PersistentItem
+    range: E64_EndOfExistence
+    inverse: P93_took_out_of_existence
+    multivalued: true
+    aliases:
+    - WAS_TAKEN_OUT_OF_EXISTENCE_BY
+    annotations:
+      crm_code: P93i
+      crm_label: was taken out of existence by
+      quantifier: 0..*
+      notes: Inverse of took out of existence
+  P94_has_created:
+    domain: E65_Creation
+    range: E77_PersistentItem
+    inverse: P94i_was_created_by
+    multivalued: true
+    aliases:
+    - HAS_CREATED
+    annotations:
+      crm_code: P94
+      crm_label: has created
+      quantifier: 0..*
+      notes: Creation has created
+  P94i_was_created_by:
+    domain: E77_PersistentItem
+    range: E65_Creation
+    inverse: P94_has_created
+    multivalued: true
+    aliases:
+    - WAS_CREATED_BY
+    annotations:
+      crm_code: P94i
+      crm_label: was created by
+      quantifier: 0..*
+      notes: Inverse of has created
+  P95_has_formed:
+    domain: E66_Formation
+    range: E77_PersistentItem
+    inverse: P95i_was_formed_by
+    multivalued: true
+    aliases:
+    - HAS_FORMED
+    annotations:
+      crm_code: P95
+      crm_label: has formed
+      quantifier: 0..*
+      notes: Formation has formed
+  P95i_was_formed_by:
+    domain: E77_PersistentItem
+    range: E66_Formation
+    inverse: P95_has_formed
+    multivalued: true
+    aliases:
+    - WAS_FORMED_BY
+    annotations:
+      crm_code: P95i
+      crm_label: was formed by
+      quantifier: 0..*
+      notes: Inverse of has formed
+  P96_by_mother:
+    domain: E67_Birth
+    range: E21_Person
+    inverse: P96i_gave_birth_to
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - BY_MOTHER
+    annotations:
+      crm_code: P96
+      crm_label: by mother
+      quantifier: 0..1
+      notes: Birth by mother
+  P96i_gave_birth_to:
+    domain: E21_Person
+    range: E67_Birth
+    inverse: P96_by_mother
+    multivalued: true
+    aliases:
+    - GAVE_BIRTH_TO
+    annotations:
+      crm_code: P96i
+      crm_label: gave birth to
+      quantifier: 0..*
+      notes: Inverse of by mother
+  P97_from_father:
+    domain: E67_Birth
+    range: E21_Person
+    inverse: P97i_was_father_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - FROM_FATHER
+    annotations:
+      crm_code: P97
+      crm_label: from father
+      quantifier: 0..1
+      notes: Birth from father
+  P97i_was_father_of:
+    domain: E21_Person
+    range: E67_Birth
+    inverse: P97_from_father
+    multivalued: true
+    aliases:
+    - WAS_FATHER_OF
+    annotations:
+      crm_code: P97i
+      crm_label: was father of
+      quantifier: 0..*
+      notes: Inverse of from father
+  P98_brought_into_existence:
+    domain: E66_Formation
+    range: E77_PersistentItem
+    inverse: P98i_was_brought_into_existence_by
+    multivalued: true
+    aliases:
+    - BROUGHT_INTO_EXISTENCE
+    annotations:
+      crm_code: P98
+      crm_label: brought into existence
+      quantifier: 0..*
+      notes: Formation brought into existence
+  P98i_was_brought_into_existence_by:
+    domain: E77_PersistentItem
+    range: E66_Formation
+    inverse: P98_brought_into_existence
+    multivalued: true
+    aliases:
+    - WAS_BROUGHT_INTO_EXISTENCE_BY
+    annotations:
+      crm_code: P98i
+      crm_label: was brought into existence by
+      quantifier: 0..*
+      notes: Inverse of brought into existence
+  P99_dissolved:
+    domain: E68_Dissolution
+    range: E74_Group
+    inverse: P99i_was_dissolved_by
+    multivalued: true
+    aliases:
+    - DISSOLVED
+    annotations:
+      crm_code: P99
+      crm_label: dissolved
+      quantifier: 0..*
+      notes: Death dissolved
+  P99i_was_dissolved_by:
+    domain: E74_Group
+    range: E68_Dissolution
+    inverse: P99_dissolved
+    multivalued: true
+    aliases:
+    - WAS_DISSOLVED_BY
+    annotations:
+      crm_code: P99i
+      crm_label: was dissolved by
+      quantifier: 0..*
+      notes: Inverse of dissolved
+  P100_was_death_of:
+    domain: E68_Dissolution
+    range: E21_Person
+    inverse: P100i_died_in
+    multivalued: true
+    aliases:
+    - WAS_DEATH_OF
+    annotations:
+      crm_code: P100
+      crm_label: was death of
+      quantifier: 0..*
+      notes: Death was death of
+  P100i_died_in:
+    domain: E21_Person
+    range: E68_Dissolution
+    inverse: P100_was_death_of
+    multivalued: true
+    aliases:
+    - DIED_IN
+    annotations:
+      crm_code: P100i
+      crm_label: died in
+      quantifier: 0..*
+      notes: Inverse of was death of
+  P101_had_as_general_use:
+    domain: E7_Activity
+    range: E55_Type
+    inverse: P101i_was_use_of
+    multivalued: true
+    aliases:
+    - HAD_AS_GENERAL_USE
+    annotations:
+      crm_code: P101
+      crm_label: had as general use
+      quantifier: 0..*
+      notes: Activity had as general use
+  P101i_was_use_of:
+    domain: E55_Type
+    range: E7_Activity
+    inverse: P101_had_as_general_use
+    multivalued: true
+    aliases:
+    - WAS_USE_OF
+    annotations:
+      crm_code: P101i
+      crm_label: was use of
+      quantifier: 0..*
+      notes: Inverse of had as general use
+  P102_has_title:
+    domain: E35_Title
+    range: E1_CRMEntity
+    inverse: P102i_is_title_of
+    multivalued: true
+    aliases:
+    - HAS_TITLE
+    annotations:
+      crm_code: P102
+      crm_label: has title
+      quantifier: 0..*
+      notes: Title has title
+  P102i_is_title_of:
+    domain: E1_CRMEntity
+    range: E35_Title
+    inverse: P102_has_title
+    multivalued: true
+    aliases:
+    - IS_TITLE_OF
+    annotations:
+      crm_code: P102i
+      crm_label: is title of
+      quantifier: 0..*
+      notes: Inverse of has title
+  P103_was_intended_for:
+    domain: E7_Activity
+    range: E55_Type
+    inverse: P103i_was_intention_of
+    multivalued: true
+    aliases:
+    - WAS_INTENDED_FOR
+    annotations:
+      crm_code: P103
+      crm_label: was intended for
+      quantifier: 0..*
+      notes: Activity was intended for
+  P103i_was_intention_of:
+    domain: E55_Type
+    range: E7_Activity
+    inverse: P103_was_intended_for
+    multivalued: true
+    aliases:
+    - WAS_INTENTION_OF
+    annotations:
+      crm_code: P103i
+      crm_label: was intention of
+      quantifier: 0..*
+      notes: Inverse of was intended for
+  P104_is_subject_to:
+    domain: E30_Right
+    range: E39_Actor
+    inverse: P104i_is_subject_of
+    multivalued: true
+    aliases:
+    - IS_SUBJECT_TO
+    annotations:
+      crm_code: P104
+      crm_label: is subject to
+      quantifier: 0..*
+      notes: Right is subject to
+  P104i_is_subject_of:
+    domain: E39_Actor
+    range: E30_Right
+    inverse: P104_is_subject_to
+    multivalued: true
+    aliases:
+    - IS_SUBJECT_OF
+    annotations:
+      crm_code: P104i
+      crm_label: is subject of
+      quantifier: 0..*
+      notes: Inverse of is subject to
+  P105_right_held_by:
+    domain: E30_Right
+    range: E39_Actor
+    inverse: P105i_holds_right
+    multivalued: true
+    aliases:
+    - RIGHT_HELD_BY
+    annotations:
+      crm_code: P105
+      crm_label: right held by
+      quantifier: 0..*
+      notes: Right held by
+  P105i_holds_right:
+    domain: E39_Actor
+    range: E30_Right
+    inverse: P105_right_held_by
+    multivalued: true
+    aliases:
+    - HOLDS_RIGHT
+    annotations:
+      crm_code: P105i
+      crm_label: holds right
+      quantifier: 0..*
+      notes: Inverse of right held by
+  P106_is_composed_of:
+    domain: E70_Thing
+    range: E70_Thing
+    inverse: P106i_forms_part_of
+    multivalued: true
+    aliases:
+    - IS_COMPOSED_OF
+    annotations:
+      crm_code: P106
+      crm_label: is composed of
+      quantifier: 0..*
+      notes: Thing is composed of
+  P106i_forms_part_of:
+    domain: E70_Thing
+    range: E70_Thing
+    inverse: P106_is_composed_of
+    multivalued: true
+    aliases:
+    - FORMS_PART_OF
+    annotations:
+      crm_code: P106i
+      crm_label: forms part of
+      quantifier: 0..*
+      notes: Inverse of is composed of
+  P107_has_current_or_former_member:
+    domain: E74_Group
+    range: E39_Actor
+    inverse: P107i_is_current_or_former_member_of
+    multivalued: true
+    aliases:
+    - HAS_CURRENT_OR_FORMER_MEMBER
+    annotations:
+      crm_code: P107
+      crm_label: has current or former member
+      quantifier: 0..*
+      notes: Group has current or former member
+  P107i_is_current_or_former_member_of:
+    domain: E39_Actor
+    range: E74_Group
+    inverse: P107_has_current_or_former_member
+    multivalued: true
+    aliases:
+    - IS_CURRENT_OR_FORMER_MEMBER_OF
+    annotations:
+      crm_code: P107i
+      crm_label: is current or former member of
+      quantifier: 0..*
+      notes: Inverse of has current or former member
+  P109_has_current_or_former_curator:
+    domain: E78_CuratedHolding
+    range: E39_Actor
+    inverse: P109i_is_current_or_former_curator_of
+    multivalued: true
+    aliases:
+    - HAS_CURRENT_OR_FORMER_CURATOR
+    annotations:
+      crm_code: P109
+      crm_label: has current or former curator
+      quantifier: 0..*
+      notes: Curated holding has current or former curator
+  P109i_is_current_or_former_curator_of:
+    domain: E39_Actor
+    range: E78_CuratedHolding
+    inverse: P109_has_current_or_former_curator
+    multivalued: true
+    aliases:
+    - IS_CURRENT_OR_FORMER_CURATOR_OF
+    annotations:
+      crm_code: P109i
+      crm_label: is current or former curator of
+      quantifier: 0..*
+      notes: Inverse of has current or former curator
+  P110_augmented:
+    domain: E79_PartAddition
+    range: E18_PhysicalThing
+    inverse: P110i_was_augmented_by
+    multivalued: true
+    aliases:
+    - AUGMENTED
+    annotations:
+      crm_code: P110
+      crm_label: augmented
+      quantifier: 0..*
+      notes: Part addition augmented
+  P110i_was_augmented_by:
+    domain: E18_PhysicalThing
+    range: E79_PartAddition
+    inverse: P110_augmented
+    multivalued: true
+    aliases:
+    - WAS_AUGMENTED_BY
+    annotations:
+      crm_code: P110i
+      crm_label: was augmented by
+      quantifier: 0..*
+      notes: Inverse of augmented
+  P111_added:
+    domain: E79_PartAddition
+    range: E18_PhysicalThing
+    inverse: P111i_was_added_by
+    multivalued: true
+    aliases:
+    - ADDED
+    annotations:
+      crm_code: P111
+      crm_label: added
+      quantifier: 0..*
+      notes: Part addition added
+  P111i_was_added_by:
+    domain: E18_PhysicalThing
+    range: E79_PartAddition
+    inverse: P111_added
+    multivalued: true
+    aliases:
+    - WAS_ADDED_BY
+    annotations:
+      crm_code: P111i
+      crm_label: was added by
+      quantifier: 0..*
+      notes: Inverse of added
+  P112_diminished:
+    domain: E80_PartRemoval
+    range: E18_PhysicalThing
+    inverse: P112i_was_diminished_by
+    multivalued: true
+    aliases:
+    - DIMINISHED
+    annotations:
+      crm_code: P112
+      crm_label: diminished
+      quantifier: 0..*
+      notes: Part removal diminished
+  P112i_was_diminished_by:
+    domain: E18_PhysicalThing
+    range: E80_PartRemoval
+    inverse: P112_diminished
+    multivalued: true
+    aliases:
+    - WAS_DIMINISHED_BY
+    annotations:
+      crm_code: P112i
+      crm_label: was diminished by
+      quantifier: 0..*
+      notes: Inverse of diminished
+  P113_removed:
+    domain: E80_PartRemoval
+    range: E18_PhysicalThing
+    inverse: P113i_was_removed_by
+    multivalued: true
+    aliases:
+    - REMOVED
+    annotations:
+      crm_code: P113
+      crm_label: removed
+      quantifier: 0..*
+      notes: Part removal removed
+  P113i_was_removed_by:
+    domain: E18_PhysicalThing
+    range: E80_PartRemoval
+    inverse: P113_removed
+    multivalued: true
+    aliases:
+    - WAS_REMOVED_BY
+    annotations:
+      crm_code: P113i
+      crm_label: was removed by
+      quantifier: 0..*
+      notes: Inverse of removed
+  P120_occurs_before:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P120i_occurs_after
+    multivalued: true
+    aliases:
+    - OCCURS_BEFORE
+    annotations:
+      crm_code: P120
+      crm_label: occurs before
+      quantifier: 0..*
+      notes: Temporal entity occurs before another temporal entity
+  P120i_occurs_after:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P120_occurs_before
+    multivalued: true
+    aliases:
+    - OCCURS_AFTER
+    annotations:
+      crm_code: P120i
+      crm_label: occurs after
+      quantifier: 0..*
+      notes: Inverse of occurs before
+  P121_overlaps_with:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P121i_overlaps_with
+    multivalued: true
+    aliases:
+    - OVERLAPS_WITH
+    annotations:
+      crm_code: P121
+      crm_label: overlaps with
+      quantifier: 0..*
+      notes: Place overlaps with another place
+  P121i_overlaps_with:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P121_overlaps_with
+    multivalued: true
+    aliases:
+    - OVERLAPS_WITH
+    annotations:
+      crm_code: P121i
+      crm_label: overlaps with
+      quantifier: 0..*
+      notes: Inverse of overlaps with
+  P122_borders_with:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P122i_borders_with
+    multivalued: true
+    aliases:
+    - BORDERS_WITH
+    annotations:
+      crm_code: P122
+      crm_label: borders with
+      quantifier: 0..*
+      notes: Place borders with another place
+  P122i_borders_with:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P122_borders_with
+    multivalued: true
+    aliases:
+    - BORDERS_WITH
+    annotations:
+      crm_code: P122i
+      crm_label: borders with
+      quantifier: 0..*
+      notes: Inverse of borders with
+  P123_resulted_in:
+    domain: E5_Event
+    range: E1_CRMEntity
+    inverse: P123i_was_result_of
+    multivalued: true
+    aliases:
+    - RESULTED_IN
+    annotations:
+      crm_code: P123
+      crm_label: resulted in
+      quantifier: 0..*
+      notes: Event resulted in an entity
+  P123i_was_result_of:
+    domain: E1_CRMEntity
+    range: E5_Event
+    inverse: P123_resulted_in
+    multivalued: true
+    aliases:
+    - WAS_RESULT_OF
+    annotations:
+      crm_code: P123i
+      crm_label: was result of
+      quantifier: 0..*
+      notes: Inverse of resulted in
+  P124_transformed:
+    domain: E81_Transformation
+    range: E18_PhysicalThing
+    inverse: P124i_was_transformed_by
+    multivalued: true
+    aliases:
+    - TRANSFORMED
+    annotations:
+      crm_code: P124
+      crm_label: transformed
+      quantifier: 0..*
+      notes: Transformation transformed
+  P124i_was_transformed_by:
+    domain: E18_PhysicalThing
+    range: E81_Transformation
+    inverse: P124_transformed
+    multivalued: true
+    aliases:
+    - WAS_TRANSFORMED_BY
+    annotations:
+      crm_code: P124i
+      crm_label: was transformed by
+      quantifier: 0..*
+      notes: Inverse of transformed
+  P125_used_object_of_type:
+    domain: E7_Activity
+    range: E55_Type
+    inverse: P125i_was_used_by
+    multivalued: true
+    aliases:
+    - USED_OBJECT_OF_TYPE
+    annotations:
+      crm_code: P125
+      crm_label: used object of type
+      quantifier: 0..*
+      notes: Activity used object of type
+  P125i_was_used_by:
+    domain: E55_Type
+    range: E7_Activity
+    inverse: P125_used_object_of_type
+    multivalued: true
+    aliases:
+    - WAS_USED_BY
+    annotations:
+      crm_code: P125i
+      crm_label: was used by
+      quantifier: 0..*
+      notes: Inverse of used object of type
+  P126_employed:
+    domain: E7_Activity
+    range: E19_PhysicalObject
+    inverse: P126i_was_employed_in
+    multivalued: true
+    aliases:
+    - EMPLOYED
+    annotations:
+      crm_code: P126
+      crm_label: employed
+      quantifier: 0..*
+      notes: Activity employed
+  P126i_was_employed_in:
+    domain: E19_PhysicalObject
+    range: E7_Activity
+    inverse: P126_employed
+    multivalued: true
+    aliases:
+    - WAS_EMPLOYED_IN
+    annotations:
+      crm_code: P126i
+      crm_label: was employed in
+      quantifier: 0..*
+      notes: Inverse of employed
+  P127_has_broader_term:
+    domain: E55_Type
+    range: E55_Type
+    inverse: P127i_has_narrower_term
+    multivalued: true
+    aliases:
+    - HAS_BROADER_TERM
+    annotations:
+      crm_code: P127
+      crm_label: has broader term
+      quantifier: 0..*
+      notes: Type has broader term
+  P127i_has_narrower_term:
+    domain: E55_Type
+    range: E55_Type
+    inverse: P127_has_broader_term
+    multivalued: true
+    aliases:
+    - HAS_NARROWER_TERM
+    annotations:
+      crm_code: P127i
+      crm_label: has narrower term
+      quantifier: 0..*
+      notes: Inverse of has broader term
+  P128_carries:
+    domain: E84_InformationCarrier
+    range: E73_InformationObject
+    inverse: P128i_is_carried_by
+    multivalued: true
+    aliases:
+    - CARRIES
+    annotations:
+      crm_code: P128
+      crm_label: carries
+      quantifier: 0..*
+      notes: Information carrier carries
+  P128i_is_carried_by:
+    domain: E73_InformationObject
+    range: E84_InformationCarrier
+    inverse: P128_carries
+    multivalued: true
+    aliases:
+    - IS_CARRIED_BY
+    annotations:
+      crm_code: P128i
+      crm_label: is carried by
+      quantifier: 0..*
+      notes: Inverse of carries
+  P129_is_about:
+    domain: E73_InformationObject
+    range: E1_CRMEntity
+    inverse: P129i_is_subject_of
+    multivalued: true
+    aliases:
+    - IS_ABOUT
+    annotations:
+      crm_code: P129
+      crm_label: is about
+      quantifier: 0..*
+      notes: Information object is about
+  P129i_is_subject_of:
+    domain: E1_CRMEntity
+    range: E73_InformationObject
+    inverse: P129_is_about
+    multivalued: true
+    aliases:
+    - IS_SUBJECT_OF
+    annotations:
+      crm_code: P129i
+      crm_label: is subject of
+      quantifier: 0..*
+      notes: Inverse of is about
+  P130_shows_features_of:
+    domain: E36_VisualItem
+    range: E1_CRMEntity
+    inverse: P130i_features_are_also_shown_on
+    multivalued: true
+    aliases:
+    - SHOWS_FEATURES_OF
+    annotations:
+      crm_code: P130
+      crm_label: shows features of
+      quantifier: 0..*
+      notes: Visual item shows features of
+  P130i_features_are_also_shown_on:
+    domain: E1_CRMEntity
+    range: E36_VisualItem
+    inverse: P130_shows_features_of
+    multivalued: true
+    aliases:
+    - FEATURES_ARE_ALSO_SHOWN_ON
+    annotations:
+      crm_code: P130i
+      crm_label: features are also shown on
+      quantifier: 0..*
+      notes: Inverse of shows features of
+  P132_spatiotemporally_overlaps_with:
+    domain: E92_SpacetimeVolume
+    range: E92_SpacetimeVolume
+    inverse: P132i_spatiotemporally_overlaps_with
+    multivalued: true
+    aliases:
+    - SPATIOTEMPORALLY_OVERLAPS_WITH
+    annotations:
+      crm_code: P132
+      crm_label: spatiotemporally overlaps with
+      quantifier: 0..*
+      notes: Spacetime volume spatiotemporally overlaps with
+  P132i_spatiotemporally_overlaps_with:
+    domain: E92_SpacetimeVolume
+    range: E92_SpacetimeVolume
+    inverse: P132_spatiotemporally_overlaps_with
+    multivalued: true
+    aliases:
+    - SPATIOTEMPORALLY_OVERLAPS_WITH
+    annotations:
+      crm_code: P132i
+      crm_label: spatiotemporally overlaps with
+      quantifier: 0..*
+      notes: Inverse of spatiotemporally overlaps with
+  P133_is_spatiotemporally_separated_from:
+    domain: E92_SpacetimeVolume
+    range: E92_SpacetimeVolume
+    inverse: P133i_is_spatiotemporally_separated_from
+    multivalued: true
+    aliases:
+    - IS_SPATIOTEMPORALLY_SEPARATED_FROM
+    annotations:
+      crm_code: P133
+      crm_label: is spatiotemporally separated from
+      quantifier: 0..*
+      notes: Spacetime volume is spatiotemporally separated from
+  P133i_is_spatiotemporally_separated_from:
+    domain: E92_SpacetimeVolume
+    range: E92_SpacetimeVolume
+    inverse: P133_is_spatiotemporally_separated_from
+    multivalued: true
+    aliases:
+    - IS_SPATIOTEMPORALLY_SEPARATED_FROM
+    annotations:
+      crm_code: P133i
+      crm_label: is spatiotemporally separated from
+      quantifier: 0..*
+      notes: Inverse of is spatiotemporally separated from
+  P134_continued:
+    domain: E7_Activity
+    range: E7_Activity
+    inverse: P134i_was_continued_by
+    multivalued: true
+    aliases:
+    - CONTINUED
+    annotations:
+      crm_code: P134
+      crm_label: continued
+      quantifier: 0..*
+      notes: Activity continued
+  P134i_was_continued_by:
+    domain: E7_Activity
+    range: E7_Activity
+    inverse: P134_continued
+    multivalued: true
+    aliases:
+    - WAS_CONTINUED_BY
+    annotations:
+      crm_code: P134i
+      crm_label: was continued by
+      quantifier: 0..*
+      notes: Inverse of continued
+  P135_created_type:
+    domain: E83_TypeCreation
+    range: E55_Type
+    inverse: P135i_was_created_by
+    multivalued: true
+    aliases:
+    - CREATED_TYPE
+    annotations:
+      crm_code: P135
+      crm_label: created type
+      quantifier: 0..*
+      notes: Type creation created type
+  P135i_was_created_by:
+    domain: E55_Type
+    range: E83_TypeCreation
+    inverse: P135_created_type
+    multivalued: true
+    aliases:
+    - WAS_CREATED_BY
+    annotations:
+      crm_code: P135i
+      crm_label: was created by
+      quantifier: 0..*
+      notes: Inverse of created type
+  P136_was_based_on:
+    domain: E73_InformationObject
+    range: E73_InformationObject
+    inverse: P136i_was_basis_for
+    multivalued: true
+    aliases:
+    - WAS_BASED_ON
+    annotations:
+      crm_code: P136
+      crm_label: was based on
+      quantifier: 0..*
+      notes: Information object was based on
+  P136i_was_basis_for:
+    domain: E73_InformationObject
+    range: E73_InformationObject
+    inverse: P136_was_based_on
+    multivalued: true
+    aliases:
+    - WAS_BASIS_FOR
+    annotations:
+      crm_code: P136i
+      crm_label: was basis for
+      quantifier: 0..*
+      notes: Inverse of was based on
+  P137_exemplifies:
+    domain: E55_Type
+    range: E1_CRMEntity
+    inverse: P137i_is_exemplified_by
+    multivalued: true
+    aliases:
+    - EXEMPLIFIES
+    annotations:
+      crm_code: P137
+      crm_label: exemplifies
+      quantifier: 0..*
+      notes: Type exemplifies
+  P137i_is_exemplified_by:
+    domain: E1_CRMEntity
+    range: E55_Type
+    inverse: P137_exemplifies
+    multivalued: true
+    aliases:
+    - IS_EXEMPLIFIED_BY
+    annotations:
+      crm_code: P137i
+      crm_label: is exemplified by
+      quantifier: 0..*
+      notes: Inverse of exemplifies
+  P138_represents:
+    domain: E73_InformationObject
+    range: E1_CRMEntity
+    inverse: P138i_is_represented_by
+    multivalued: true
+    aliases:
+    - REPRESENTS
+    annotations:
+      crm_code: P138
+      crm_label: represents
+      quantifier: 0..*
+      notes: Information object represents
+  P138i_is_represented_by:
+    domain: E1_CRMEntity
+    range: E73_InformationObject
+    inverse: P138_represents
+    multivalued: true
+    aliases:
+    - IS_REPRESENTED_BY
+    annotations:
+      crm_code: P138i
+      crm_label: is represented by
+      quantifier: 0..*
+      notes: Inverse of represents
+  P139_has_alternative_form:
+    domain: E41_Appellation
+    range: E41_Appellation
+    inverse: P139i_is_alternative_form_of
+    multivalued: true
+    aliases:
+    - HAS_ALTERNATIVE_FORM
+    annotations:
+      crm_code: P139
+      crm_label: has alternative form
+      quantifier: 0..*
+      notes: Appellation has alternative form
+  P139i_is_alternative_form_of:
+    domain: E41_Appellation
+    range: E41_Appellation
+    inverse: P139_has_alternative_form
+    multivalued: true
+    aliases:
+    - IS_ALTERNATIVE_FORM_OF
+    annotations:
+      crm_code: P139i
+      crm_label: is alternative form of
+      quantifier: 0..*
+      notes: Inverse of has alternative form
+  P140_assigned_attribute_to:
+    domain: E13_AttributeAssignment
+    range: E1_CRMEntity
+    inverse: P140i_was_attributed_by
+    multivalued: true
+    aliases:
+    - ASSIGNED_ATTRIBUTE_TO
+    annotations:
+      crm_code: P140
+      crm_label: assigned attribute to
+      quantifier: 0..*
+      notes: Attribute assignment assigned attribute to
+  P140i_was_attributed_by:
+    domain: E1_CRMEntity
+    range: E13_AttributeAssignment
+    inverse: P140_assigned_attribute_to
+    multivalued: true
+    aliases:
+    - WAS_ATTRIBUTED_BY
+    annotations:
+      crm_code: P140i
+      crm_label: was attributed by
+      quantifier: 0..*
+      notes: Inverse of assigned attribute to
+  P141_assigned:
+    domain: E13_AttributeAssignment
+    range: E1_CRMEntity
+    inverse: P141i_was_assigned_by
+    multivalued: true
+    aliases:
+    - ASSIGNED
+    annotations:
+      crm_code: P141
+      crm_label: assigned
+      quantifier: 0..*
+      notes: Attribute assignment assigned
+  P141i_was_assigned_by:
+    domain: E1_CRMEntity
+    range: E13_AttributeAssignment
+    inverse: P141_assigned
+    multivalued: true
+    aliases:
+    - WAS_ASSIGNED_BY
+    annotations:
+      crm_code: P141i
+      crm_label: was assigned by
+      quantifier: 0..*
+      notes: Inverse of assigned
+  P142_used_constituent:
+    domain: E7_Activity
+    range: E18_PhysicalThing
+    inverse: P142i_was_used_in
+    multivalued: true
+    aliases:
+    - USED_CONSTITUENT
+    annotations:
+      crm_code: P142
+      crm_label: used constituent
+      quantifier: 0..*
+      notes: Activity used constituent
+  P142i_was_used_in:
+    domain: E18_PhysicalThing
+    range: E7_Activity
+    inverse: P142_used_constituent
+    multivalued: true
+    aliases:
+    - WAS_USED_IN
+    annotations:
+      crm_code: P142i
+      crm_label: was used in
+      quantifier: 0..*
+      notes: Inverse of used constituent
+  P143_joined:
+    domain: E85_Joining
+    range: E39_Actor
+    inverse: P143i_was_joined_by
+    multivalued: true
+    aliases:
+    - JOINED
+    annotations:
+      crm_code: P143
+      crm_label: joined
+      quantifier: 0..*
+      notes: Joining joined
+  P143i_was_joined_by:
+    domain: E39_Actor
+    range: E85_Joining
+    inverse: P143_joined
+    multivalued: true
+    aliases:
+    - WAS_JOINED_BY
+    annotations:
+      crm_code: P143i
+      crm_label: was joined by
+      quantifier: 0..*
+      notes: Inverse of joined
+  P144_joined_with:
+    domain: E85_Joining
+    range: E39_Actor
+    inverse: P144i_was_joined_with_by
+    multivalued: true
+    aliases:
+    - JOINED_WITH
+    annotations:
+      crm_code: P144
+      crm_label: joined with
+      quantifier: 0..*
+      notes: Joining joined with
+  P144i_was_joined_with_by:
+    domain: E39_Actor
+    range: E85_Joining
+    inverse: P144_joined_with
+    multivalued: true
+    aliases:
+    - WAS_JOINED_WITH_BY
+    annotations:
+      crm_code: P144i
+      crm_label: was joined with by
+      quantifier: 0..*
+      notes: Inverse of joined with
+  P145_separated:
+    domain: E86_Leaving
+    range: E39_Actor
+    inverse: P145i_was_separated_by
+    multivalued: true
+    aliases:
+    - SEPARATED
+    annotations:
+      crm_code: P145
+      crm_label: separated
+      quantifier: 0..*
+      notes: Leaving separated
+  P145i_was_separated_by:
+    domain: E39_Actor
+    range: E86_Leaving
+    inverse: P145_separated
+    multivalued: true
+    aliases:
+    - WAS_SEPARATED_BY
+    annotations:
+      crm_code: P145i
+      crm_label: was separated by
+      quantifier: 0..*
+      notes: Inverse of separated
+  P146_separated_from:
+    domain: E86_Leaving
+    range: E39_Actor
+    inverse: P146i_was_separated_from_by
+    multivalued: true
+    aliases:
+    - SEPARATED_FROM
+    annotations:
+      crm_code: P146
+      crm_label: separated from
+      quantifier: 0..*
+      notes: Leaving separated from
+  P146i_was_separated_from_by:
+    domain: E39_Actor
+    range: E86_Leaving
+    inverse: P146_separated_from
+    multivalued: true
+    aliases:
+    - WAS_SEPARATED_FROM_BY
+    annotations:
+      crm_code: P146i
+      crm_label: was separated from by
+      quantifier: 0..*
+      notes: Inverse of separated from
+  P147_curated:
+    domain: E87_CurationActivity
+    range: E78_CuratedHolding
+    inverse: P147i_was_curated_by
+    multivalued: true
+    aliases:
+    - CURATED
+    annotations:
+      crm_code: P147
+      crm_label: curated
+      quantifier: 0..*
+      notes: Curation activity curated
+  P147i_was_curated_by:
+    domain: E78_CuratedHolding
+    range: E87_CurationActivity
+    inverse: P147_curated
+    multivalued: true
+    aliases:
+    - WAS_CURATED_BY
+    annotations:
+      crm_code: P147i
+      crm_label: was curated by
+      quantifier: 0..*
+      notes: Inverse of curated
+  P148_has_component:
+    domain: E89_PropositionalStatement
+    range: E89_PropositionalStatement
+    inverse: P148i_is_component_of
+    multivalued: true
+    aliases:
+    - HAS_COMPONENT
+    annotations:
+      crm_code: P148
+      crm_label: has component
+      quantifier: 0..*
+      notes: Propositional statement has component
+  P148i_is_component_of:
+    domain: E89_PropositionalStatement
+    range: E89_PropositionalStatement
+    inverse: P148_has_component
+    multivalued: true
+    aliases:
+    - IS_COMPONENT_OF
+    annotations:
+      crm_code: P148i
+      crm_label: is component of
+      quantifier: 0..*
+      notes: Inverse of has component
+  P150_defines_typical_parts:
+    domain: E55_Type
+    range: E55_Type
+    inverse: P150i_defines_typical_wholes
+    multivalued: true
+    aliases:
+    - DEFINES_TYPICAL_PARTS
+    annotations:
+      crm_code: P150
+      crm_label: defines typical parts
+      quantifier: 0..*
+      notes: Type defines typical parts
+  P150i_defines_typical_wholes:
+    domain: E55_Type
+    range: E55_Type
+    inverse: P150_defines_typical_parts
+    multivalued: true
+    aliases:
+    - DEFINES_TYPICAL_WHOLES
+    annotations:
+      crm_code: P150i
+      crm_label: defines typical wholes
+      quantifier: 0..*
+      notes: Inverse of defines typical parts
+  P151_was_formed_from:
+    domain: E66_Formation
+    range: E77_PersistentItem
+    inverse: P151i_participated_in
+    multivalued: true
+    aliases:
+    - WAS_FORMED_FROM
+    annotations:
+      crm_code: P151
+      crm_label: was formed from
+      quantifier: 0..*
+      notes: Formation was formed from
+  P151i_participated_in:
+    domain: E77_PersistentItem
+    range: E66_Formation
+    inverse: P151_was_formed_from
+    multivalued: true
+    aliases:
+    - PARTICIPATED_IN
+    annotations:
+      crm_code: P151i
+      crm_label: participated in
+      quantifier: 0..*
+      notes: Inverse of was formed from
+  P152_has_parent:
+    domain: E21_Person
+    range: E21_Person
+    inverse: P152i_is_parent_of
+    multivalued: true
+    aliases:
+    - HAS_PARENT
+    annotations:
+      crm_code: P152
+      crm_label: has parent
+      quantifier: 0..*
+      notes: Person has parent
+  P152i_is_parent_of:
+    domain: E21_Person
+    range: E21_Person
+    inverse: P152_has_parent
+    multivalued: true
+    aliases:
+    - IS_PARENT_OF
+    annotations:
+      crm_code: P152i
+      crm_label: is parent of
+      quantifier: 0..*
+      notes: Inverse of has parent
+  P156_occupies:
+    domain: E93_Presence
+    range: E53_Place
+    inverse: P156i_is_occupied_by
+    multivalued: true
+    aliases:
+    - OCCUPIES
+    annotations:
+      crm_code: P156
+      crm_label: occupies
+      quantifier: 0..*
+      notes: Presence occupies
+  P156i_is_occupied_by:
+    domain: E53_Place
+    range: E93_Presence
+    inverse: P156_occupies
+    multivalued: true
+    aliases:
+    - IS_OCCUPIED_BY
+    annotations:
+      crm_code: P156i
+      crm_label: is occupied by
+      quantifier: 0..*
+      notes: Inverse of occupies
+  P157_is_at_rest_relative_to:
+    domain: E93_Presence
+    range: E53_Place
+    inverse: P157i_provides_reference_space_for
+    multivalued: true
+    aliases:
+    - IS_AT_REST_RELATIVE_TO
+    annotations:
+      crm_code: P157
+      crm_label: is at rest relative to
+      quantifier: 0..*
+      notes: Presence is at rest relative to
+  P157i_provides_reference_space_for:
+    domain: E53_Place
+    range: E93_Presence
+    inverse: P157_is_at_rest_relative_to
+    multivalued: true
+    aliases:
+    - PROVIDES_REFERENCE_SPACE_FOR
+    annotations:
+      crm_code: P157i
+      crm_label: provides reference space for
+      quantifier: 0..*
+      notes: Inverse of is at rest relative to
+  P160_has_temporal_projection:
+    domain: E92_SpacetimeVolume
+    range: E52_TimeSpan
+    inverse: P160i_is_temporal_projection_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_TEMPORAL_PROJECTION
+    annotations:
+      crm_code: P160
+      crm_label: has temporal projection
+      quantifier: 0..1
+      notes: Spacetime volume has temporal projection
+  P160i_is_temporal_projection_of:
+    domain: E52_TimeSpan
+    range: E92_SpacetimeVolume
+    inverse: P160_has_temporal_projection
+    multivalued: true
+    aliases:
+    - IS_TEMPORAL_PROJECTION_OF
+    annotations:
+      crm_code: P160i
+      crm_label: is temporal projection of
+      quantifier: 0..*
+      notes: Inverse of has temporal projection
+  P161_has_spatial_projection:
+    domain: E92_SpacetimeVolume
+    range: E53_Place
+    inverse: P161i_is_spatial_projection_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_SPATIAL_PROJECTION
+    annotations:
+      crm_code: P161
+      crm_label: has spatial projection
+      quantifier: 0..1
+      notes: Spacetime volume has spatial projection
+  P161i_is_spatial_projection_of:
+    domain: E53_Place
+    range: E92_SpacetimeVolume
+    inverse: P161_has_spatial_projection
+    multivalued: true
+    aliases:
+    - IS_SPATIAL_PROJECTION_OF
+    annotations:
+      crm_code: P161i
+      crm_label: is spatial projection of
+      quantifier: 0..*
+      notes: Inverse of has spatial projection
+  P164_is_temporally_specified_by:
+    domain: E92_SpacetimeVolume
+    range: E52_TimeSpan
+    inverse: P164i_temporally_specifies
+    multivalued: true
+    aliases:
+    - IS_TEMPORALLY_SPECIFIED_BY
+    annotations:
+      crm_code: P164
+      crm_label: is temporally specified by
+      quantifier: 0..*
+      notes: Spacetime volume is temporally specified by
+  P164i_temporally_specifies:
+    domain: E52_TimeSpan
+    range: E92_SpacetimeVolume
+    inverse: P164_is_temporally_specified_by
+    multivalued: true
+    aliases:
+    - TEMPORALLY_SPECIFIES
+    annotations:
+      crm_code: P164i
+      crm_label: temporally specifies
+      quantifier: 0..*
+      notes: Inverse of is temporally specified by
+  P165_incorporates:
+    domain: E92_SpacetimeVolume
+    range: E92_SpacetimeVolume
+    inverse: P165i_is_incorporated_in
+    multivalued: true
+    aliases:
+    - INCORPORATES
+    annotations:
+      crm_code: P165
+      crm_label: incorporates
+      quantifier: 0..*
+      notes: Spacetime volume incorporates
+  P165i_is_incorporated_in:
+    domain: E92_SpacetimeVolume
+    range: E92_SpacetimeVolume
+    inverse: P165_incorporates
+    multivalued: true
+    aliases:
+    - IS_INCORPORATED_IN
+    annotations:
+      crm_code: P165i
+      crm_label: is incorporated in
+      quantifier: 0..*
+      notes: Inverse of incorporates
+  P166_was_a_presence_of:
+    domain: E93_Presence
+    range: E77_PersistentItem
+    inverse: P166i_had_presence
+    multivalued: true
+    aliases:
+    - WAS_A_PRESENCE_OF
+    annotations:
+      crm_code: P166
+      crm_label: was a presence of
+      quantifier: 0..*
+      notes: Presence was a presence of
+  P166i_had_presence:
+    domain: E77_PersistentItem
+    range: E93_Presence
+    inverse: P166_was_a_presence_of
+    multivalued: true
+    aliases:
+    - HAD_PRESENCE
+    annotations:
+      crm_code: P166i
+      crm_label: had presence
+      quantifier: 0..*
+      notes: Inverse of was a presence of
+  P167_was_within:
+    domain: E93_Presence
+    range: E92_SpacetimeVolume
+    inverse: P167i_contains
+    multivalued: true
+    aliases:
+    - WAS_WITHIN
+    annotations:
+      crm_code: P167
+      crm_label: was within
+      quantifier: 0..*
+      notes: Presence was within
+  P167i_contains:
+    domain: E92_SpacetimeVolume
+    range: E93_Presence
+    inverse: P167_was_within
+    multivalued: true
+    aliases:
+    - CONTAINS
+    annotations:
+      crm_code: P167i
+      crm_label: contains
+      quantifier: 0..*
+      notes: Inverse of was within
+  P168_place_is_defined_by:
+    domain: E53_Place
+    range: E94_Space
+    inverse: P168i_defines
+    multivalued: true
+    aliases:
+    - PLACE_IS_DEFINED_BY
+    annotations:
+      crm_code: P168
+      crm_label: place is defined by
+      quantifier: 0..*
+      notes: Place is defined by
+  P168i_defines:
+    domain: E94_Space
+    range: E53_Place
+    inverse: P168_place_is_defined_by
+    multivalued: true
+    aliases:
+    - DEFINES
+    annotations:
+      crm_code: P168i
+      crm_label: defines
+      quantifier: 0..*
+      notes: Inverse of place is defined by
+  P169_defines_spacetime_volume:
+    domain: E94_Space
+    range: E92_SpacetimeVolume
+    inverse: P169i_spacetime_volume_is_defined_by
+    multivalued: true
+    aliases:
+    - DEFINES_SPACETIME_VOLUME
+    annotations:
+      crm_code: P169
+      crm_label: defines spacetime volume
+      quantifier: 0..*
+      notes: Space defines spacetime volume
+  P169i_spacetime_volume_is_defined_by:
+    domain: E92_SpacetimeVolume
+    range: E94_Space
+    inverse: P169_defines_spacetime_volume
+    multivalued: true
+    aliases:
+    - SPACETIME_VOLUME_IS_DEFINED_BY
+    annotations:
+      crm_code: P169i
+      crm_label: spacetime volume is defined by
+      quantifier: 0..*
+      notes: Inverse of defines spacetime volume
+  P170_defines_time:
+    domain: E52_TimeSpan
+    range: E61_TimePrimitive
+    inverse: P170i_time_is_defined_by
+    multivalued: true
+    aliases:
+    - DEFINES_TIME
+    annotations:
+      crm_code: P170
+      crm_label: defines time
+      quantifier: 0..*
+      notes: Time-span defines time
+  P170i_time_is_defined_by:
+    domain: E61_TimePrimitive
+    range: E52_TimeSpan
+    inverse: P170_defines_time
+    multivalued: true
+    aliases:
+    - TIME_IS_DEFINED_BY
+    annotations:
+      crm_code: P170i
+      crm_label: time is defined by
+      quantifier: 0..*
+      notes: Inverse of defines time
+  P171_at_some_place_within:
+    domain: E93_Presence
+    range: E53_Place
+    inverse: P171i_contains
+    multivalued: true
+    aliases:
+    - AT_SOME_PLACE_WITHIN
+    annotations:
+      crm_code: P171
+      crm_label: at some place within
+      quantifier: 0..*
+      notes: Presence at some place within
+  P171i_contains:
+    domain: E53_Place
+    range: E93_Presence
+    inverse: P171_at_some_place_within
+    multivalued: true
+    aliases:
+    - CONTAINS
+    annotations:
+      crm_code: P171i
+      crm_label: contains
+      quantifier: 0..*
+      notes: Inverse of at some place within
+  P172_contains:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P172i_is_contained_in
+    multivalued: true
+    aliases:
+    - CONTAINS
+    annotations:
+      crm_code: P172
+      crm_label: contains
+      quantifier: 0..*
+      notes: Place contains
+  P172i_is_contained_in:
+    domain: E53_Place
+    range: E53_Place
+    inverse: P172_contains
+    multivalued: true
+    aliases:
+    - IS_CONTAINED_IN
+    annotations:
+      crm_code: P172i
+      crm_label: is contained in
+      quantifier: 0..*
+      notes: Inverse of contains
+  P173_starts_before_or_with_the_end_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P173i_ends_after_or_with_the_start_of
+    multivalued: true
+    aliases:
+    - STARTS_BEFORE_OR_WITH_THE_END_OF
+    annotations:
+      crm_code: P173
+      crm_label: starts before or with the end of
+      quantifier: 0..*
+      notes: Temporal entity starts before or with the end of
+  P173i_ends_after_or_with_the_start_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P173_starts_before_or_with_the_end_of
+    multivalued: true
+    aliases:
+    - ENDS_AFTER_OR_WITH_THE_START_OF
+    annotations:
+      crm_code: P173i
+      crm_label: ends after or with the start of
+      quantifier: 0..*
+      notes: Inverse of starts before or with the end of
+  P174_starts_before_the_end_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P174i_ends_after_the_start_of
+    multivalued: true
+    aliases:
+    - STARTS_BEFORE_THE_END_OF
+    annotations:
+      crm_code: P174
+      crm_label: starts before the end of
+      quantifier: 0..*
+      notes: Temporal entity starts before the end of
+  P174i_ends_after_the_start_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P174_starts_before_the_end_of
+    multivalued: true
+    aliases:
+    - ENDS_AFTER_THE_START_OF
+    annotations:
+      crm_code: P174i
+      crm_label: ends after the start of
+      quantifier: 0..*
+      notes: Inverse of starts before the end of
+  P175_starts_before_or_with_the_start_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P175i_starts_after_or_with_the_start_of
+    multivalued: true
+    aliases:
+    - STARTS_BEFORE_OR_WITH_THE_START_OF
+    annotations:
+      crm_code: P175
+      crm_label: starts before or with the start of
+      quantifier: 0..*
+      notes: Temporal entity starts before or with the start of
+  P175i_starts_after_or_with_the_start_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P175_starts_before_or_with_the_start_of
+    multivalued: true
+    aliases:
+    - STARTS_AFTER_OR_WITH_THE_START_OF
+    annotations:
+      crm_code: P175i
+      crm_label: starts after or with the start of
+      quantifier: 0..*
+      notes: Inverse of starts before or with the start of
+  P176_starts_before_the_start_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P176i_starts_after_the_start_of
+    multivalued: true
+    aliases:
+    - STARTS_BEFORE_THE_START_OF
+    annotations:
+      crm_code: P176
+      crm_label: starts before the start of
+      quantifier: 0..*
+      notes: Temporal entity starts before the start of
+  P176i_starts_after_the_start_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P176_starts_before_the_start_of
+    multivalued: true
+    aliases:
+    - STARTS_AFTER_THE_START_OF
+    annotations:
+      crm_code: P176i
+      crm_label: starts after the start of
+      quantifier: 0..*
+      notes: Inverse of starts before the start of
+  P177_assigned:
+    domain: E13_AttributeAssignment
+    range: E1_CRMEntity
+    inverse: P177i_was_assigned_by
+    multivalued: true
+    aliases:
+    - ASSIGNED
+    annotations:
+      crm_code: P177
+      crm_label: assigned
+      quantifier: 0..*
+      notes: Attribute assignment assigned
+  P177i_was_assigned_by:
+    domain: E1_CRMEntity
+    range: E13_AttributeAssignment
+    inverse: P177_assigned
+    multivalued: true
+    aliases:
+    - WAS_ASSIGNED_BY
+    annotations:
+      crm_code: P177i
+      crm_label: was assigned by
+      quantifier: 0..*
+      notes: Inverse of assigned
+  P179_had_sales_price:
+    domain: E8_Acquisition
+    range: E97_MonetaryAmount
+    inverse: P179i_was_sales_price_of
+    multivalued: true
+    aliases:
+    - HAD_SALES_PRICE
+    annotations:
+      crm_code: P179
+      crm_label: had sales price
+      quantifier: 0..*
+      notes: Acquisition had sales price
+  P179i_was_sales_price_of:
+    domain: E97_MonetaryAmount
+    range: E8_Acquisition
+    inverse: P179_had_sales_price
+    multivalued: true
+    aliases:
+    - WAS_SALES_PRICE_OF
+    annotations:
+      crm_code: P179i
+      crm_label: was sales price of
+      quantifier: 0..*
+      notes: Inverse of had sales price
+  P180_has_currency:
+    domain: E97_MonetaryAmount
+    range: E98_Currency
+    inverse: P180i_is_currency_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAS_CURRENCY
+    annotations:
+      crm_code: P180
+      crm_label: has currency
+      quantifier: 0..1
+      notes: Monetary amount has currency
+  P180i_is_currency_of:
+    domain: E98_Currency
+    range: E97_MonetaryAmount
+    inverse: P180_has_currency
+    multivalued: true
+    aliases:
+    - IS_CURRENCY_OF
+    annotations:
+      crm_code: P180i
+      crm_label: is currency of
+      quantifier: 0..*
+      notes: Inverse of has currency
+  P182_ends_before_or_with_the_start_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P182i_starts_after_or_with_the_end_of
+    multivalued: true
+    aliases:
+    - ENDS_BEFORE_OR_WITH_THE_START_OF
+    annotations:
+      crm_code: P182
+      crm_label: ends before or with the start of
+      quantifier: 0..*
+      notes: Temporal entity ends before or with the start of
+  P182i_starts_after_or_with_the_end_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P182_ends_before_or_with_the_start_of
+    multivalued: true
+    aliases:
+    - STARTS_AFTER_OR_WITH_THE_END_OF
+    annotations:
+      crm_code: P182i
+      crm_label: starts after or with the end of
+      quantifier: 0..*
+      notes: Inverse of ends before or with the start of
+  P183_ends_before_the_start_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P183i_starts_after_the_end_of
+    multivalued: true
+    aliases:
+    - ENDS_BEFORE_THE_START_OF
+    annotations:
+      crm_code: P183
+      crm_label: ends before the start of
+      quantifier: 0..*
+      notes: Temporal entity ends before the start of
+  P183i_starts_after_the_end_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P183_ends_before_the_start_of
+    multivalued: true
+    aliases:
+    - STARTS_AFTER_THE_END_OF
+    annotations:
+      crm_code: P183i
+      crm_label: starts after the end of
+      quantifier: 0..*
+      notes: Inverse of ends before the start of
+  P184_ends_before_or_with_the_end_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P184i_ends_after_or_with_the_end_of
+    multivalued: true
+    aliases:
+    - ENDS_BEFORE_OR_WITH_THE_END_OF
+    annotations:
+      crm_code: P184
+      crm_label: ends before or with the end of
+      quantifier: 0..*
+      notes: Temporal entity ends before or with the end of
+  P184i_ends_after_or_with_the_end_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P184_ends_before_or_with_the_end_of
+    multivalued: true
+    aliases:
+    - ENDS_AFTER_OR_WITH_THE_END_OF
+    annotations:
+      crm_code: P184i
+      crm_label: ends after or with the end of
+      quantifier: 0..*
+      notes: Inverse of ends before or with the end of
+  P185_ends_before_the_end_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P185i_ends_after_the_end_of
+    multivalued: true
+    aliases:
+    - ENDS_BEFORE_THE_END_OF
+    annotations:
+      crm_code: P185
+      crm_label: ends before the end of
+      quantifier: 0..*
+      notes: Temporal entity ends before the end of
+  P185i_ends_after_the_end_of:
+    domain: E2_TemporalEntity
+    range: E2_TemporalEntity
+    inverse: P185_ends_before_the_end_of
+    multivalued: true
+    aliases:
+    - ENDS_AFTER_THE_END_OF
+    annotations:
+      crm_code: P185i
+      crm_label: ends after the end of
+      quantifier: 0..*
+      notes: Inverse of ends before the end of
+  P186_produced_thing_of_type:
+    domain: E12_Production
+    range: E55_Type
+    inverse: P186i_was_produced_by
+    multivalued: true
+    aliases:
+    - PRODUCED_THING_OF_TYPE
+    annotations:
+      crm_code: P186
+      crm_label: produced thing of type
+      quantifier: 0..*
+      notes: Production produced thing of type
+  P186i_was_produced_by:
+    domain: E55_Type
+    range: E12_Production
+    inverse: P186_produced_thing_of_type
+    multivalued: true
+    aliases:
+    - WAS_PRODUCED_BY
+    annotations:
+      crm_code: P186i
+      crm_label: was produced by
+      quantifier: 0..*
+      notes: Inverse of produced thing of type
+  P187_has_production_plan:
+    domain: E12_Production
+    range: E29_DesignOrProcedure
+    inverse: P187i_was_production_plan_for
+    multivalued: true
+    aliases:
+    - HAS_PRODUCTION_PLAN
+    annotations:
+      crm_code: P187
+      crm_label: has production plan
+      quantifier: 0..*
+      notes: Production has production plan
+  P187i_was_production_plan_for:
+    domain: E29_DesignOrProcedure
+    range: E12_Production
+    inverse: P187_has_production_plan
+    multivalued: true
+    aliases:
+    - WAS_PRODUCTION_PLAN_FOR
+    annotations:
+      crm_code: P187i
+      crm_label: was production plan for
+      quantifier: 0..*
+      notes: Inverse of has production plan
+  P188_requires:
+    domain: E29_DesignOrProcedure
+    range: E19_PhysicalObject
+    inverse: P188i_is_required_by
+    multivalued: true
+    aliases:
+    - REQUIRES
+    annotations:
+      crm_code: P188
+      crm_label: requires
+      quantifier: 0..*
+      notes: Design or procedure requires
+  P188i_is_required_by:
+    domain: E19_PhysicalObject
+    range: E29_DesignOrProcedure
+    inverse: P188_requires
+    multivalued: true
+    aliases:
+    - IS_REQUIRED_BY
+    annotations:
+      crm_code: P188i
+      crm_label: is required by
+      quantifier: 0..*
+      notes: Inverse of requires
+  P189_approximates:
+    domain: E95_SpacetimePrimitive
+    range: E95_SpacetimePrimitive
+    inverse: P189i_approximates
+    multivalued: true
+    aliases:
+    - APPROXIMATES
+    annotations:
+      crm_code: P189
+      crm_label: approximates
+      quantifier: 0..*
+      notes: Spacetime primitive approximates
+  P189i_approximates:
+    domain: E95_SpacetimePrimitive
+    range: E95_SpacetimePrimitive
+    inverse: P189_approximates
+    multivalued: true
+    aliases:
+    - APPROXIMATES
+    annotations:
+      crm_code: P189i
+      crm_label: approximates
+      quantifier: 0..*
+      notes: Inverse of approximates
+  P190_has_symbolic_content:
+    domain: E90_SymbolicObject
+    range: E62_String
+    inverse: P190i_is_symbolic_content_of
+    multivalued: true
+    aliases:
+    - HAS_SYMBOLIC_CONTENT
+    annotations:
+      crm_code: P190
+      crm_label: has symbolic content
+      quantifier: 0..*
+      notes: Symbolic object has symbolic content
+  P190i_is_symbolic_content_of:
+    domain: E62_String
+    range: E90_SymbolicObject
+    inverse: P190_has_symbolic_content
+    multivalued: true
+    aliases:
+    - IS_SYMBOLIC_CONTENT_OF
+    annotations:
+      crm_code: P190i
+      crm_label: is symbolic content of
+      quantifier: 0..*
+      notes: Inverse of has symbolic content
+  P191_had_duration:
+    domain: E2_TemporalEntity
+    range: E54_Dimension
+    inverse: P191i_was_duration_of
+    multivalued: false
+    maximum_cardinality: 1
+    aliases:
+    - HAD_DURATION
+    annotations:
+      crm_code: P191
+      crm_label: had duration
+      quantifier: 0..1
+      notes: Temporal entity had duration
+  P191i_was_duration_of:
+    domain: E54_Dimension
+    range: E2_TemporalEntity
+    inverse: P191_had_duration
+    multivalued: true
+    aliases:
+    - WAS_DURATION_OF
+    annotations:
+      crm_code: P191i
+      crm_label: was duration of
+      quantifier: 0..*
+      notes: Inverse of had duration
+  P195_was_a_presence_of:
+    domain: E93_Presence
+    range: E77_PersistentItem
+    inverse: P195i_had_presence
+    multivalued: true
+    aliases:
+    - WAS_A_PRESENCE_OF
+    annotations:
+      crm_code: P195
+      crm_label: was a presence of
+      quantifier: 0..*
+      notes: Presence was a presence of
+  P195i_had_presence:
+    domain: E77_PersistentItem
+    range: E93_Presence
+    inverse: P195_was_a_presence_of
+    multivalued: true
+    aliases:
+    - HAD_PRESENCE
+    annotations:
+      crm_code: P195i
+      crm_label: had presence
+      quantifier: 0..*
+      notes: Inverse of was a presence of
+  P196_defines:
+    domain: E94_Space
+    range: E92_SpacetimeVolume
+    inverse: P196i_is_defined_by
+    multivalued: true
+    aliases:
+    - DEFINES
+    annotations:
+      crm_code: P196
+      crm_label: defines
+      quantifier: 0..*
+      notes: Space defines
+  P196i_is_defined_by:
+    domain: E92_SpacetimeVolume
+    range: E94_Space
+    inverse: P196_defines
+    multivalued: true
+    aliases:
+    - IS_DEFINED_BY
+    annotations:
+      crm_code: P196i
+      crm_label: is defined by
+      quantifier: 0..*
+      notes: Inverse of defines
+  P197_covered_parts_of:
+    domain: E93_Presence
+    range: E53_Place
+    inverse: P197i_was_covered_by
+    multivalued: true
+    aliases:
+    - COVERED_PARTS_OF
+    annotations:
+      crm_code: P197
+      crm_label: covered parts of
+      quantifier: 0..*
+      notes: Presence covered parts of
+  P197i_was_covered_by:
+    domain: E53_Place
+    range: E93_Presence
+    inverse: P197_covered_parts_of
+    multivalued: true
+    aliases:
+    - WAS_COVERED_BY
+    annotations:
+      crm_code: P197i
+      crm_label: was covered by
+      quantifier: 0..*
+      notes: Inverse of covered parts of
+  P198_holds_or_supports:
+    domain: E93_Presence
+    range: E18_PhysicalThing
+    inverse: P198i_is_held_or_supported_by
+    multivalued: true
+    aliases:
+    - HOLDS_OR_SUPPORTS
+    annotations:
+      crm_code: P198
+      crm_label: holds or supports
+      quantifier: 0..*
+      notes: Presence holds or supports
+  P198i_is_held_or_supported_by:
+    domain: E18_PhysicalThing
+    range: E93_Presence
+    inverse: P198_holds_or_supports
+    multivalued: true
+    aliases:
+    - IS_HELD_OR_SUPPORTED_BY
+    annotations:
+      crm_code: P198i
+      crm_label: is held or supported by
+      quantifier: 0..*
+      notes: Inverse of holds or supports

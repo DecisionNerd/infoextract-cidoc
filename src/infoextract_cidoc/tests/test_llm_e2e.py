@@ -23,18 +23,14 @@ from infoextract_cidoc.io.to_cypher import generate_cypher_script
 from infoextract_cidoc.io.to_markdown import MarkdownStyle, to_markdown
 from infoextract_cidoc.io.to_networkx import to_networkx_graph
 
-_EINSTEIN_TEXT = (
-    Path(__file__).parent.parent / "examples" / "einstein.md"
-).read_text()
+_EINSTEIN_TEXT = (Path(__file__).parent.parent / "examples" / "einstein.md").read_text()
 
 
 @pytest.fixture(scope="module", autouse=True)
 def _require_api_key() -> None:
     """Skip this entire module if no Gemini API key is configured."""
     if not os.environ.get("GEMINI_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
-        pytest.skip(
-            "No Gemini API key available; set GEMINI_API_KEY or GOOGLE_API_KEY"
-        )
+        pytest.skip("No Gemini API key available; set GEMINI_API_KEY or GOOGLE_API_KEY")
 
 
 @pytest.fixture(scope="module")

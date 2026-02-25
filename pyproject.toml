@@ -83,6 +83,7 @@ dev = [
     "pre-commit>=3.6.0",
     "pytest-cov>=4.0",
     "pytest-xdist>=3.0",
+    "linkml>=1.9.6",
 ]
 docs = [
     "mkdocs>=1.6.0",
@@ -94,7 +95,7 @@ docs = [
 [tool.ruff]
 target-version = "py313"
 line-length = 88
-exclude = ["src/infoextract_cidoc/codegen/generate_templates.py"]
+exclude = ["src/infoextract_cidoc/codegen/generate_templates.py", "src/infoextract_cidoc/codegen/cidoc_crm.yaml", "src/infoextract_cidoc/codegen/cidoc_crm_properties.yaml"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "C90", "I", "N", "UP", "YTT", "S", "BLE", "FBT", "B", "A", "C4", "DTZ", "T10", "EM", "EXE", "FA", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SLOT", "SIM", "TID", "TCH", "INT", "ARG", "PTH", "TD", "FIX", "ERA", "PD", "PGH", "PL", "TRY", "FLY", "NPY", "AIR", "PERF", "FURB", "LOG", "RUF"]
@@ -107,8 +108,8 @@ known-first-party = ["infoextract_cidoc"]
 [tool.ruff.lint.per-file-ignores]
 "src/infoextract_cidoc/codegen/generate_templates.py" = ["ALL"]
 "src/infoextract_cidoc/tests/**/*.py" = ["S101", "TID252", "B017", "PT011", "PT018", "PLR0915", "PLR2004", "PLC0415", "SLF001", "ARG002", "ERA001"]
-"src/infoextract_cidoc/models/generated/*.py" = ["RUF012", "N801", "FBT001"]
-"src/infoextract_cidoc/codegen/*.py" = ["EXE001", "PLC0415", "INP001"]
+"src/infoextract_cidoc/models/generated/*.py" = ["RUF012", "N801", "FBT001", "TC003"]
+"src/infoextract_cidoc/codegen/*.py" = ["EXE001", "PLC0415", "INP001", "T201"]
 "src/infoextract_cidoc/models/base.py" = ["RUF012", "N801", "FBT001", "N805", "PLC0415", "S324"]
 "src/infoextract_cidoc/io/*.py" = ["FBT001", "INP001", "PERF401", "PLW2901"]
 "src/infoextract_cidoc/io/to_networkx/*.py" = ["ARG001"]
@@ -130,10 +131,10 @@ check_untyped_defs = true
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true
-exclude = ["src/infoextract_cidoc/tests/", "docs/"]
+exclude = ["src/infoextract_cidoc/tests/", "docs/", "src/infoextract_cidoc/codegen/generate_templates\\.py"]
 
 [tool.bandit]
-exclude_dirs = ["src/infoextract_cidoc/tests"]
+exclude_dirs = ["src/infoextract_cidoc/tests", "src/infoextract_cidoc/codegen/generate_templates.py"]
 skips = ["B101"]
 
 [tool.pytest.ini_options]
@@ -151,6 +152,8 @@ source = ["src/infoextract_cidoc"]
 omit = [
     "src/infoextract_cidoc/tests/*",
     "src/infoextract_cidoc/codegen/*",
+    "src/infoextract_cidoc/main.py",
+    "src/infoextract_cidoc/visualization/*",
 ]
 
 [tool.coverage.report]

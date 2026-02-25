@@ -6,8 +6,8 @@ from uuid import uuid4
 
 from ...io.to_markdown import MarkdownStyle, render_table, to_markdown
 from ...models.generated.e_classes import (
-    EE12_Production,
-    EE22_HumanMadeObject,
+    E12_Production,
+    E22_HumanMadeObject,
 )
 
 
@@ -16,7 +16,7 @@ class TestMarkdownRendering:
 
     def test_card_rendering(self):
         """Test card-style rendering."""
-        entity = EE22_HumanMadeObject(
+        entity = E22_HumanMadeObject(
             id=uuid4(),
             class_code="E22",
             label="Ancient Vase",
@@ -35,7 +35,7 @@ class TestMarkdownRendering:
 
     def test_detailed_rendering(self):
         """Test detailed-style rendering."""
-        entity = EE22_HumanMadeObject(
+        entity = E22_HumanMadeObject(
             id=uuid4(),
             class_code="E22",
             label="Ancient Vase",
@@ -54,8 +54,8 @@ class TestMarkdownRendering:
     def test_table_rendering(self):
         """Test table-style rendering."""
         entities = [
-            EE22_HumanMadeObject(id=uuid4(), class_code="E22", label="Vase 1"),
-            EE22_HumanMadeObject(id=uuid4(), class_code="E22", label="Vase 2"),
+            E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Vase 1"),
+            E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Vase 2"),
         ]
 
         markdown = render_table(entities)
@@ -68,7 +68,7 @@ class TestMarkdownRendering:
 
     def test_narrative_rendering(self):
         """Test narrative-style rendering."""
-        entity = EE12_Production(
+        entity = E12_Production(
             id=uuid4(),
             class_code="E12",
             label="Vase Production",
@@ -86,9 +86,7 @@ class TestMarkdownRendering:
 
     def test_aliases_usage(self):
         """Test that aliases are used when provided."""
-        entity = EE22_HumanMadeObject(
-            id=uuid4(), class_code="E22", label="Ancient Vase"
-        )
+        entity = E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Ancient Vase")
 
         aliases = {"E22": "Artifact", "current_location": "Location"}
 
@@ -100,9 +98,7 @@ class TestMarkdownRendering:
 
     def test_show_codes_option(self):
         """Test show_codes option."""
-        entity = EE22_HumanMadeObject(
-            id=uuid4(), class_code="E22", label="Ancient Vase"
-        )
+        entity = E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Ancient Vase")
 
         # With codes
         markdown_with_codes = to_markdown(entity, MarkdownStyle.CARD, show_codes=True)
@@ -117,7 +113,7 @@ class TestMarkdownRendering:
 
     def test_empty_entity(self):
         """Test rendering of entity with minimal data."""
-        entity = EE22_HumanMadeObject(id=uuid4(), class_code="E22")
+        entity = E22_HumanMadeObject(id=uuid4(), class_code="E22")
 
         markdown = to_markdown(entity, MarkdownStyle.CARD)
 
@@ -128,8 +124,8 @@ class TestMarkdownRendering:
     def test_custom_columns(self):
         """Test table rendering with custom columns."""
         entities = [
-            EE22_HumanMadeObject(id=uuid4(), class_code="E22", label="Vase 1"),
-            EE22_HumanMadeObject(id=uuid4(), class_code="E22", label="Vase 2"),
+            E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Vase 1"),
+            E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Vase 2"),
         ]
 
         custom_columns = ["id", "label"]

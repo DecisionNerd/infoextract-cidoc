@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 def _entity_to_crm(entity: ExtractedEntity) -> CRMEntity:
     """Map an ExtractedEntity to a CRMEntity."""
     return CRMEntity(
-        id=str(entity.id),
+        id=entity.id,
         class_code=entity.class_code,
         label=entity.label,
         notes=entity.description,
@@ -43,6 +43,7 @@ def map_to_crm_entities(
             src=rel.source_id,
             type=rel.property_code,
             tgt=rel.target_id,
+            props=None,
             source_text=rel.source_text,
         )
         for rel in result.relationships

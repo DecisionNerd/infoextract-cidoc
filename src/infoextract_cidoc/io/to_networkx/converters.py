@@ -48,7 +48,11 @@ def entities_to_networkx(
         if include_all_attributes:
             entity_dict = entity.dict()
             node_data.update(
-                {k: v for k, v in entity_dict.items() if k not in [node_id_field, "class_code"]}
+                {
+                    k: v
+                    for k, v in entity_dict.items()
+                    if k not in [node_id_field, "class_code"]
+                }
             )
 
         node_data_list.append(node_data)

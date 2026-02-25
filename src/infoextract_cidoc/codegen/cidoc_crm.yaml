@@ -1,0 +1,492 @@
+id: https://cidoc-crm.org/schemas/cidoc_crm_v7.1.3
+name: cidoc_crm
+description: CIDOC Conceptual Reference Model v7.1.3 - LinkML schema for code generation
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  crm: https://cidoc-crm.org/
+
+imports:
+  - linkml:types
+
+default_range: string
+
+# Shortcut slots (alias fields for common P-property relationships).
+# Only defined on the first class in each hierarchy branch that introduces them;
+# subclasses inherit them automatically via LinkML is_a.
+slots:
+  timespan:
+    range: string
+    required: false
+    description: "P4: has time-span — shortcut to E52_TimeSpan entity ID"
+
+  took_place_at:
+    range: string
+    required: false
+    description: "P7: took place at — shortcut to E53_Place entity ID"
+
+  current_location:
+    range: string
+    required: false
+    description: "P53: has current or former location — shortcut to E53_Place entity ID"
+
+  produced_by:
+    range: string
+    required: false
+    description: "P108: was produced by — shortcut to E12_Production entity ID"
+
+  begin_of_the_begin:
+    range: string
+    required: false
+    description: "P79: beginning is qualified by — shortcut to E61_TimePrimitive entity ID"
+
+  end_of_the_end:
+    range: string
+    required: false
+    description: "P80: end is qualified by — shortcut to E61_TimePrimitive entity ID"
+
+classes:
+
+  # ── E1 root ──────────────────────────────────────────────────────────────────
+
+  E1_CRMEntity:
+    abstract: true
+    description: "E1: CRM Entity — the most abstract CRM class"
+
+  # ── E2 branch: Temporal Entities ─────────────────────────────────────────────
+
+  E2_TemporalEntity:
+    is_a: E1_CRMEntity
+    abstract: true
+    description: "E2: Temporal Entity — entities that persist through time"
+
+  E3_ConditionState:
+    is_a: E2_TemporalEntity
+    description: "E3: Condition State — a physical condition of an object"
+
+  E4_Period:
+    is_a: E2_TemporalEntity
+    description: "E4: Period — a named historical or cultural period"
+
+  # E5 introduces timespan and took_place_at; all descendants inherit them
+  E5_Event:
+    is_a: E2_TemporalEntity
+    description: "E5: Event — something that happens and has spatiotemporal extent"
+    slots:
+      - timespan
+      - took_place_at
+
+  E6_Destruction:
+    is_a: E5_Event
+    description: "E6: Destruction — an event that destroys a physical object"
+
+  E7_Activity:
+    is_a: E5_Event
+    description: "E7: Activity — an intentional action by an actor"
+
+  E8_Acquisition:
+    is_a: E7_Activity
+    description: "E8: Acquisition — the acquisition of ownership of an object"
+
+  E9_Move:
+    is_a: E7_Activity
+    description: "E9: Move — a physical relocation of an object"
+
+  E10_TransferOfCustody:
+    is_a: E7_Activity
+    description: "E10: Transfer of Custody — custody transfer of an object"
+
+  E11_Modification:
+    is_a: E7_Activity
+    description: "E11: Modification — a physical modification of an object"
+
+  E12_Production:
+    is_a: E7_Activity
+    description: "E12: Production — the creation of a human-made object"
+
+  E13_AttributeAssignment:
+    is_a: E7_Activity
+    description: "E13: Attribute Assignment — the assignment of an attribute to an entity"
+
+  E14_ConditionAssessment:
+    is_a: E13_AttributeAssignment
+    description: "E14: Condition Assessment — an assessment of the condition of an object"
+
+  E15_IdentifierAssignment:
+    is_a: E13_AttributeAssignment
+    description: "E15: Identifier Assignment — the assignment of an identifier to an entity"
+
+  E16_Measurement:
+    is_a: E13_AttributeAssignment
+    description: "E16: Measurement — the measurement of a dimension"
+
+  E17_TypeAssignment:
+    is_a: E13_AttributeAssignment
+    description: "E17: Type Assignment — the assignment of a type to an entity"
+
+  E63_BeginningOfExistence:
+    is_a: E5_Event
+    description: "E63: Beginning of Existence — an event that brings an entity into existence"
+
+  E64_EndOfExistence:
+    is_a: E5_Event
+    description: "E64: End of Existence — an event that terminates an entity's existence"
+
+  E65_Creation:
+    is_a: E63_BeginningOfExistence
+    description: "E65: Creation — the creation of a conceptual object"
+
+  E66_Formation:
+    is_a: E63_BeginningOfExistence
+    description: "E66: Formation — the formation of a group"
+
+  E67_Birth:
+    is_a: E66_Formation
+    description: "E67: Birth — the birth of a person"
+
+  E68_Dissolution:
+    is_a: E64_EndOfExistence
+    description: "E68: Dissolution — the dissolution of a group"
+
+  E69_Death:
+    is_a: E64_EndOfExistence
+    description: "E69: Death — the death of a person"
+
+  E79_PartAddition:
+    is_a: E11_Modification
+    description: "E79: Part Addition — the addition of a part to an object"
+
+  E80_PartRemoval:
+    is_a: E11_Modification
+    description: "E80: Part Removal — the removal of a part from an object"
+
+  E81_Transformation:
+    is_a: E11_Modification
+    description: "E81: Transformation — a transformation of an object into another"
+
+  E83_TypeCreation:
+    is_a: E65_Creation
+    description: "E83: Type Creation — the creation of a type concept"
+
+  E85_Joining:
+    is_a: E7_Activity
+    description: "E85: Joining — joining a group"
+
+  E86_Leaving:
+    is_a: E7_Activity
+    description: "E86: Leaving — leaving a group"
+
+  E87_CurationActivity:
+    is_a: E7_Activity
+    description: "E87: Curation Activity — a curation activity for a managed collection"
+
+  E96_Purchase:
+    is_a: E8_Acquisition
+    description: "E96: Purchase — an acquisition by exchange of monetary value"
+
+  # ── E18 branch: Physical Things ──────────────────────────────────────────────
+
+  E18_PhysicalThing:
+    is_a: E1_CRMEntity
+    abstract: true
+    description: "E18: Physical Thing — a material thing that occupies space"
+
+  # E19 introduces current_location for the Physical Object sub-branch
+  E19_PhysicalObject:
+    is_a: E18_PhysicalThing
+    description: "E19: Physical Object — a discrete physical object"
+    slots:
+      - current_location
+
+  E20_BiologicalObject:
+    is_a: E19_PhysicalObject
+    description: "E20: Biological Object — a biological object"
+
+  E21_Person:
+    is_a: E20_BiologicalObject
+    description: "E21: Person — a human individual"
+
+  # E22 inherits current_location from E19 and adds produced_by
+  E22_HumanMadeObject:
+    is_a: E19_PhysicalObject
+    description: "E22: Human-Made Object — a physical object intentionally made by humans"
+    slots:
+      - produced_by
+
+  # E24 is a separate E18 sub-branch; must independently declare current_location
+  E24_PhysicalManMadeThing:
+    is_a: E18_PhysicalThing
+    description: "E24: Physical Man-Made Thing — a physical man-made thing"
+    slots:
+      - current_location
+
+  E25_ManMadeFeature:
+    is_a: E24_PhysicalManMadeThing
+    description: "E25: Man-Made Feature — a man-made feature in the landscape"
+
+  # E26 is another separate E18 sub-branch; must independently declare current_location
+  E26_PhysicalFeature:
+    is_a: E18_PhysicalThing
+    description: "E26: Physical Feature — a physical feature of an object or location"
+    slots:
+      - current_location
+
+  E27_Site:
+    is_a: E26_PhysicalFeature
+    description: "E27: Site — an area of land of cultural heritage significance"
+
+  # ── E23 branch: Conceptual Objects ───────────────────────────────────────────
+
+  E23_ConceptualObject:
+    is_a: E1_CRMEntity
+    abstract: true
+    description: "E23: Conceptual Object (abstract) — immaterial, conceptual items"
+
+  E28_ConceptualObject:
+    is_a: E23_ConceptualObject
+    description: "E28: Conceptual Object — a non-material conceptual item"
+
+  E29_DesignOrProcedure:
+    is_a: E28_ConceptualObject
+    description: "E29: Design or Procedure — a design or procedural prescription"
+
+  E30_Right:
+    is_a: E28_ConceptualObject
+    description: "E30: Right — a legal right"
+
+  E31_Document:
+    is_a: E28_ConceptualObject
+    description: "E31: Document — a document containing propositional content"
+
+  E32_AuthorityDocument:
+    is_a: E31_Document
+    description: "E32: Authority Document — an authoritative reference document"
+
+  E33_LinguisticObject:
+    is_a: E28_ConceptualObject
+    description: "E33: Linguistic Object — a linguistic expression"
+
+  E34_Inscription:
+    is_a: E33_LinguisticObject
+    description: "E34: Inscription — a textual inscription on a physical object"
+
+  E35_Title:
+    is_a: E33_LinguisticObject
+    description: "E35: Title — a title or name of a work"
+
+  E36_VisualItem:
+    is_a: E28_ConceptualObject
+    description: "E36: Visual Item — a visual representation"
+
+  E37_Mark:
+    is_a: E36_VisualItem
+    description: "E37: Mark — a mark or symbol"
+
+  E38_Image:
+    is_a: E36_VisualItem
+    description: "E38: Image — a pictorial representation"
+
+  E41_Appellation:
+    is_a: E28_ConceptualObject
+    description: "E41: Appellation — a name or identifier used to refer to an entity"
+
+  E42_Identifier:
+    is_a: E28_ConceptualObject
+    description: "E42: Identifier — a unique identifier"
+
+  E44_PlaceAppellation:
+    is_a: E41_Appellation
+    description: "E44: Place Appellation — a name used to refer to a place"
+
+  E45_Address:
+    is_a: E44_PlaceAppellation
+    description: "E45: Address — a postal or civic address"
+
+  E47_SpatialCoordinates:
+    is_a: E28_ConceptualObject
+    description: "E47: Spatial Coordinates — coordinates that define a location"
+
+  E48_PlaceName:
+    is_a: E44_PlaceAppellation
+    description: "E48: Place Name — a toponym or place name"
+
+  E49_TimeAppellation:
+    is_a: E41_Appellation
+    description: "E49: Time Appellation — a name used to refer to a time"
+
+  E50_Date:
+    is_a: E49_TimeAppellation
+    description: "E50: Date — a calendar date expression"
+
+  E51_ContactPoint:
+    is_a: E45_Address
+    description: "E51: Contact Point — a contact point such as phone or email"
+
+  E54_Dimension:
+    is_a: E28_ConceptualObject
+    description: "E54: Dimension — a measured dimension of a physical thing"
+
+  E55_Type:
+    is_a: E28_ConceptualObject
+    description: "E55: Type — a type or category concept"
+
+  E56_Language:
+    is_a: E55_Type
+    description: "E56: Language — a natural language"
+
+  E57_Material:
+    is_a: E55_Type
+    description: "E57: Material — a physical material"
+
+  E58_MeasurementUnit:
+    is_a: E55_Type
+    description: "E58: Measurement Unit — a unit of measurement"
+
+  E75_ConceptualObjectAppellation:
+    is_a: E41_Appellation
+    description: "E75: Conceptual Object Appellation — a name for a conceptual object"
+
+  E76_ConceptualObjectIdentifier:
+    is_a: E42_Identifier
+    description: "E76: Conceptual Object Identifier — an identifier for a conceptual object"
+
+  E82_ActorAppellation:
+    is_a: E75_ConceptualObjectAppellation
+    description: "E82: Actor Appellation — a name used to refer to an actor"
+
+  E88_PropositionalObject:
+    is_a: E28_ConceptualObject
+    description: "E88: Propositional Object — a set of propositions"
+
+  E89_PropositionalStatement:
+    is_a: E88_PropositionalObject
+    description: "E89: Propositional Statement — a single propositional statement"
+
+  E90_SymbolicObject:
+    is_a: E28_ConceptualObject
+    description: "E90: Symbolic Object — a symbolic expression"
+
+  E91_KnowledgeObject:
+    is_a: E90_SymbolicObject
+    description: "E91: Knowledge Object — structured knowledge"
+
+  E97_MonetaryAmount:
+    is_a: E28_ConceptualObject
+    description: "E97: Monetary Amount — a monetary value"
+
+  E98_Currency:
+    is_a: E55_Type
+    description: "E98: Currency — a monetary currency"
+
+  E99_ProductType:
+    is_a: E55_Type
+    description: "E99: Product Type — a product type"
+
+  # ── E39 branch: Actors ────────────────────────────────────────────────────────
+
+  E39_Actor:
+    is_a: E1_CRMEntity
+    abstract: true
+    description: "E39: Actor — a person or group capable of intentional action"
+
+  E40_LegalBody:
+    is_a: E39_Actor
+    description: "E40: Legal Body — a legal body such as a corporation or institution"
+
+  E74_Group:
+    is_a: E39_Actor
+    description: "E74: Group — a group of people or organisations"
+
+  # ── E43 branch: Places ────────────────────────────────────────────────────────
+
+  E43_Place:
+    is_a: E1_CRMEntity
+    abstract: true
+    description: "E43: Place (abstract) — a location in space"
+
+  E46_Section:
+    is_a: E43_Place
+    description: "E46: Section — a named section of a place"
+
+  E53_Place:
+    is_a: E43_Place
+    description: "E53: Place — a location defined in space"
+
+  # ── E52: Time-Span ────────────────────────────────────────────────────────────
+
+  E52_TimeSpan:
+    is_a: E1_CRMEntity
+    description: "E52: Time-Span — a temporal extent defined by begin and end"
+    slots:
+      - begin_of_the_begin
+      - end_of_the_end
+
+  # ── E59 branch: Primitive Values ─────────────────────────────────────────────
+
+  E59_PrimitiveValue:
+    is_a: E1_CRMEntity
+    abstract: true
+    description: "E59: Primitive Value — a primitive data value"
+
+  E60_Number:
+    is_a: E59_PrimitiveValue
+    description: "E60: Number — a numeric value"
+
+  E61_TimePrimitive:
+    is_a: E59_PrimitiveValue
+    description: "E61: Time Primitive — a primitive time value"
+
+  E62_String:
+    is_a: E59_PrimitiveValue
+    description: "E62: String — a string value"
+
+  E95_SpacetimePrimitive:
+    is_a: E59_PrimitiveValue
+    description: "E95: Spacetime Primitive — a primitive spacetime coordinate"
+
+  # ── E70 branch: Things ────────────────────────────────────────────────────────
+
+  E70_Thing:
+    is_a: E1_CRMEntity
+    abstract: true
+    description: "E70: Thing — anything with identity"
+
+  E71_HumanMadeThing:
+    is_a: E70_Thing
+    description: "E71: Human-Made Thing — a human-made thing (abstract)"
+
+  E72_LegalObject:
+    is_a: E70_Thing
+    description: "E72: Legal Object — something with legal significance"
+
+  E73_InformationObject:
+    is_a: E70_Thing
+    description: "E73: Information Object — an information object"
+
+  E84_InformationCarrier:
+    is_a: E73_InformationObject
+    description: "E84: Information Carrier — a physical carrier of information"
+
+  # ── E77 branch: Persistent Items ─────────────────────────────────────────────
+
+  E77_PersistentItem:
+    is_a: E1_CRMEntity
+    description: "E77: Persistent Item — an item that persists through time"
+
+  E78_CuratedHolding:
+    is_a: E77_PersistentItem
+    description: "E78: Curated Holding — a managed collection of objects"
+
+  # ── E92 branch: Spacetime Volumes ─────────────────────────────────────────────
+
+  E92_SpacetimeVolume:
+    is_a: E1_CRMEntity
+    description: "E92: Spacetime Volume — a volume in spacetime"
+
+  E93_Presence:
+    is_a: E92_SpacetimeVolume
+    description: "E93: Presence — the presence of an entity in a spacetime volume"
+
+  E94_Space:
+    is_a: E92_SpacetimeVolume
+    description: "E94: Space — a geometric space"

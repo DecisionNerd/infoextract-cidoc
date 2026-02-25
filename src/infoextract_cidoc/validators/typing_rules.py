@@ -45,8 +45,8 @@ def validate_domain_range_alignment(
         return
 
     property_info = P[p_code]
-    expected_domain = property_info["domain"]
-    expected_range = property_info["range"]
+    expected_domain = str(property_info["domain"])
+    expected_range = str(property_info["range"])
 
     # Check domain alignment
     if not _is_class_compatible(source_entity.class_code, expected_domain):
@@ -121,14 +121,14 @@ def validate_batch_typing(
         Dictionary mapping entity IDs to validation messages
     """
     # Create entity lookup
-    entity_lookup = {entity.id: entity for entity in entities}
+    entity_lookup = {str(entity.id): entity for entity in entities}
 
     results = {}
 
     for entity in entities:
         messages = validate_entity_typing(entity, entity_lookup, severity)
         if messages:
-            results[entity.id] = messages
+            results[str(entity.id)] = messages
 
     return results
 

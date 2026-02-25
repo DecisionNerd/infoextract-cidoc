@@ -1,1312 +1,643 @@
 """
 Auto-generated CIDOC CRM E-class models.
-Generated from YAML specifications in codegen/specs/
+Source of truth: codegen/cidoc_crm.yaml (LinkML schema)
+
+DO NOT EDIT — regenerate with: make codegen
 """
 
+from __future__ import annotations
+
 from uuid import UUID
+
+from pydantic import Field
 
 from infoextract_cidoc.models.base import CRMEntity
 
 
-class EE1_CRMEntity(CRMEntity):
-    """CIDOC CRM E1: CRM Entity (Abstract)"""
+class E1_CRMEntity(CRMEntity):
+    """E1: CRM Entity — the most abstract CRM class"""
 
     class_code: str = "E1"
 
-    class Config:
-        json_schema_extra = {
-            "description": "CRM Entity",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
-
-class EE2_TemporalEntity(EE1_CRMEntity):
-    """CIDOC CRM E2: Temporal Entity (Abstract)"""
-
-    class_code: str = "E2"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Temporal Entity",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE3_ConditionState(EE2_TemporalEntity):
-    """CIDOC CRM E3: Condition State"""
-
-    class_code: str = "E3"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Condition State",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE4_Period(EE2_TemporalEntity):
-    """CIDOC CRM E4: Period"""
-
-    class_code: str = "E4"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Period",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE5_Event(EE2_TemporalEntity):
-    """CIDOC CRM E5: Event"""
-
-    class_code: str = "E5"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Event",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE6_Destruction(EE5_Event):
-    """CIDOC CRM E6: Destruction"""
-
-    class_code: str = "E6"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Destruction",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE7_Activity(EE5_Event):
-    """CIDOC CRM E7: Activity"""
-
-    class_code: str = "E7"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Activity",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE8_Acquisition(EE7_Activity):
-    """CIDOC CRM E8: Acquisition"""
-
-    class_code: str = "E8"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Acquisition",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE9_Move(EE7_Activity):
-    """CIDOC CRM E9: Move"""
-
-    class_code: str = "E9"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Move",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE10_TransferofCustody(EE7_Activity):
-    """CIDOC CRM E10: Transfer of Custody"""
-
-    class_code: str = "E10"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Transfer of Custody",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE11_Modification(EE7_Activity):
-    """CIDOC CRM E11: Modification"""
-
-    class_code: str = "E11"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Modification",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE12_Production(EE7_Activity):
-    """CIDOC CRM E12: Production"""
-
-    class_code: str = "E12"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Production",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE13_AttributeAssignment(EE7_Activity):
-    """CIDOC CRM E13: Attribute Assignment"""
-
-    class_code: str = "E13"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Attribute Assignment",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE14_ConditionAssessment(EE13_AttributeAssignment):
-    """CIDOC CRM E14: Condition Assessment"""
-
-    class_code: str = "E14"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Condition Assessment",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE15_IdentifierAssignment(EE13_AttributeAssignment):
-    """CIDOC CRM E15: Identifier Assignment"""
-
-    class_code: str = "E15"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Identifier Assignment",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE16_Measurement(EE13_AttributeAssignment):
-    """CIDOC CRM E16: Measurement"""
-
-    class_code: str = "E16"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Measurement",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE17_TypeAssignment(EE13_AttributeAssignment):
-    """CIDOC CRM E17: Type Assignment"""
-
-    class_code: str = "E17"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Type Assignment",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE18_PhysicalThing(EE1_CRMEntity):
-    """CIDOC CRM E18: Physical Thing (Abstract)"""
+class E18_PhysicalThing(E1_CRMEntity):
+    """E18: Physical Thing — a material thing that occupies space"""
 
     class_code: str = "E18"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Physical Thing",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
-
-class EE19_PhysicalObject(EE18_PhysicalThing):
-    """CIDOC CRM E19: Physical Object"""
-
-    class_code: str = "E19"
-
-    current_location: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Physical Object",
-            "canonical_fields": ["label", "type", "notes", "current_location"],
-        }
-
-
-class EE20_BiologicalObject(EE19_PhysicalObject):
-    """CIDOC CRM E20: Biological Object"""
-
-    class_code: str = "E20"
-
-    current_location: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Biological Object",
-            "canonical_fields": ["label", "type", "notes", "current_location"],
-        }
-
-
-class EE21_Person(EE20_BiologicalObject):
-    """CIDOC CRM E21: Person"""
-
-    class_code: str = "E21"
-
-    current_location: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Person",
-            "canonical_fields": ["label", "type", "notes", "current_location"],
-        }
-
-
-class EE22_HumanMadeObject(EE19_PhysicalObject):
-    """CIDOC CRM E22: Human-Made Object"""
-
-    class_code: str = "E22"
-
-    current_location: UUID | None = None
-    produced_by: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Human-Made Object",
-            "canonical_fields": [
-                "label",
-                "type",
-                "notes",
-                "current_location",
-                "produced_by",
-            ],
-        }
-
-
-class EE23_ConceptualObject(EE1_CRMEntity):
-    """CIDOC CRM E23: Conceptual Object (Abstract)"""
+class E23_ConceptualObject(E1_CRMEntity):
+    """E23: Conceptual Object (abstract) — immaterial, conceptual items"""
 
     class_code: str = "E23"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Conceptual Object",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
+class E2_TemporalEntity(E1_CRMEntity):
+    """E2: Temporal Entity — entities that persist through time"""
 
-class EE24_PhysicalManMadeThing(EE18_PhysicalThing):
-    """CIDOC CRM E24: Physical Man-Made Thing"""
+    class_code: str = "E2"
 
-    class_code: str = "E24"
 
-    current_location: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Physical Man-Made Thing",
-            "canonical_fields": ["label", "type", "notes", "current_location"],
-        }
-
-
-class EE25_ManMadeFeature(EE24_PhysicalManMadeThing):
-    """CIDOC CRM E25: Man-Made Feature"""
-
-    class_code: str = "E25"
-
-    current_location: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Man-Made Feature",
-            "canonical_fields": ["label", "type", "notes", "current_location"],
-        }
-
-
-class EE26_PhysicalFeature(EE18_PhysicalThing):
-    """CIDOC CRM E26: Physical Feature"""
-
-    class_code: str = "E26"
-
-    current_location: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Physical Feature",
-            "canonical_fields": ["label", "type", "notes", "current_location"],
-        }
-
-
-class EE27_Site(EE26_PhysicalFeature):
-    """CIDOC CRM E27: Site"""
-
-    class_code: str = "E27"
-
-    current_location: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Site",
-            "canonical_fields": ["label", "type", "notes", "current_location"],
-        }
-
-
-class EE28_ConceptualObject(EE23_ConceptualObject):
-    """CIDOC CRM E28: Conceptual Object"""
-
-    class_code: str = "E28"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Conceptual Object",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE29_DesignorProcedure(EE28_ConceptualObject):
-    """CIDOC CRM E29: Design or Procedure"""
-
-    class_code: str = "E29"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Design or Procedure",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE30_Right(EE28_ConceptualObject):
-    """CIDOC CRM E30: Right"""
-
-    class_code: str = "E30"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Right",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE31_Document(EE28_ConceptualObject):
-    """CIDOC CRM E31: Document"""
-
-    class_code: str = "E31"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Document",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE32_AuthorityDocument(EE31_Document):
-    """CIDOC CRM E32: Authority Document"""
-
-    class_code: str = "E32"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Authority Document",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE33_LinguisticObject(EE28_ConceptualObject):
-    """CIDOC CRM E33: Linguistic Object"""
-
-    class_code: str = "E33"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Linguistic Object",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE34_Inscription(EE33_LinguisticObject):
-    """CIDOC CRM E34: Inscription"""
-
-    class_code: str = "E34"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Inscription",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE35_Title(EE33_LinguisticObject):
-    """CIDOC CRM E35: Title"""
-
-    class_code: str = "E35"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Title",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE36_VisualItem(EE28_ConceptualObject):
-    """CIDOC CRM E36: Visual Item"""
-
-    class_code: str = "E36"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Visual Item",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE37_Mark(EE36_VisualItem):
-    """CIDOC CRM E37: Mark"""
-
-    class_code: str = "E37"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Mark",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE38_Image(EE36_VisualItem):
-    """CIDOC CRM E38: Image"""
-
-    class_code: str = "E38"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Image",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE39_Actor(EE1_CRMEntity):
-    """CIDOC CRM E39: Actor (Abstract)"""
+class E39_Actor(E1_CRMEntity):
+    """E39: Actor — a person or group capable of intentional action"""
 
     class_code: str = "E39"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Actor",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
-
-class EE40_LegalBody(EE39_Actor):
-    """CIDOC CRM E40: Legal Body"""
-
-    class_code: str = "E40"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Legal Body",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE41_Appellation(EE28_ConceptualObject):
-    """CIDOC CRM E41: Appellation"""
-
-    class_code: str = "E41"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Appellation",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE42_Identifier(EE28_ConceptualObject):
-    """CIDOC CRM E42: Identifier"""
-
-    class_code: str = "E42"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Identifier",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE43_Place(EE1_CRMEntity):
-    """CIDOC CRM E43: Place (Abstract)"""
+class E43_Place(E1_CRMEntity):
+    """E43: Place (abstract) — a location in space"""
 
     class_code: str = "E43"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Place",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
-
-class EE44_PlaceAppellation(EE41_Appellation):
-    """CIDOC CRM E44: Place Appellation"""
-
-    class_code: str = "E44"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Place Appellation",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE45_Address(EE44_PlaceAppellation):
-    """CIDOC CRM E45: Address"""
-
-    class_code: str = "E45"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Address",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE46_Section(EE43_Place):
-    """CIDOC CRM E46: Section"""
-
-    class_code: str = "E46"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Section",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE47_SpatialCoordinates(EE28_ConceptualObject):
-    """CIDOC CRM E47: Spatial Coordinates"""
-
-    class_code: str = "E47"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Spatial Coordinates",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE48_PlaceName(EE44_PlaceAppellation):
-    """CIDOC CRM E48: Place Name"""
-
-    class_code: str = "E48"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Place Name",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE49_TimeAppellation(EE41_Appellation):
-    """CIDOC CRM E49: Time Appellation"""
-
-    class_code: str = "E49"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Time Appellation",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE50_Date(EE49_TimeAppellation):
-    """CIDOC CRM E50: Date"""
-
-    class_code: str = "E50"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Date",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE51_ContactPoint(EE45_Address):
-    """CIDOC CRM E51: Contact Point"""
-
-    class_code: str = "E51"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Contact Point",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE52_TimeSpan(EE1_CRMEntity):
-    """CIDOC CRM E52: Time-Span"""
+class E52_TimeSpan(E1_CRMEntity):
+    """E52: Time-Span — a temporal extent defined by begin and end"""
 
     class_code: str = "E52"
 
-    begin_of_the_begin: UUID | None = None
-    end_of_the_end: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Time-Span",
-            "canonical_fields": [
-                "label",
-                "type",
-                "notes",
-                "begin_of_the_begin",
-                "end_of_the_end",
-            ],
-        }
+    begin_of_the_begin: UUID | None = Field(
+        None,
+        description="P79: beginning is qualified by — shortcut to E61_TimePrimitive entity ID",
+    )
+    end_of_the_end: UUID | None = Field(
+        None,
+        description="P80: end is qualified by — shortcut to E61_TimePrimitive entity ID",
+    )
 
 
-class EE53_Place(EE43_Place):
-    """CIDOC CRM E53: Place"""
-
-    class_code: str = "E53"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Place",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE54_Dimension(EE28_ConceptualObject):
-    """CIDOC CRM E54: Dimension"""
-
-    class_code: str = "E54"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Dimension",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE55_Type(EE28_ConceptualObject):
-    """CIDOC CRM E55: Type"""
-
-    class_code: str = "E55"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Type",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE56_Language(EE55_Type):
-    """CIDOC CRM E56: Language"""
-
-    class_code: str = "E56"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Language",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE57_Material(EE55_Type):
-    """CIDOC CRM E57: Material"""
-
-    class_code: str = "E57"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Material",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE58_MeasurementUnit(EE55_Type):
-    """CIDOC CRM E58: Measurement Unit"""
-
-    class_code: str = "E58"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Measurement Unit",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE59_PrimitiveValue(EE1_CRMEntity):
-    """CIDOC CRM E59: Primitive Value (Abstract)"""
+class E59_PrimitiveValue(E1_CRMEntity):
+    """E59: Primitive Value — a primitive data value"""
 
     class_code: str = "E59"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Primitive Value",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
-
-class EE60_Number(EE59_PrimitiveValue):
-    """CIDOC CRM E60: Number"""
-
-    class_code: str = "E60"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Number",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE61_TimePrimitive(EE59_PrimitiveValue):
-    """CIDOC CRM E61: Time Primitive"""
-
-    class_code: str = "E61"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Time Primitive",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE62_String(EE59_PrimitiveValue):
-    """CIDOC CRM E62: String"""
-
-    class_code: str = "E62"
-
-    class Config:
-        json_schema_extra = {
-            "description": "String",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE63_BeginningofExistence(EE5_Event):
-    """CIDOC CRM E63: Beginning of Existence"""
-
-    class_code: str = "E63"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Beginning of Existence",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE64_EndofExistence(EE5_Event):
-    """CIDOC CRM E64: End of Existence"""
-
-    class_code: str = "E64"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "End of Existence",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE65_Creation(EE63_BeginningofExistence):
-    """CIDOC CRM E65: Creation"""
-
-    class_code: str = "E65"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Creation",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE66_Formation(EE63_BeginningofExistence):
-    """CIDOC CRM E66: Formation"""
-
-    class_code: str = "E66"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Formation",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE67_Birth(EE66_Formation):
-    """CIDOC CRM E67: Birth"""
-
-    class_code: str = "E67"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Birth",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE68_Dissolution(EE64_EndofExistence):
-    """CIDOC CRM E68: Dissolution"""
-
-    class_code: str = "E68"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Dissolution",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE69_Death(EE64_EndofExistence):
-    """CIDOC CRM E69: Death"""
-
-    class_code: str = "E69"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Death",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE70_Thing(EE1_CRMEntity):
-    """CIDOC CRM E70: Thing (Abstract)"""
+class E70_Thing(E1_CRMEntity):
+    """E70: Thing — anything with identity"""
 
     class_code: str = "E70"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Thing",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
-
-class EE71_HumanMadeThing(EE70_Thing):
-    """CIDOC CRM E71: Human-Made Thing"""
-
-    class_code: str = "E71"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Human-Made Thing",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE72_LegalObject(EE70_Thing):
-    """CIDOC CRM E72: Legal Object"""
-
-    class_code: str = "E72"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Legal Object",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE73_InformationObject(EE70_Thing):
-    """CIDOC CRM E73: Information Object"""
-
-    class_code: str = "E73"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Information Object",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE74_Group(EE39_Actor):
-    """CIDOC CRM E74: Group"""
-
-    class_code: str = "E74"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Group",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE75_ConceptualObjectAppellation(EE41_Appellation):
-    """CIDOC CRM E75: Conceptual Object Appellation"""
-
-    class_code: str = "E75"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Conceptual Object Appellation",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE76_ConceptualObjectIdentifier(EE42_Identifier):
-    """CIDOC CRM E76: Conceptual Object Identifier"""
-
-    class_code: str = "E76"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Conceptual Object Identifier",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE77_PersistentItem(EE1_CRMEntity):
-    """CIDOC CRM E77: Persistent Item"""
+class E77_PersistentItem(E1_CRMEntity):
+    """E77: Persistent Item — an item that persists through time"""
 
     class_code: str = "E77"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Persistent Item",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
-
-class EE78_CuratedHolding(EE77_PersistentItem):
-    """CIDOC CRM E78: Curated Holding"""
-
-    class_code: str = "E78"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Curated Holding",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE79_PartAddition(EE11_Modification):
-    """CIDOC CRM E79: Part Addition"""
-
-    class_code: str = "E79"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Part Addition",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE80_PartRemoval(EE11_Modification):
-    """CIDOC CRM E80: Part Removal"""
-
-    class_code: str = "E80"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Part Removal",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE81_Transformation(EE11_Modification):
-    """CIDOC CRM E81: Transformation"""
-
-    class_code: str = "E81"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Transformation",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE82_ActorAppellation(EE75_ConceptualObjectAppellation):
-    """CIDOC CRM E82: Actor Appellation"""
-
-    class_code: str = "E82"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Actor Appellation",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE83_TypeCreation(EE65_Creation):
-    """CIDOC CRM E83: Type Creation"""
-
-    class_code: str = "E83"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Type Creation",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE84_InformationCarrier(EE73_InformationObject):
-    """CIDOC CRM E84: Information Carrier"""
-
-    class_code: str = "E84"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Information Carrier",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE85_Joining(EE7_Activity):
-    """CIDOC CRM E85: Joining"""
-
-    class_code: str = "E85"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Joining",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE86_Leaving(EE7_Activity):
-    """CIDOC CRM E86: Leaving"""
-
-    class_code: str = "E86"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Leaving",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE87_CurationActivity(EE7_Activity):
-    """CIDOC CRM E87: Curation Activity"""
-
-    class_code: str = "E87"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Curation Activity",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-
-
-class EE88_PropositionalObject(EE28_ConceptualObject):
-    """CIDOC CRM E88: Propositional Object"""
-
-    class_code: str = "E88"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Propositional Object",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE89_PropositionalStatement(EE88_PropositionalObject):
-    """CIDOC CRM E89: Propositional Statement"""
-
-    class_code: str = "E89"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Propositional Statement",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE90_SymbolicObject(EE28_ConceptualObject):
-    """CIDOC CRM E90: Symbolic Object"""
-
-    class_code: str = "E90"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Symbolic Object",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE91_KnowledgeObject(EE90_SymbolicObject):
-    """CIDOC CRM E91: Knowledge Object"""
-
-    class_code: str = "E91"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Knowledge Object",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE92_SpacetimeVolume(EE1_CRMEntity):
-    """CIDOC CRM E92: Spacetime Volume"""
+class E92_SpacetimeVolume(E1_CRMEntity):
+    """E92: Spacetime Volume — a volume in spacetime"""
 
     class_code: str = "E92"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Spacetime Volume",
-            "canonical_fields": ["label", "type", "notes"],
-        }
+
+class E19_PhysicalObject(E18_PhysicalThing):
+    """E19: Physical Object — a discrete physical object"""
+
+    class_code: str = "E19"
+
+    current_location: UUID | None = Field(
+        None,
+        description="P53: has current or former location — shortcut to E53_Place entity ID",
+    )
 
 
-class EE93_Presence(EE92_SpacetimeVolume):
-    """CIDOC CRM E93: Presence"""
+class E24_PhysicalManMadeThing(E18_PhysicalThing):
+    """E24: Physical Man-Made Thing — a physical man-made thing"""
 
-    class_code: str = "E93"
+    class_code: str = "E24"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Presence",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-
-
-class EE94_Space(EE92_SpacetimeVolume):
-    """CIDOC CRM E94: Space"""
-
-    class_code: str = "E94"
-
-    class Config:
-        json_schema_extra = {
-            "description": "Space",
-            "canonical_fields": ["label", "type", "notes"],
-        }
+    current_location: UUID | None = Field(
+        None,
+        description="P53: has current or former location — shortcut to E53_Place entity ID",
+    )
 
 
-class EE95_SpacetimePrimitive(EE59_PrimitiveValue):
-    """CIDOC CRM E95: Spacetime Primitive"""
+class E26_PhysicalFeature(E18_PhysicalThing):
+    """E26: Physical Feature — a physical feature of an object or location"""
+
+    class_code: str = "E26"
+
+    current_location: UUID | None = Field(
+        None,
+        description="P53: has current or former location — shortcut to E53_Place entity ID",
+    )
+
+
+class E28_ConceptualObject(E23_ConceptualObject):
+    """E28: Conceptual Object — a non-material conceptual item"""
+
+    class_code: str = "E28"
+
+
+class E3_ConditionState(E2_TemporalEntity):
+    """E3: Condition State — a physical condition of an object"""
+
+    class_code: str = "E3"
+
+
+class E4_Period(E2_TemporalEntity):
+    """E4: Period — a named historical or cultural period"""
+
+    class_code: str = "E4"
+
+
+class E5_Event(E2_TemporalEntity):
+    """E5: Event — something that happens and has spatiotemporal extent"""
+
+    class_code: str = "E5"
+
+    timespan: UUID | None = Field(
+        None, description="P4: has time-span — shortcut to E52_TimeSpan entity ID"
+    )
+    took_place_at: UUID | None = Field(
+        None, description="P7: took place at — shortcut to E53_Place entity ID"
+    )
+
+
+class E40_LegalBody(E39_Actor):
+    """E40: Legal Body — a legal body such as a corporation or institution"""
+
+    class_code: str = "E40"
+
+
+class E74_Group(E39_Actor):
+    """E74: Group — a group of people or organisations"""
+
+    class_code: str = "E74"
+
+
+class E46_Section(E43_Place):
+    """E46: Section — a named section of a place"""
+
+    class_code: str = "E46"
+
+
+class E53_Place(E43_Place):
+    """E53: Place — a location defined in space"""
+
+    class_code: str = "E53"
+
+
+class E60_Number(E59_PrimitiveValue):
+    """E60: Number — a numeric value"""
+
+    class_code: str = "E60"
+
+
+class E61_TimePrimitive(E59_PrimitiveValue):
+    """E61: Time Primitive — a primitive time value"""
+
+    class_code: str = "E61"
+
+
+class E62_String(E59_PrimitiveValue):
+    """E62: String — a string value"""
+
+    class_code: str = "E62"
+
+
+class E95_SpacetimePrimitive(E59_PrimitiveValue):
+    """E95: Spacetime Primitive — a primitive spacetime coordinate"""
 
     class_code: str = "E95"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Spacetime Primitive",
-            "canonical_fields": ["label", "type", "notes"],
-        }
+
+class E71_HumanMadeThing(E70_Thing):
+    """E71: Human-Made Thing — a human-made thing (abstract)"""
+
+    class_code: str = "E71"
 
 
-class EE96_Purchase(EE8_Acquisition):
-    """CIDOC CRM E96: Purchase"""
+class E72_LegalObject(E70_Thing):
+    """E72: Legal Object — something with legal significance"""
 
-    class_code: str = "E96"
-
-    timespan: UUID | None = None
-    took_place_at: UUID | None = None
-
-    class Config:
-        json_schema_extra = {
-            "description": "Purchase",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
+    class_code: str = "E72"
 
 
-class EE97_MonetaryAmount(EE28_ConceptualObject):
-    """CIDOC CRM E97: Monetary Amount"""
+class E73_InformationObject(E70_Thing):
+    """E73: Information Object — an information object"""
+
+    class_code: str = "E73"
+
+
+class E78_CuratedHolding(E77_PersistentItem):
+    """E78: Curated Holding — a managed collection of objects"""
+
+    class_code: str = "E78"
+
+
+class E93_Presence(E92_SpacetimeVolume):
+    """E93: Presence — the presence of an entity in a spacetime volume"""
+
+    class_code: str = "E93"
+
+
+class E94_Space(E92_SpacetimeVolume):
+    """E94: Space — a geometric space"""
+
+    class_code: str = "E94"
+
+
+class E20_BiologicalObject(E19_PhysicalObject):
+    """E20: Biological Object — a biological object"""
+
+    class_code: str = "E20"
+
+
+class E22_HumanMadeObject(E19_PhysicalObject):
+    """E22: Human-Made Object — a physical object intentionally made by humans"""
+
+    class_code: str = "E22"
+
+    produced_by: UUID | None = Field(
+        None, description="P108: was produced by — shortcut to E12_Production entity ID"
+    )
+
+
+class E25_ManMadeFeature(E24_PhysicalManMadeThing):
+    """E25: Man-Made Feature — a man-made feature in the landscape"""
+
+    class_code: str = "E25"
+
+
+class E27_Site(E26_PhysicalFeature):
+    """E27: Site — an area of land of cultural heritage significance"""
+
+    class_code: str = "E27"
+
+
+class E29_DesignOrProcedure(E28_ConceptualObject):
+    """E29: Design or Procedure — a design or procedural prescription"""
+
+    class_code: str = "E29"
+
+
+class E30_Right(E28_ConceptualObject):
+    """E30: Right — a legal right"""
+
+    class_code: str = "E30"
+
+
+class E31_Document(E28_ConceptualObject):
+    """E31: Document — a document containing propositional content"""
+
+    class_code: str = "E31"
+
+
+class E33_LinguisticObject(E28_ConceptualObject):
+    """E33: Linguistic Object — a linguistic expression"""
+
+    class_code: str = "E33"
+
+
+class E36_VisualItem(E28_ConceptualObject):
+    """E36: Visual Item — a visual representation"""
+
+    class_code: str = "E36"
+
+
+class E41_Appellation(E28_ConceptualObject):
+    """E41: Appellation — a name or identifier used to refer to an entity"""
+
+    class_code: str = "E41"
+
+
+class E42_Identifier(E28_ConceptualObject):
+    """E42: Identifier — a unique identifier"""
+
+    class_code: str = "E42"
+
+
+class E47_SpatialCoordinates(E28_ConceptualObject):
+    """E47: Spatial Coordinates — coordinates that define a location"""
+
+    class_code: str = "E47"
+
+
+class E54_Dimension(E28_ConceptualObject):
+    """E54: Dimension — a measured dimension of a physical thing"""
+
+    class_code: str = "E54"
+
+
+class E55_Type(E28_ConceptualObject):
+    """E55: Type — a type or category concept"""
+
+    class_code: str = "E55"
+
+
+class E88_PropositionalObject(E28_ConceptualObject):
+    """E88: Propositional Object — a set of propositions"""
+
+    class_code: str = "E88"
+
+
+class E90_SymbolicObject(E28_ConceptualObject):
+    """E90: Symbolic Object — a symbolic expression"""
+
+    class_code: str = "E90"
+
+
+class E97_MonetaryAmount(E28_ConceptualObject):
+    """E97: Monetary Amount — a monetary value"""
 
     class_code: str = "E97"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Monetary Amount",
-            "canonical_fields": ["label", "type", "notes"],
-        }
+
+class E63_BeginningOfExistence(E5_Event):
+    """E63: Beginning of Existence — an event that brings an entity into existence"""
+
+    class_code: str = "E63"
 
 
-class EE98_Currency(EE55_Type):
-    """CIDOC CRM E98: Currency"""
+class E64_EndOfExistence(E5_Event):
+    """E64: End of Existence — an event that terminates an entity's existence"""
+
+    class_code: str = "E64"
+
+
+class E6_Destruction(E5_Event):
+    """E6: Destruction — an event that destroys a physical object"""
+
+    class_code: str = "E6"
+
+
+class E7_Activity(E5_Event):
+    """E7: Activity — an intentional action by an actor"""
+
+    class_code: str = "E7"
+
+
+class E84_InformationCarrier(E73_InformationObject):
+    """E84: Information Carrier — a physical carrier of information"""
+
+    class_code: str = "E84"
+
+
+class E21_Person(E20_BiologicalObject):
+    """E21: Person — a human individual"""
+
+    class_code: str = "E21"
+
+
+class E32_AuthorityDocument(E31_Document):
+    """E32: Authority Document — an authoritative reference document"""
+
+    class_code: str = "E32"
+
+
+class E34_Inscription(E33_LinguisticObject):
+    """E34: Inscription — a textual inscription on a physical object"""
+
+    class_code: str = "E34"
+
+
+class E35_Title(E33_LinguisticObject):
+    """E35: Title — a title or name of a work"""
+
+    class_code: str = "E35"
+
+
+class E37_Mark(E36_VisualItem):
+    """E37: Mark — a mark or symbol"""
+
+    class_code: str = "E37"
+
+
+class E38_Image(E36_VisualItem):
+    """E38: Image — a pictorial representation"""
+
+    class_code: str = "E38"
+
+
+class E44_PlaceAppellation(E41_Appellation):
+    """E44: Place Appellation — a name used to refer to a place"""
+
+    class_code: str = "E44"
+
+
+class E49_TimeAppellation(E41_Appellation):
+    """E49: Time Appellation — a name used to refer to a time"""
+
+    class_code: str = "E49"
+
+
+class E75_ConceptualObjectAppellation(E41_Appellation):
+    """E75: Conceptual Object Appellation — a name for a conceptual object"""
+
+    class_code: str = "E75"
+
+
+class E76_ConceptualObjectIdentifier(E42_Identifier):
+    """E76: Conceptual Object Identifier — an identifier for a conceptual object"""
+
+    class_code: str = "E76"
+
+
+class E56_Language(E55_Type):
+    """E56: Language — a natural language"""
+
+    class_code: str = "E56"
+
+
+class E57_Material(E55_Type):
+    """E57: Material — a physical material"""
+
+    class_code: str = "E57"
+
+
+class E58_MeasurementUnit(E55_Type):
+    """E58: Measurement Unit — a unit of measurement"""
+
+    class_code: str = "E58"
+
+
+class E98_Currency(E55_Type):
+    """E98: Currency — a monetary currency"""
 
     class_code: str = "E98"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Currency",
-            "canonical_fields": ["label", "type", "notes"],
-        }
 
-
-class EE99_ProductType(EE55_Type):
-    """CIDOC CRM E99: Product Type"""
+class E99_ProductType(E55_Type):
+    """E99: Product Type — a product type"""
 
     class_code: str = "E99"
 
-    class Config:
-        json_schema_extra = {
-            "description": "Product Type",
-            "canonical_fields": ["label", "type", "notes"],
-        }
+
+class E89_PropositionalStatement(E88_PropositionalObject):
+    """E89: Propositional Statement — a single propositional statement"""
+
+    class_code: str = "E89"
+
+
+class E91_KnowledgeObject(E90_SymbolicObject):
+    """E91: Knowledge Object — structured knowledge"""
+
+    class_code: str = "E91"
+
+
+class E65_Creation(E63_BeginningOfExistence):
+    """E65: Creation — the creation of a conceptual object"""
+
+    class_code: str = "E65"
+
+
+class E66_Formation(E63_BeginningOfExistence):
+    """E66: Formation — the formation of a group"""
+
+    class_code: str = "E66"
+
+
+class E68_Dissolution(E64_EndOfExistence):
+    """E68: Dissolution — the dissolution of a group"""
+
+    class_code: str = "E68"
+
+
+class E69_Death(E64_EndOfExistence):
+    """E69: Death — the death of a person"""
+
+    class_code: str = "E69"
+
+
+class E10_TransferOfCustody(E7_Activity):
+    """E10: Transfer of Custody — custody transfer of an object"""
+
+    class_code: str = "E10"
+
+
+class E11_Modification(E7_Activity):
+    """E11: Modification — a physical modification of an object"""
+
+    class_code: str = "E11"
+
+
+class E12_Production(E7_Activity):
+    """E12: Production — the creation of a human-made object"""
+
+    class_code: str = "E12"
+
+
+class E13_AttributeAssignment(E7_Activity):
+    """E13: Attribute Assignment — the assignment of an attribute to an entity"""
+
+    class_code: str = "E13"
+
+
+class E85_Joining(E7_Activity):
+    """E85: Joining — joining a group"""
+
+    class_code: str = "E85"
+
+
+class E86_Leaving(E7_Activity):
+    """E86: Leaving — leaving a group"""
+
+    class_code: str = "E86"
+
+
+class E87_CurationActivity(E7_Activity):
+    """E87: Curation Activity — a curation activity for a managed collection"""
+
+    class_code: str = "E87"
+
+
+class E8_Acquisition(E7_Activity):
+    """E8: Acquisition — the acquisition of ownership of an object"""
+
+    class_code: str = "E8"
+
+
+class E9_Move(E7_Activity):
+    """E9: Move — a physical relocation of an object"""
+
+    class_code: str = "E9"
+
+
+class E45_Address(E44_PlaceAppellation):
+    """E45: Address — a postal or civic address"""
+
+    class_code: str = "E45"
+
+
+class E48_PlaceName(E44_PlaceAppellation):
+    """E48: Place Name — a toponym or place name"""
+
+    class_code: str = "E48"
+
+
+class E50_Date(E49_TimeAppellation):
+    """E50: Date — a calendar date expression"""
+
+    class_code: str = "E50"
+
+
+class E82_ActorAppellation(E75_ConceptualObjectAppellation):
+    """E82: Actor Appellation — a name used to refer to an actor"""
+
+    class_code: str = "E82"
+
+
+class E83_TypeCreation(E65_Creation):
+    """E83: Type Creation — the creation of a type concept"""
+
+    class_code: str = "E83"
+
+
+class E67_Birth(E66_Formation):
+    """E67: Birth — the birth of a person"""
+
+    class_code: str = "E67"
+
+
+class E79_PartAddition(E11_Modification):
+    """E79: Part Addition — the addition of a part to an object"""
+
+    class_code: str = "E79"
+
+
+class E80_PartRemoval(E11_Modification):
+    """E80: Part Removal — the removal of a part from an object"""
+
+    class_code: str = "E80"
+
+
+class E81_Transformation(E11_Modification):
+    """E81: Transformation — a transformation of an object into another"""
+
+    class_code: str = "E81"
+
+
+class E14_ConditionAssessment(E13_AttributeAssignment):
+    """E14: Condition Assessment — an assessment of the condition of an object"""
+
+    class_code: str = "E14"
+
+
+class E15_IdentifierAssignment(E13_AttributeAssignment):
+    """E15: Identifier Assignment — the assignment of an identifier to an entity"""
+
+    class_code: str = "E15"
+
+
+class E16_Measurement(E13_AttributeAssignment):
+    """E16: Measurement — the measurement of a dimension"""
+
+    class_code: str = "E16"
+
+
+class E17_TypeAssignment(E13_AttributeAssignment):
+    """E17: Type Assignment — the assignment of a type to an entity"""
+
+    class_code: str = "E17"
+
+
+class E96_Purchase(E8_Acquisition):
+    """E96: Purchase — an acquisition by exchange of monetary value"""
+
+    class_code: str = "E96"
+
+
+class E51_ContactPoint(E45_Address):
+    """E51: Contact Point — a contact point such as phone or email"""
+
+    class_code: str = "E51"

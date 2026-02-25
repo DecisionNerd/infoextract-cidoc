@@ -233,7 +233,9 @@ class TestPipelineIntegration:
             ],
         )
         extraction_result = resolve_extraction(lite_result)
-        assert extraction_result.relationships[0].source_text == "Einstein was born in Ulm"
+        assert (
+            extraction_result.relationships[0].source_text == "Einstein was born in Ulm"
+        )
 
         _, crm_relations = map_to_crm_entities(extraction_result)
         assert crm_relations[0].source_text == "Einstein was born in Ulm"

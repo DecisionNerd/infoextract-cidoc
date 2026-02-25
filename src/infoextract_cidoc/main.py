@@ -82,9 +82,12 @@ async def complete_workflow_demo(
 
     # Step 1: LangStruct extraction + resolution + CRM mapping
 
-    _lite_result, extraction_result, crm_entities, crm_relations = await _run_extraction(
-        text
-    )
+    (
+        _lite_result,
+        extraction_result,
+        crm_entities,
+        crm_relations,
+    ) = await _run_extraction(text)
 
     # Apply confidence threshold filter
     crm_entities = [
@@ -93,10 +96,7 @@ async def complete_workflow_demo(
         if not hasattr(e, "confidence") or True  # CRMEntity doesn't have confidence
     ]
     # Filter at the extraction_result level
-    [
-        e for e in extraction_result.entities if e.confidence >= confidence_threshold
-    ]
-
+    [e for e in extraction_result.entities if e.confidence >= confidence_threshold]
 
     # Step 2: Serialize as Canonical JSON
 
@@ -107,7 +107,6 @@ async def complete_workflow_demo(
     json_file = output_path / "canonical_entities.json"
     with json_file.open("w") as f:
         json.dump(json_data, f, indent=2)
-
 
     # Step 3: Render to Markdown
 
@@ -125,7 +124,6 @@ async def complete_workflow_demo(
     with table_file.open("w") as f:
         f.write("# CRM Entities Summary\n\n" + table_markdown)
 
-
     # Step 4: Convert to NetworkX Graph
 
     graph = to_networkx_graph(crm_entities)
@@ -136,10 +134,8 @@ async def complete_workflow_demo(
     communities = find_communities(graph)
     network_stats = create_network_summary(graph)
 
-
     # Step 6: Visualization
     if visualize or interactive:
-
         plots_dir = output_path / "plots"
         plots_dir.mkdir(exist_ok=True)
 
@@ -154,12 +150,10 @@ async def complete_workflow_demo(
 
     # Step 7: Export to Cypher
     if export_cypher:
-
         cypher_script = generate_cypher_script(crm_entities)
         cypher_file = output_path / "network.cypher"
         with cypher_file.open("w") as f:
             f.write(cypher_script)
-
 
     # Step 8: Create Summary Report
 
@@ -182,8 +176,6 @@ async def complete_workflow_demo(
             f.write(f"- Network plots: {output_path / 'plots'}\n")
         if export_cypher:
             f.write(f"- Cypher script: {output_path / 'network.cypher'}\n")
-
-
 
 
 async def einstein_demo() -> None:
@@ -216,10 +208,12 @@ async def handle_extract_command(args: argparse.Namespace) -> None:
     else:
         text = args.text
 
-
-    _lite_result, extraction_result, crm_entities, _crm_relations = await _run_extraction(
-        text
-    )
+    (
+        _lite_result,
+        extraction_result,
+        crm_entities,
+        _crm_relations,
+    ) = await _run_extraction(text)
 
     # Apply confidence filter
     filtered_entities = [
@@ -228,7 +222,6 @@ async def handle_extract_command(args: argparse.Namespace) -> None:
     filtered_relationships = [
         r for r in extraction_result.relationships if r.confidence >= args.confidence
     ]
-
 
     output_dir = Path(args.output)
     output_dir.mkdir(exist_ok=True)
@@ -257,7 +250,6 @@ async def handle_analyze_command(args: argparse.Namespace) -> None:
     if not input_file.exists():
         return
 
-
     with input_file.open() as f:
         data = json.load(f)
 
@@ -274,11 +266,11 @@ async def handle_analyze_command(args: argparse.Namespace) -> None:
                 class_code=entity_data["class_code"],
                 label=entity_data["label"],
                 notes=entity_data.get("description", ""),
+                source_text=entity_data.get("source_text"),
             )
             entities.append(entity)
     else:
         return
-
 
     output_dir = Path(args.output)
     output_dir.mkdir(exist_ok=True)

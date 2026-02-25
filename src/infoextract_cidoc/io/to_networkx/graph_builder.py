@@ -56,7 +56,11 @@ def to_networkx_graph(
             )
             # Add any additional attributes
             node_data.update(
-                {k: v for k, v in entity.dict().items() if k not in ["id", "class_code", "label", "notes", "type"]}
+                {
+                    k: v
+                    for k, v in entity.dict().items()
+                    if k not in ["id", "class_code", "label", "notes", "type"]
+                }
             )
 
         graph.add_node(str(entity.id), **node_data)
