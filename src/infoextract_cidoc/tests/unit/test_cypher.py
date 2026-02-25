@@ -13,8 +13,8 @@ from ...io.to_cypher import (
     validate_cypher_script,
 )
 from ...models.generated.e_classes import (
-    EE22_HumanMadeObject,
-    EE53_Place,
+    E22_HumanMadeObject,
+    E53_Place,
 )
 
 
@@ -24,10 +24,10 @@ class TestCypherEmission:
     def test_emit_nodes(self):
         """Test node emission."""
         entities = [
-            EE22_HumanMadeObject(
+            E22_HumanMadeObject(
                 id=uuid4(), class_code="E22", label="Ancient Vase", type=["E55:Vessel"]
             ),
-            EE53_Place(id=uuid4(), class_code="E53", label="Athens, Greece"),
+            E53_Place(id=uuid4(), class_code="E53", label="Athens, Greece"),
         ]
 
         result = emit_nodes(entities)
@@ -51,7 +51,7 @@ class TestCypherEmission:
     def test_emit_relationships(self):
         """Test relationship emission."""
         entities = [
-            EE22_HumanMadeObject(
+            E22_HumanMadeObject(
                 id=uuid4(),
                 class_code="E22",
                 current_location=uuid4(),
@@ -78,7 +78,7 @@ class TestCypherEmission:
 
     def test_expand_shortcuts(self):
         """Test shortcut expansion."""
-        entity = EE22_HumanMadeObject(
+        entity = E22_HumanMadeObject(
             id=uuid4(), class_code="E22", current_location=uuid4(), produced_by=uuid4()
         )
 
@@ -102,8 +102,8 @@ class TestCypherEmission:
     def test_generate_cypher_script(self):
         """Test Cypher script generation."""
         entities = [
-            EE22_HumanMadeObject(id=uuid4(), class_code="E22", label="Ancient Vase"),
-            EE53_Place(id=uuid4(), class_code="E53", label="Athens, Greece"),
+            E22_HumanMadeObject(id=uuid4(), class_code="E22", label="Ancient Vase"),
+            E53_Place(id=uuid4(), class_code="E53", label="Athens, Greece"),
         ]
 
         script = generate_cypher_script(entities)
@@ -119,7 +119,7 @@ class TestCypherEmission:
     def test_generate_cypher_parameters(self):
         """Test Cypher parameter generation."""
         entities = [
-            EE22_HumanMadeObject(id="obj_001", class_code="E22", label="Ancient Vase")
+            E22_HumanMadeObject(id="obj_001", class_code="E22", label="Ancient Vase")
         ]
 
         params = generate_cypher_parameters(entities)
@@ -141,10 +141,10 @@ class TestCypherEmission:
         place_id = "550e8400-e29b-41d4-a716-446655440001"
 
         entities = [
-            EE22_HumanMadeObject(
+            E22_HumanMadeObject(
                 id=vase_id, class_code="E22", current_location=place_id
             ),
-            EE53_Place(id=place_id, class_code="E53", label="Athens, Greece"),
+            E53_Place(id=place_id, class_code="E53", label="Athens, Greece"),
         ]
 
         script = generate_cypher_script(entities)
@@ -163,10 +163,10 @@ class TestCypherEmission:
         place_id = "550e8400-e29b-41d4-a716-446655440001"
 
         entities = [
-            EE22_HumanMadeObject(
+            E22_HumanMadeObject(
                 id=vase_id, class_code="E22", current_location=place_id
             ),
-            EE53_Place(id=place_id, class_code="E53", label="Athens, Greece"),
+            E53_Place(id=place_id, class_code="E53", label="Athens, Greece"),
         ]
 
         params = generate_cypher_parameters(entities)
@@ -214,7 +214,7 @@ class TestCypherEmission:
     def test_batch_size_handling(self):
         """Test custom batch size handling."""
         entities = [
-            EE22_HumanMadeObject(id=f"obj_{i:03d}", class_code="E22") for i in range(5)
+            E22_HumanMadeObject(id=f"obj_{i:03d}", class_code="E22") for i in range(5)
         ]
 
         # Test with small batch size

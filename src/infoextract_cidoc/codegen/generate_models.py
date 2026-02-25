@@ -1,139 +1,120 @@
 #!/usr/bin/env python3
 """
-Code generator for CIDOC CRM Pydantic models from YAML specifications.
-Generates e_classes.py with all E-class models.
+Code generator for CIDOC CRM Pydantic models from the LinkML schema.
+
+Uses LinkML SchemaView to traverse the class hierarchy defined in
+cidoc_crm.yaml and emits clean Pydantic V2 model code.
+
+Run via:  uv run python src/infoextract_cidoc/codegen/generate_models.py
+Or:       make codegen
 """
 
+from __future__ import annotations
+
+from collections import deque
 from pathlib import Path
-from typing import Any
 
-import yaml
-
-
-def load_yaml_specs(specs_dir: Path) -> dict[str, Any]:
-    """Load YAML specifications from the specs directory."""
-    classes_file = specs_dir / "crm_classes.yaml"
-    properties_file = specs_dir / "crm_properties.yaml"
-    aliases_file = specs_dir / "aliases.yaml"
-
-    with classes_file.open() as f:
-        classes = yaml.safe_load(f)
-
-    with properties_file.open() as f:
-        properties = yaml.safe_load(f)
-
-    with aliases_file.open() as f:
-        aliases = yaml.safe_load(f)
-
-    return {"classes": classes, "properties": properties, "aliases": aliases}
+from linkml_runtime.utils.schemaview import SchemaView
 
 
-def generate_class_model(
-    class_spec: dict[str, Any], classes: list[dict[str, Any]]
-) -> str:
-    """Generate Pydantic model code for a single E-class."""
-    code = class_spec["code"]
-    label = class_spec["label"]
-    abstract = class_spec.get("abstract", False)
-    parents = class_spec.get("parents", [])
-    canonical_fields = class_spec.get("canonical_fields", [])
-    shortcuts = class_spec.get("shortcuts", [])
+def _topological_order(sv: SchemaView) -> list[str]:
+    """Return class names in topological order (parents before children)."""
+    all_classes = sv.all_classes()
+    in_degree: dict[str, int] = dict.fromkeys(all_classes, 0)
+    children: dict[str, list[str]] = {name: [] for name in all_classes}
 
-    # Convert label to Python class name
-    class_name = f"E{code}_{label.replace(' ', '').replace('-', '')}"
+    for name, cls in all_classes.items():
+        if cls.is_a and cls.is_a in all_classes:
+            in_degree[name] += 1
+            children[cls.is_a].append(name)
 
-    # Determine parent class
-    if parents:
-        # Find the parent class spec to get its label
-        parent_code = parents[0]
-        parent_spec = next((c for c in classes if c["code"] == parent_code), None)
-        if parent_spec:
-            parent_label = parent_spec["label"]
-            parent_class = (
-                f"E{parent_code}_{parent_label.replace(' ', '').replace('-', '')}"
-            )
-        else:
-            parent_class = "CRMEntity"
-    else:
-        parent_class = "CRMEntity"
+    queue: deque[str] = deque(
+        name for name, degree in in_degree.items() if degree == 0
+    )
+    order: list[str] = []
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for child in sorted(children[node]):  # sorted for determinism
+            in_degree[child] -= 1
+            if in_degree[child] == 0:
+                queue.append(child)
 
-    # Generate shortcut fields
-    shortcut_fields = []
-    for shortcut in shortcuts:
-        shortcut["property"]
-        alias_field = shortcut["alias_field"]
-        field_type = shortcut.get("field_type", "UUID")
-        shortcut_fields.append(f"    {alias_field}: Optional[{field_type}] = None")
+    return order
 
-    shortcut_fields_str = "\n".join(shortcut_fields) if shortcut_fields else "    pass"
 
-    # Generate docstring
-    docstring = f'    """CIDOC CRM {code}: {label}'
-    if abstract:
-        docstring += " (Abstract)"
-    docstring += '"""'
+def _generate_class(sv: SchemaView, class_name: str) -> str:
+    """Render a single Pydantic V2 class definition."""
+    cls = sv.get_class(class_name)
 
-    return f"""class {class_name}({parent_class}):
-{docstring}
-    class_code: str = "{code}"
+    # Derive E-code: "E22_HumanMadeObject" -> "E22"
+    code = class_name.split("_")[0]
 
-{shortcut_fields_str}
+    # Determine Python parent
+    parent = cls.is_a if cls.is_a else "CRMEntity"
 
-    class Config:
-        json_schema_extra = {{
-            "description": "{label}",
-            "canonical_fields": {canonical_fields}
-        }}
+    # Own slots only — subclasses inherit via Python class hierarchy
+    own_slot_names: list[str] = list(cls.slots or [])
+
+    # Build field lines
+    field_lines: list[str] = []
+    for slot_name in own_slot_names:
+        slot = sv.get_slot(slot_name)
+        desc = (slot.description or "").replace('"', '\\"')
+        field_lines.append(
+            f'    {slot_name}: UUID | None = Field(None, description="{desc}")'
+        )
+
+    body = "\n".join(field_lines) if field_lines else "    pass"
+    description = (cls.description or f"{code}: {class_name}").replace('"', '\\"')
+
+    return (
+        f'class {class_name}({parent}):\n'
+        f'    """{description}"""\n'
+        f"\n"
+        f'    class_code: str = "{code}"\n'
+        f"\n"
+        f"{body}\n"
+    )
+
+
+def generate(schema_path: Path, output_path: Path) -> None:
+    """Generate e_classes.py from the LinkML schema at *schema_path*."""
+    sv = SchemaView(str(schema_path))
+    order = _topological_order(sv)
+
+    header = '''\
 """
-
-
-def generate_models_file(specs: dict[str, Any], output_path: Path) -> None:
-    """Generate the complete e_classes.py file."""
-    classes = specs["classes"]
-
-    # Generate imports and base class
-    header = '''"""
 Auto-generated CIDOC CRM E-class models.
-Generated from YAML specifications in codegen/specs/
+Source of truth: codegen/cidoc_crm.yaml (LinkML schema)
+
+DO NOT EDIT — regenerate with: make codegen
 """
 
-from typing import Optional, List
+from __future__ import annotations
+
 from uuid import UUID
-from pydantic import BaseModel, Field
-from ..base import CRMEntity
+
+from pydantic import Field
+
+from infoextract_cidoc.models.base import CRMEntity
 
 
 '''
 
-    # Generate all class models
-    class_models = []
-    for class_spec in classes:
-        model_code = generate_class_model(class_spec, classes)
-        class_models.append(model_code)
+    classes = "\n\n".join(_generate_class(sv, name) for name in order)
 
-    # Combine header and models
-    full_content = header + "\n\n".join(class_models)
-
-    # Write to file
-    with output_path.open("w") as f:
-        f.write(full_content)
-
-
-def main():
-    """Main code generation function."""
-    # Get paths
-    current_dir = Path(__file__).parent
-    specs_dir = current_dir / "specs"
-    output_path = current_dir.parent / "models" / "generated" / "e_classes.py"
-
-    # Ensure output directory exists
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(header + classes + "\n")
 
-    # Load specifications
-    specs = load_yaml_specs(specs_dir)
 
-    # Generate models
-    generate_models_file(specs, output_path)
+def main() -> None:
+    """Entry point for code generation."""
+    here = Path(__file__).parent
+    schema = here / "cidoc_crm.yaml"
+    output = here.parent / "models" / "generated" / "e_classes.py"
+    generate(schema, output)
+    print(f"Generated {output}")
 
 
 if __name__ == "__main__":

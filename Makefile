@@ -1,4 +1,4 @@
-.PHONY: lint format format-check type-check security test test-unit test-golden coverage check-coverage pre-push docs-serve docs-build clean
+.PHONY: lint format format-check type-check security test test-unit test-golden coverage check-coverage pre-push docs-serve docs-build clean codegen
 
 # --- Code quality ---
 
@@ -45,6 +45,12 @@ docs-serve:
 
 docs-build:
 	uv run mkdocs build --strict
+
+# --- Code generation ---
+
+codegen:
+	uv run python src/infoextract_cidoc/codegen/generate_models.py
+	uv run ruff format src/infoextract_cidoc/models/generated/e_classes.py
 
 # --- Cleanup ---
 
