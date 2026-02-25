@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Migrated P-property registry from bespoke YAML spec to LinkML (`codegen/cidoc_crm_properties.yaml`); `generate_registry.py` replaced by `generate_properties.py` using `SchemaView`
+- `properties.py` regenerated with identical `P`/`DOMAIN` interface; dead `RANGE` dict removed
+- Fixed all pre-existing `make pre-push` gate failures: 38 mypy errors, bandit B324 (MD5), coverage threshold
+
 ## [0.1.0] - 2026-02-23
 
 ### Added
