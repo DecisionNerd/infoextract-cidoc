@@ -3,9 +3,11 @@ name: Changelog Check
 on:
   pull_request:
     branches: ["main"]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
 
 jobs:
   check:
+    name: Verify CHANGELOG Updated
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'
     steps:
@@ -13,12 +15,79 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check CHANGELOG updated
+      - name: Check for bypass labels
+        id: check_labels
         run: |
-          if git diff --name-only origin/main...HEAD | grep -q "CHANGELOG.md"; then
-            echo "CHANGELOG.md was updated."
+          SKIP=$(gh pr view ${{ github.event.pull_request.number }} \
+            --json labels --jq '.labels[].name' | grep -c "skip-changelog" || echo "0")
+          NONE=$(gh pr view ${{ github.event.pull_request.number }} \
+            --json labels --jq '.labels[].name' | grep -c "release:none" || echo "0")
+          echo "skip=$SKIP" >> $GITHUB_OUTPUT
+          echo "release_none=$NONE" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check CHANGELOG.md changes
+        id: check_changelog
+        run: |
+          BASE_SHA=${{ github.event.pull_request.base.sha }}
+          MODIFIED=$(git diff --name-only "$BASE_SHA"..HEAD | grep -c "CHANGELOG.md" || echo "0")
+          echo "modified=$MODIFIED" >> $GITHUB_OUTPUT
+          if [ "$MODIFIED" = "1" ]; then
+            ENTRIES=$(git diff "$BASE_SHA"..HEAD -- CHANGELOG.md | grep -c "^+.*- " || echo "0")
+            echo "entries=$ENTRIES" >> $GITHUB_OUTPUT
           else
-            echo "ERROR: CHANGELOG.md was not updated in this PR."
-            echo "Please add an entry under [Unreleased] in CHANGELOG.md."
-            exit 1
+            echo "entries=0" >> $GITHUB_OUTPUT
           fi
+
+      - name: Determine result
+        id: result
+        run: |
+          if [ "${{ steps.check_labels.outputs.skip }}" = "1" ] || \
+             [ "${{ steps.check_labels.outputs.release_none }}" = "1" ]; then
+            echo "pass=true" >> $GITHUB_OUTPUT
+            echo "reason=PR has bypass label (skip-changelog or release:none)" >> $GITHUB_OUTPUT
+          elif [ "${{ steps.check_changelog.outputs.modified }}" = "1" ] && \
+               [ "${{ steps.check_changelog.outputs.entries }}" -gt "0" ]; then
+            echo "pass=true" >> $GITHUB_OUTPUT
+            echo "reason=CHANGELOG [Unreleased] section was updated" >> $GITHUB_OUTPUT
+          else
+            echo "pass=false" >> $GITHUB_OUTPUT
+            if [ "${{ steps.check_changelog.outputs.modified }}" = "0" ]; then
+              echo "reason=CHANGELOG.md was not modified" >> $GITHUB_OUTPUT
+            else
+              echo "reason=CHANGELOG.md modified but [Unreleased] section appears unchanged" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Post failure comment
+        if: steps.result.outputs.pass == 'false'
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body \
+          "## CHANGELOG Check Failed
+
+          **Reason:** ${{ steps.result.outputs.reason }}
+
+          Add your changes to the \`[Unreleased]\` section in \`CHANGELOG.md\`:
+          \`\`\`markdown
+          ## [Unreleased]
+
+          ### Added / Fixed / Changed
+          - Your change here
+          \`\`\`
+
+          Or add a label to bypass:
+          - \`skip-changelog\` — exceptional cases
+          - \`release:none\` — docs/CI-only changes that do not warrant a release entry"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail if check did not pass
+        if: steps.result.outputs.pass == 'false'
+        run: |
+          echo "CHANGELOG check failed: ${{ steps.result.outputs.reason }}"
+          exit 1
+
+      - name: Success
+        if: steps.result.outputs.pass == 'true'
+        run: echo "CHANGELOG check passed: ${{ steps.result.outputs.reason }}"
