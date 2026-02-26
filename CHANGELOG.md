@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-02-26
+
 ### Changed
 - Broadened Python support from 3.13-only to 3.12+; test matrix now covers 3.12/3.13 × Ubuntu/macOS/Windows (floor set by `langstruct>=0.2.0`)
 
