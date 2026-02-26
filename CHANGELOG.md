@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-02-26
+
 ### Fixed
 - Changelog check no longer fires on direct pushes to main (added `github.event_name == 'pull_request'` guard)
 
