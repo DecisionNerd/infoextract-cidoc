@@ -9,7 +9,7 @@ jobs:
   check:
     name: Verify CHANGELOG Updated
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v6
         with:
