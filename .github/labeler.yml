@@ -10,6 +10,18 @@ models:
   - changed-files:
     - any-glob-to-any-file: "src/infoextract_cidoc/models/**"
 
+validators:
+  - changed-files:
+    - any-glob-to-any-file: "src/infoextract_cidoc/validators/**"
+
+codegen:
+  - changed-files:
+    - any-glob-to-any-file: "src/infoextract_cidoc/codegen/**"
+
+visualization:
+  - changed-files:
+    - any-glob-to-any-file: "src/infoextract_cidoc/visualization/**"
+
 tests:
   - changed-files:
     - any-glob-to-any-file: "src/infoextract_cidoc/tests/**"

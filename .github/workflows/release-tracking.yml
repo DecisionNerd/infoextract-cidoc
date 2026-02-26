@@ -1,24 +1,143 @@
-name: Release Readiness
+name: Release Tracking
 
 on:
+  pull_request:
+    types: [closed]
+  release:
+    types: [published]
   schedule:
     - cron: "0 9 * * 1"  # Every Monday at 9am UTC
   workflow_dispatch:
 
 jobs:
-  check:
+  label-merged-pr:
+    name: Label Merged PRs
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Ensure release:pending label exists
+        if: |
+          contains(github.event.pull_request.labels.*.name, 'release:patch') ||
+          contains(github.event.pull_request.labels.*.name, 'release:minor') ||
+          contains(github.event.pull_request.labels.*.name, 'release:major')
+        run: |
+          gh label create "release:pending" \
+            --color "0075ca" \
+            --description "Merged — waiting for release" \
+            --force
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add release:pending label
+        if: |
+          contains(github.event.pull_request.labels.*.name, 'release:patch') ||
+          contains(github.event.pull_request.labels.*.name, 'release:minor') ||
+          contains(github.event.pull_request.labels.*.name, 'release:major')
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} \
+            --add-label "release:pending" \
+            --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  check-release-needed:
+    name: Check if Release Needed
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: read
     steps:
       - uses: actions/checkout@v6
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
         with:
-          version: "latest"
+          fetch-depth: 0
 
-      - name: Install dependencies
-        run: uv sync
+      - name: Check for unreleased changes
+        id: check
+        run: |
+          # Count merged PRs with release:pending label
+          PENDING=$(gh pr list \
+            --base main \
+            --state merged \
+            --label "release:pending" \
+            --json number \
+            --jq 'length' || echo "0")
+          echo "pending=$PENDING" >> $GITHUB_OUTPUT
 
-      - name: Check release readiness
-        run: uv run python scripts/check_release_needed.py
-        continue-on-error: true
+          # Count entries in [Unreleased] CHANGELOG section
+          UNRELEASED=$(awk \
+            '/## \[Unreleased\]/{found=1; next} /## \[/{if(found) exit} found && /^###/{print}' \
+            CHANGELOG.md | wc -l | xargs)
+          echo "unreleased=$UNRELEASED" >> $GITHUB_OUTPUT
+
+          echo "Pending release PRs: $PENDING"
+          echo "Unreleased CHANGELOG sections: $UNRELEASED"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create reminder issue if needed
+        run: |
+          PENDING=${{ steps.check.outputs.pending }}
+          UNRELEASED=${{ steps.check.outputs.unreleased }}
+
+          if [ "$PENDING" -gt "0" ] || [ "$UNRELEASED" -gt "0" ]; then
+            # Skip if reminder issue already open
+            EXISTING=$(gh issue list \
+              --label "release:reminder" \
+              --state open \
+              --json number \
+              --jq '.[0].number')
+
+            if [ -z "$EXISTING" ]; then
+              gh label create "release:reminder" \
+                --color "e11d48" \
+                --description "Automated release reminder" \
+                --force
+              gh issue create \
+                --title "Release Reminder: Unreleased changes on main" \
+                --label "release:reminder" \
+                --body "## Release Status
+
+          The weekly release check found unreleased changes.
+
+          - **Merged PRs with \`release:pending\`:** $PENDING
+          - **CHANGELOG \`[Unreleased]\` sections:** $UNRELEASED
+
+          ### Next steps
+          1. Review \`CHANGELOG.md\` \`[Unreleased]\` section
+          2. Check pending PRs: \`gh pr list --state merged --label 'release:pending'\`
+          3. Create a release via GitHub Releases when ready
+
+          ---
+          *Auto-created by release tracking workflow. Close when a release is published.*"
+              echo "Created release reminder issue"
+            else
+              echo "Reminder issue #$EXISTING already open — skipping"
+            fi
+          else
+            echo "No unreleased changes — no reminder needed"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  close-reminder-on-release:
+    name: Close Reminder on Release
+    if: github.event_name == 'release' && github.event.action == 'published'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Close open reminder issues
+        run: |
+          gh issue list \
+            --label "release:reminder" \
+            --state open \
+            --json number \
+            --jq '.[].number' | while read -r issue; do
+            gh issue close "$issue" \
+              --comment "Closing: release ${{ github.event.release.tag_name }} published."
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
