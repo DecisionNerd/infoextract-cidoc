@@ -95,7 +95,7 @@ Golden tests in `tests/golden/` compare serialised output against checked-in fix
 
 ## Key constraints
 
-- **Python 3.13+**, `uv` for all dependency management (not pip/poetry directly).
+- **Python 3.10+**, `uv` for all dependency management (not pip/poetry directly).
 - `models/generated/` is auto-generated — edit `codegen/specs/` YAML instead.
 - `CRMEntity` uses Pydantic V1-style `@validator` and `class Config` (migration to V2 `@field_validator` / `model_config` is pending).
 - `F401` is marked `unfixable` in ruff config — remove unused imports manually.
