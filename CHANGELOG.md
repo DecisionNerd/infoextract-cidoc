@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Changelog check no longer fires on direct pushes to main (added `github.event_name == 'pull_request'` guard)
+
+### Changed
+- Updated project description in `pyproject.toml` to accurately reflect the toolkit's capabilities
+- Updated Python version badge in README from 3.13+ to 3.12+
+
 ## [0.1.2] - 2026-02-26
 
 ### Changed
