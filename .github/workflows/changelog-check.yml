@@ -90,4 +90,5 @@ jobs:
 
       - name: Success
         if: steps.result.outputs.pass == 'true'
-        run: echo "CHANGELOG check passed: ${{ steps.result.outputs.reason }}"
+        run: |
+          echo "CHANGELOG check passed: ${{ steps.result.outputs.reason }}"
