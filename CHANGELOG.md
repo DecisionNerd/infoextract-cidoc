@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-02-26
+
+### Fixed
+- Fixed YAML parse error in `changelog-check.yml` — colon-space inside unquoted `run:` scalar now uses block scalar (`|`)
+
 ## [0.1.3] - 2026-02-26
 
 ### Fixed

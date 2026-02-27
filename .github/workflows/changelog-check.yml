@@ -19,9 +19,9 @@ jobs:
         id: check_labels
         run: |
           SKIP=$(gh pr view ${{ github.event.pull_request.number }} \
-            --json labels --jq '.labels[].name' | grep -c "skip-changelog" || echo "0")
+            --json labels --jq '.labels[].name' | grep -c "skip-changelog" || true)
           NONE=$(gh pr view ${{ github.event.pull_request.number }} \
-            --json labels --jq '.labels[].name' | grep -c "release:none" || echo "0")
+            --json labels --jq '.labels[].name' | grep -c "release:none" || true)
           echo "skip=$SKIP" >> $GITHUB_OUTPUT
           echo "release_none=$NONE" >> $GITHUB_OUTPUT
         env:
@@ -31,10 +31,10 @@ jobs:
         id: check_changelog
         run: |
           BASE_SHA=${{ github.event.pull_request.base.sha }}
-          MODIFIED=$(git diff --name-only "$BASE_SHA"..HEAD | grep -c "CHANGELOG.md" || echo "0")
+          MODIFIED=$(git diff --name-only "$BASE_SHA"..HEAD | grep -c "CHANGELOG.md" || true)
           echo "modified=$MODIFIED" >> $GITHUB_OUTPUT
           if [ "$MODIFIED" = "1" ]; then
-            ENTRIES=$(git diff "$BASE_SHA"..HEAD -- CHANGELOG.md | grep -c "^+.*- " || echo "0")
+            ENTRIES=$(git diff "$BASE_SHA"..HEAD -- CHANGELOG.md | grep -c "^+.*- " || true)
             echo "entries=$ENTRIES" >> $GITHUB_OUTPUT
           else
             echo "entries=0" >> $GITHUB_OUTPUT
@@ -90,4 +90,5 @@ jobs:
 
       - name: Success
         if: steps.result.outputs.pass == 'true'
-        run: echo "CHANGELOG check passed: ${{ steps.result.outputs.reason }}"
+        run: |
+          echo "CHANGELOG check passed: ${{ steps.result.outputs.reason }}"
