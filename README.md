@@ -12,8 +12,6 @@
 [![Neo4j Compatible](https://img.shields.io/badge/Neo4j-Compatible-blue.svg)](https://neo4j.com/)
 [![Memgraph Compatible](https://img.shields.io/badge/Memgraph-Compatible-purple.svg)](https://memgraph.com/)
 
-![COLLIE logo](collie-logo.png)
-
 A developer-friendly toolkit for working with the **CIDOC CRM v7.1.3** in modern data workflows. infoextract-cidoc provides complete Pydantic models (99 classes, 322 properties), LangStruct-powered AI extraction, Markdown renderers, and Cypher emitters that bridge the gap between conceptual rigor and developer usability.
 
 ## Why infoextract-cidoc?
