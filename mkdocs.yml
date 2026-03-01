@@ -54,6 +54,8 @@ nav:
     - Output Formats: guide/output-formats.md
     - CRM Models: guide/crm-models.md
   - API Reference: reference/api.md
+  - Examples:
+    - Overview: examples/index.md
   - Development:
     - Contributing: development/contributing.md
     - Testing: development/testing.md

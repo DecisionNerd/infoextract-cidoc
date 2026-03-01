@@ -208,9 +208,21 @@ make coverage       # With coverage report
 make pre-push       # Full CI: lint + type-check + security + coverage
 ```
 
+## Examples
+
+The [`examples/`](examples/) directory contains runnable end-to-end scripts.
+
+```bash
+# Einstein biography — full pipeline demo
+GEMINI_API_KEY=... python examples/einstein_demo.py
+```
+
+See [`examples/README.md`](examples/README.md) for prerequisites and a description of each example.
+
 ## Documentation
 
 - **[Quickstart](QUICKSTART.md)** - Getting started guide
+- **[Examples](examples/README.md)** - Runnable demos
 - **[Contributing](CONTRIBUTING.md)** - Development workflow
 - **[Changelog](CHANGELOG.md)** - Version history
 - **[HOWTOs](docs/HOWTOs.md)** - Comprehensive modeling guide
