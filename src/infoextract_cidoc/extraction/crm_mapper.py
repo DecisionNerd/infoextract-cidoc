@@ -233,7 +233,9 @@ def _entity_to_crm(
     """Map an ExtractedEntity to a typed CRM subclass, populating shortcut fields."""
     cls = _CLASS_CODE_MAP.get(entity.class_code, CRMEntity)
     # Only pass shortcut fields that the target class actually defines
-    valid_shortcuts = {k: v for k, v in shortcut_kwargs.items() if k in cls.model_fields}
+    valid_shortcuts = {
+        k: v for k, v in shortcut_kwargs.items() if k in cls.model_fields
+    }
     return cls(
         id=entity.id,
         class_code=entity.class_code,
@@ -267,8 +269,7 @@ def map_to_crm_entities(
             shortcut_lookup[src][field] = rel.target_id
 
     crm_entities = [
-        _entity_to_crm(e, shortcut_lookup.get(str(e.id), {}))
-        for e in result.entities
+        _entity_to_crm(e, shortcut_lookup.get(str(e.id), {})) for e in result.entities
     ]
 
     crm_relations = [

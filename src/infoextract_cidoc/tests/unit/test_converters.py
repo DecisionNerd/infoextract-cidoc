@@ -125,9 +125,7 @@ class TestGetSubgraphByEntityType:
 @pytest.mark.unit
 class TestConvertExtractedToNetworkx:
     def test_confidence_filtering(self) -> None:
-        high_conf = ExtractedEntity(
-            class_code="E21", label="Einstein", confidence=0.9
-        )
+        high_conf = ExtractedEntity(class_code="E21", label="Einstein", confidence=0.9)
         low_conf = ExtractedEntity(class_code="E53", label="Place", confidence=0.2)
         graph = convert_extracted_to_networkx(
             [high_conf, low_conf], [], min_confidence=0.5

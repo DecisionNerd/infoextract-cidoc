@@ -62,7 +62,7 @@ def calculate_centrality_measures(
     if include_pagerank:
         try:
             centrality_measures["pagerank"] = nx.pagerank(graph)
-        except nx.NetworkXError:
+        except (nx.NetworkXError, ImportError):
             centrality_measures["pagerank"] = {}
 
     return centrality_measures

@@ -42,7 +42,9 @@ def timespan_entity() -> E52_TimeSpan:
 
 
 @pytest.fixture
-def object_entity(place_entity: E53_Place, production_entity: E12_Production) -> E22_HumanMadeObject:
+def object_entity(
+    place_entity: E53_Place, production_entity: E12_Production
+) -> E22_HumanMadeObject:
     return E22_HumanMadeObject(
         id=uuid4(),
         class_code="E22",
@@ -53,7 +55,9 @@ def object_entity(place_entity: E53_Place, production_entity: E12_Production) ->
 
 
 @pytest.fixture
-def production_entity(timespan_entity: E52_TimeSpan, place_entity: E53_Place) -> E12_Production:
+def production_entity(
+    timespan_entity: E52_TimeSpan, place_entity: E53_Place
+) -> E12_Production:
     return E12_Production(
         id=uuid4(),
         class_code="E12",
