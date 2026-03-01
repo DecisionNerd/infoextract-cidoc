@@ -20,7 +20,7 @@ security:
 # --- Testing ---
 
 test:
-	uv run pytest src/infoextract_cidoc/tests/ -v
+	uv run pytest src/infoextract_cidoc/tests/ -v -m "not llm"
 
 test-unit:
 	uv run pytest src/infoextract_cidoc/tests/unit/ -v -m unit

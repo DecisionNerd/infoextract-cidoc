@@ -1,5 +1,5 @@
 """
-PydanticAI models for information extraction from text.
+Data models for information extraction from text.
 
 These models define the structure for extracting CIDOC CRM entities and relationships
 from unstructured text using AI-powered analysis.

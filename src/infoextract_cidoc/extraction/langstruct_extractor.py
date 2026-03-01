@@ -52,7 +52,7 @@ class LangStructExtractor:
 
     Args:
         model: LiteLLM-compatible model string. Defaults to LANGSTRUCT_DEFAULT_MODEL
-               environment variable, or "gemini/gemini-2.5-flash" if not set.
+               environment variable, or "gemini/gemini-3-flash-preview" if not set.
     """
 
     def __init__(self, model: str | None = None) -> None:

@@ -1,6 +1,7 @@
 """Unit tests for LiteExtractionResult schema."""
 
 import pytest
+from pydantic import ValidationError
 
 from infoextract_cidoc.extraction.lite_schema import (
     LiteEntity,
@@ -23,7 +24,7 @@ class TestLiteEntity:
         assert entity.confidence == 0.95
 
     def test_confidence_bounds(self) -> None:
-        with pytest.raises(Exception):
+        with pytest.raises(ValidationError):
             LiteEntity(
                 ref_id="person_1",
                 entity_type="Person",

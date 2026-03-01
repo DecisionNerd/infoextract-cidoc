@@ -4,6 +4,8 @@ Unit tests for Markdown renderers.
 
 from uuid import uuid4
 
+import pytest
+
 from ...io.to_markdown import MarkdownStyle, render_table, to_markdown
 from ...models.generated.e_classes import (
     E12_Production,
@@ -11,6 +13,7 @@ from ...models.generated.e_classes import (
 )
 
 
+@pytest.mark.unit
 class TestMarkdownRendering:
     """Test Markdown rendering functionality."""
 

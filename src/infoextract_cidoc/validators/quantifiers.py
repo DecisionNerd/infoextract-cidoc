@@ -12,6 +12,7 @@ from infoextract_cidoc.models.base import (
     CRMValidationError,
     CRMValidationWarning,
 )
+from infoextract_cidoc.models.shortcuts import P_TO_FIELD
 from infoextract_cidoc.properties import P
 
 logger = logging.getLogger(__name__)
@@ -179,21 +180,7 @@ def _get_property_values(entity: CRMEntity, p_code: str) -> list[Any]:
     Returns:
         List of values for the property
     """
-    # Map P-codes to entity fields
-    p_to_field = {
-        "P1": "identifiers",
-        "P2": "type",
-        "P3": "notes",
-        "P4": "timespan",
-        "P7": "took_place_at",
-        "P11": "participants",
-        "P53": "current_location",
-        "P79": "begin_of_the_begin",
-        "P80": "end_of_the_end",
-        "P108": "produced_by",
-    }
-
-    field_name = p_to_field.get(p_code)
+    field_name = P_TO_FIELD.get(p_code)
     if not field_name:
         return []
 

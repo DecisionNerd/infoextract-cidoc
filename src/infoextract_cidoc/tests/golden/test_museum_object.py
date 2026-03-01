@@ -6,6 +6,8 @@ Tests the complete workflow from JSON to Markdown to Cypher.
 import json
 from pathlib import Path
 
+import pytest
+
 from ...io.to_cypher import generate_cypher_parameters, generate_cypher_script
 from ...io.to_markdown import MarkdownStyle, render_table, to_markdown
 from ...models.generated.e_classes import (
@@ -20,6 +22,7 @@ from ...validators.quantifiers import ValidationSeverity, validate_batch_quantif
 from ...validators.typing_rules import validate_batch_typing
 
 
+@pytest.mark.golden
 def test_museum_object_workflow():
     """Test the complete museum object workflow."""
     # Load the example data
@@ -79,18 +82,18 @@ def test_museum_object_workflow():
     cypher_params = generate_cypher_parameters(entities)
 
     # Verify Cypher output contains expected elements
-    assert "-- Create constraints" in cypher_script
+    assert "// Create constraints" in cypher_script
     assert (
         "CREATE CONSTRAINT crm_id IF NOT EXISTS FOR (n:CRM) REQUIRE n.id IS UNIQUE;"
         in cypher_script
     )
-    assert "-- Create nodes" in cypher_script
+    assert "// Create nodes" in cypher_script
     assert "UNWIND $nodes_0 AS n" in cypher_script
     assert "MERGE (x:CRM {id: n.id})" in cypher_script
     assert "SET x.class_code = n.class_code" in cypher_script
 
     # Verify relationship creation
-    assert "-- Create relationships" in cypher_script
+    assert "// Create relationships" in cypher_script
     assert "UNWIND $rels_P53_HAS_CURRENT_LOCATION_0 AS r" in cypher_script
     assert "MERGE (s)-[:`P53_HAS_CURRENT_LOCATION`]->(t);" in cypher_script
 
@@ -124,6 +127,7 @@ def test_museum_object_workflow():
     assert production_rels[0]["src"] == vase_node["id"]
 
 
+@pytest.mark.golden
 def test_museum_object_validation():
     """Test validation of the museum object example."""
     # Load and create entities
@@ -159,6 +163,7 @@ def test_museum_object_validation():
     assert len(typing_results) == 0  # Should have no validation issues
 
 
+@pytest.mark.golden
 def test_museum_object_roundtrip():
     """Test roundtrip conversion from JSON to entities and back."""
     # Load the example data
@@ -187,7 +192,7 @@ def test_museum_object_roundtrip():
         entities.append(entity)
 
     # Convert back to JSON
-    converted_data = {"entities": [entity.dict() for entity in entities]}
+    converted_data = {"entities": [entity.model_dump() for entity in entities]}
 
     # Verify that key data is preserved
     assert len(converted_data["entities"]) == len(original_data["entities"])

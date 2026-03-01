@@ -1,21 +1,23 @@
 """
 Cypher emitters for CIDOC CRM entities.
-Generates idempotent MERGE/UNWIND scripts for Neo4j and Memgraph.
+Generates idempotent MERGE/UNWIND scripts for Neo4j (4.4+).
+Note: constraint syntax (CREATE CONSTRAINT ... IF NOT EXISTS) requires Neo4j 4.4+
+and is not compatible with Memgraph.
 """
 
-from collections.abc import Iterable
 from typing import Any
 
 from infoextract_cidoc.models.base import CRMEntity
+from infoextract_cidoc.models.shortcuts import SHORTCUT_MAPPING
 from infoextract_cidoc.properties import P
 
 
-def emit_nodes(entities: Iterable[CRMEntity]) -> dict[str, list[dict[str, Any]]]:
+def emit_nodes(entities: list[CRMEntity]) -> dict[str, list[dict[str, Any]]]:
     """
     Emit node data for Cypher script generation.
 
     Args:
-        entities: Iterable of CRM entities
+        entities: List of CRM entities
 
     Returns:
         Dictionary with 'nodes' key containing node data
@@ -38,13 +40,13 @@ def emit_nodes(entities: Iterable[CRMEntity]) -> dict[str, list[dict[str, Any]]]
 
 
 def emit_relationships(
-    entities: Iterable[CRMEntity],
+    entities: list[CRMEntity],
 ) -> dict[str, list[dict[str, Any]]]:
     """
     Emit relationship data for Cypher script generation.
 
     Args:
-        entities: Iterable of CRM entities
+        entities: List of CRM entities
 
     Returns:
         Dictionary with 'rels' key containing relationship data
@@ -81,17 +83,7 @@ def expand_shortcuts(entity: CRMEntity) -> list[dict[str, Any]]:
     """
     rels = []
 
-    # Map shortcut fields to P-properties
-    shortcut_mapping = {
-        "timespan": "P4",
-        "took_place_at": "P7",
-        "current_location": "P53",
-        "produced_by": "P108",
-        "begin_of_the_begin": "P79",
-        "end_of_the_end": "P80",
-    }
-
-    for shortcut_field, p_code in shortcut_mapping.items():
+    for shortcut_field, p_code in SHORTCUT_MAPPING.items():
         if hasattr(entity, shortcut_field):
             target_id = getattr(entity, shortcut_field)
             if target_id:
@@ -107,7 +99,7 @@ def expand_shortcuts(entity: CRMEntity) -> list[dict[str, Any]]:
 
 
 def generate_cypher_script(
-    entities: Iterable[CRMEntity],
+    entities: list[CRMEntity],
     *,
     include_constraints: bool = True,
     batch_size: int = 1000,
@@ -116,13 +108,16 @@ def generate_cypher_script(
     Generate a complete Cypher script for entities.
 
     Args:
-        entities: Iterable of CRM entities
+        entities: List of CRM entities
         include_constraints: Whether to include constraint creation
         batch_size: Batch size for UNWIND operations
 
     Returns:
         Complete Cypher script as string
     """
+    # Materialise to list so the same sequence can be iterated twice
+    entities = list(entities)
+
     # Get node and relationship data
     node_data = emit_nodes(entities)
     rel_data = emit_relationships(entities)
@@ -146,7 +141,7 @@ def generate_cypher_script(
 
 def _generate_constraints() -> str:
     """Generate constraint creation statements."""
-    return """-- Create constraints
+    return """// Create constraints
 CREATE CONSTRAINT crm_id IF NOT EXISTS FOR (n:CRM) REQUIRE n.id IS UNIQUE;
 CREATE CONSTRAINT crm_class_code IF NOT EXISTS FOR (n:CRM) REQUIRE n.class_code IS NOT NULL;"""
 
@@ -156,11 +151,10 @@ def _generate_node_script(nodes: list[dict[str, Any]], batch_size: int) -> str:
     if not nodes:
         return ""
 
-    script_parts = ["-- Create nodes"]
+    script_parts = ["// Create nodes"]
 
     # Process nodes in batches
     for i in range(0, len(nodes), batch_size):
-        nodes[i : i + batch_size]
         script_parts.append(f"UNWIND $nodes_{i // batch_size} AS n")
         script_parts.append("MERGE (x:CRM {id: n.id})")
         script_parts.append("SET x.label = coalesce(n.label, x.label)")
@@ -188,12 +182,11 @@ def _generate_relationship_script(rels: list[dict[str, Any]], batch_size: int) -
             rels_by_type[rel_type] = []
         rels_by_type[rel_type].append(rel)
 
-    script_parts = ["-- Create relationships"]
+    script_parts = ["// Create relationships"]
 
     for rel_type, type_rels in rels_by_type.items():
         # Process relationships in batches
         for i in range(0, len(type_rels), batch_size):
-            type_rels[i : i + batch_size]
             script_parts.append(f"UNWIND $rels_{rel_type}_{i // batch_size} AS r")
             script_parts.append("MATCH (s:CRM {id: r.src})")
             script_parts.append("MATCH (t:CRM {id: r.tgt})")
@@ -204,18 +197,21 @@ def _generate_relationship_script(rels: list[dict[str, Any]], batch_size: int) -
 
 
 def generate_cypher_parameters(
-    entities: Iterable[CRMEntity], *, batch_size: int = 1000
+    entities: list[CRMEntity], *, batch_size: int = 1000
 ) -> dict[str, Any]:
     """
     Generate Cypher parameters for the script.
 
     Args:
-        entities: Iterable of CRM entities
+        entities: List of CRM entities
         batch_size: Batch size for parameter grouping
 
     Returns:
         Dictionary of parameters for Cypher execution
     """
+    # Materialise to list so the same sequence can be iterated twice
+    entities = list(entities)
+
     node_data = emit_nodes(entities)
     rel_data = emit_relationships(entities)
 

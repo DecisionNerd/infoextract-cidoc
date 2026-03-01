@@ -10,6 +10,12 @@ from infoextract_cidoc.extraction.lite_schema import (
 )
 from infoextract_cidoc.extraction.resolution import resolve_extraction
 from infoextract_cidoc.models.base import CRMEntity, CRMRelation
+from infoextract_cidoc.models.generated.e_classes import (
+    E5_Event,
+    E21_Person,
+    E52_TimeSpan,
+    E53_Place,
+)
 
 
 @pytest.fixture
@@ -25,6 +31,33 @@ def sample_extraction_result():
                 target_ref="place_1",
                 property_code="P98",
                 property_label="was born",
+            ),
+        ],
+    )
+    return resolve_extraction(lite_result)
+
+
+@pytest.fixture
+def event_extraction_result():
+    """Fixture with an event linked to a timespan and place via P4/P7."""
+    lite_result = LiteExtractionResult(
+        entities=[
+            LiteEntity(ref_id="event_1", entity_type="Event", label="Birth"),
+            LiteEntity(ref_id="timespan_1", entity_type="TimeSpan", label="1879"),
+            LiteEntity(ref_id="place_1", entity_type="Place", label="Ulm"),
+        ],
+        relationships=[
+            LiteRelationship(
+                source_ref="event_1",
+                target_ref="timespan_1",
+                property_code="P4",
+                property_label="has time-span",
+            ),
+            LiteRelationship(
+                source_ref="event_1",
+                target_ref="place_1",
+                property_code="P7",
+                property_label="took place at",
             ),
         ],
     )
@@ -49,6 +82,13 @@ class TestMapToCrmEntities:
         assert "E21" in codes
         assert "E53" in codes
 
+    def test_typed_subclasses(self, sample_extraction_result) -> None:
+        """Entities must be instances of the correct generated subclass."""
+        entities, _ = map_to_crm_entities(sample_extraction_result)
+        by_code = {e.class_code: e for e in entities}
+        assert isinstance(by_code["E21"], E21_Person)
+        assert isinstance(by_code["E53"], E53_Place)
+
     def test_relation_property_code(self, sample_extraction_result) -> None:
         _, relations = map_to_crm_entities(sample_extraction_result)
         assert relations[0].type == "P98"
@@ -58,6 +98,18 @@ class TestMapToCrmEntities:
         labels = {e.label for e in entities}
         assert "Einstein" in labels
         assert "Ulm" in labels
+
+    def test_shortcut_fields_populated(self, event_extraction_result) -> None:
+        """P4 and P7 relationships must populate timespan and took_place_at."""
+        entities, _ = map_to_crm_entities(event_extraction_result)
+        by_code = {e.class_code: e for e in entities}
+        event = by_code["E5"]
+        timespan = by_code["E52"]
+        place = by_code["E53"]
+        assert isinstance(event, E5_Event)
+        assert isinstance(timespan, E52_TimeSpan)
+        assert event.timespan == timespan.id
+        assert event.took_place_at == place.id
 
     def test_empty_result(self) -> None:
         from infoextract_cidoc.extraction.models import ExtractionResult

@@ -4,6 +4,8 @@ Unit tests for Cypher emitters.
 
 from uuid import uuid4
 
+import pytest
+
 from ...io.to_cypher import (
     emit_nodes,
     emit_relationships,
@@ -18,6 +20,7 @@ from ...models.generated.e_classes import (
 )
 
 
+@pytest.mark.unit
 class TestCypherEmission:
     """Test Cypher emission functionality."""
 
@@ -109,9 +112,9 @@ class TestCypherEmission:
         script = generate_cypher_script(entities)
 
         # Check that script contains expected elements
-        assert "-- Create constraints" in script
+        assert "// Create constraints" in script
         assert "CREATE CONSTRAINT crm_id" in script
-        assert "-- Create nodes" in script
+        assert "// Create nodes" in script
         assert "UNWIND $nodes_0 AS n" in script
         assert "MERGE (x:CRM {id: n.id})" in script
         assert "SET x.class_code = n.class_code" in script
@@ -150,7 +153,7 @@ class TestCypherEmission:
         script = generate_cypher_script(entities)
 
         # Check that relationship creation is included
-        assert "-- Create relationships" in script
+        assert "// Create relationships" in script
         assert "UNWIND $rels_P53_HAS_CURRENT_LOCATION_0 AS r" in script
         assert "MATCH (s:CRM {id: r.src})" in script
         assert "MATCH (t:CRM {id: r.tgt})" in script
@@ -207,7 +210,8 @@ class TestCypherEmission:
         script = generate_cypher_script([])
         params = generate_cypher_parameters([])
 
-        # Should still generate constraints
+        # Should still generate constraints (prefixed with // comment)
+        assert "// Create constraints" in script
         assert "CREATE CONSTRAINT" in script
         assert len(params) == 0
 

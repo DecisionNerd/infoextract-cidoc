@@ -29,6 +29,7 @@ from infoextract_cidoc.visualization import (
 )
 
 
+@pytest.mark.integration
 class TestNetworkXIntegration:
     """Test NetworkX integration functionality."""
 
@@ -166,6 +167,7 @@ class TestNetworkXIntegration:
         assert stats["entity_type_distribution"]["E53"] == 2
 
 
+@pytest.mark.integration
 class TestVisualization:
     """Test visualization functionality."""
 
@@ -243,6 +245,7 @@ class TestVisualization:
         assert hasattr(fig, "layout")
 
 
+@pytest.mark.integration
 class TestExtractionModels:
     """Test extraction model functionality."""
 
@@ -311,6 +314,7 @@ class TestExtractionModels:
         assert len(residence_rels) == 1
 
 
+@pytest.mark.integration
 class TestCompleteWorkflow:
     """Test complete workflow integration."""
 

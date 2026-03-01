@@ -43,8 +43,6 @@ def check_api_key() -> None:
     ]
     configured = [k for k in api_keys if os.getenv(k)]
     if not configured:
-        for _key in api_keys[:3]:
-            pass
         sys.exit(1)
 
 
@@ -89,14 +87,13 @@ async def complete_workflow_demo(
         crm_relations,
     ) = await _run_extraction(text)
 
-    # Apply confidence threshold filter
-    crm_entities = [
-        e
-        for e in crm_entities
-        if not hasattr(e, "confidence") or True  # CRMEntity doesn't have confidence
-    ]
-    # Filter at the extraction_result level
-    [e for e in extraction_result.entities if e.confidence >= confidence_threshold]
+    # Apply confidence threshold filter at the extraction_result level
+    high_confidence_ids = {
+        str(e.id)
+        for e in extraction_result.entities
+        if e.confidence >= confidence_threshold
+    }
+    crm_entities = [e for e in crm_entities if str(e.id) in high_confidence_ids]
 
     # Step 2: Serialize as Canonical JSON
 

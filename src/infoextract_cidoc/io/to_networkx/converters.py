@@ -46,7 +46,7 @@ def entities_to_networkx(
         }
 
         if include_all_attributes:
-            entity_dict = entity.dict()
+            entity_dict = entity.model_dump()
             node_data.update(
                 {
                     k: v

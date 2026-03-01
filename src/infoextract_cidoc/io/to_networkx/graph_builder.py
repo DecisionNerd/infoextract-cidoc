@@ -11,6 +11,7 @@ import networkx as nx
 
 from infoextract_cidoc.extraction.models import ExtractionResult
 from infoextract_cidoc.models.base import CRMEntity, CRMRelation
+from infoextract_cidoc.models.shortcuts import SHORTCUT_MAPPING
 
 
 def to_networkx_graph(
@@ -58,7 +59,7 @@ def to_networkx_graph(
             node_data.update(
                 {
                     k: v
-                    for k, v in entity.dict().items()
+                    for k, v in entity.model_dump().items()
                     if k not in ["id", "class_code", "label", "notes", "type"]
                 }
             )
@@ -182,11 +183,14 @@ def create_temporal_graph(
         node_data = graph.nodes[node_id]
 
         # Extract temporal information if available
-        if hasattr(node_data, time_attribute):
-            temporal_info = getattr(node_data, time_attribute)
+        # node_data is a plain dict (NetworkX stores attributes as dicts)
+        if time_attribute in node_data:
+            temporal_info = node_data[time_attribute]
             if temporal_info:
                 node_data["temporal_info"] = temporal_info
                 node_data["has_temporal_info"] = True
+            else:
+                node_data["has_temporal_info"] = False
         else:
             node_data["has_temporal_info"] = False
 
@@ -197,17 +201,7 @@ def _expand_entity_shortcuts(entity: CRMEntity) -> list[dict[str, Any]]:
     """Expand shortcut fields in an entity to full relationships."""
     relationships = []
 
-    # Map shortcut fields to P-properties
-    shortcut_mapping = {
-        "timespan": "P4",
-        "took_place_at": "P7",
-        "current_location": "P53",
-        "produced_by": "P108",
-        "begin_of_the_begin": "P79",
-        "end_of_the_end": "P80",
-    }
-
-    for shortcut_field, p_code in shortcut_mapping.items():
+    for shortcut_field, p_code in SHORTCUT_MAPPING.items():
         if hasattr(entity, shortcut_field):
             target_id = getattr(entity, shortcut_field)
             if target_id:

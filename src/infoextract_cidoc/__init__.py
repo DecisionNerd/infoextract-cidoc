@@ -1,3 +1,3 @@
-"""infoextract-cidoc - Classful Ontology for Life-Events Information Extraction."""
+"""infoextract-cidoc - AI-powered CIDOC CRM information extraction."""
 
-__version__ = "0.1.0"
+__version__ = "0.1.4"

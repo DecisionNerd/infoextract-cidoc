@@ -1,8 +1,12 @@
-"""CRM models package for COLLIE."""
+"""CRM models package for infoextract-cidoc."""
 
 from .base import (
     CRMEntity,
     CRMRelation,
+    CRMValidationError,
+    CRMValidationWarning,
+)
+from .generated.e_classes import (
     E5_Event,
     E7_Activity,
     E8_Acquisition,
@@ -19,6 +23,8 @@ from .base import (
 __all__ = [
     "CRMEntity",
     "CRMRelation",
+    "CRMValidationError",
+    "CRMValidationWarning",
     "E5_Event",
     "E7_Activity",
     "E8_Acquisition",

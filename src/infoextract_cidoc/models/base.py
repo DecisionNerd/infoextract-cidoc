@@ -9,6 +9,17 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+_UUID_NAMESPACE = UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")  # DNS namespace
+
+
+def _deterministic_uuid(value: str) -> UUID:
+    """Return a deterministic UUID derived from *value* via MD5."""
+    return UUID(
+        hashlib.md5(
+            f"{_UUID_NAMESPACE}{value}".encode(), usedforsecurity=False
+        ).hexdigest()
+    )
+
 
 class CRMEntity(BaseModel):
     """
@@ -56,15 +67,7 @@ class CRMEntity(BaseModel):
             try:
                 return UUID(v)
             except ValueError:
-                # If string is not a valid UUID, create a deterministic UUID from the string
-                namespace = UUID(
-                    "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
-                )  # DNS namespace
-                return UUID(
-                    hashlib.md5(
-                        f"{namespace}{v}".encode(), usedforsecurity=False
-                    ).hexdigest()
-                )
+                return _deterministic_uuid(v)
         return v
 
 
@@ -108,7 +111,7 @@ class CRMRelation(BaseModel):
             try:
                 return UUID(v)
             except ValueError:
-                return uuid4()
+                return _deterministic_uuid(v)
         return v
 
 
@@ -118,183 +121,3 @@ class CRMValidationError(Exception):
 
 class CRMValidationWarning(Warning):
     """Issued when CRM validation rules are violated but severity is set to warn."""
-
-
-# Core wrapper classes for high-use E-classes
-# These provide ergonomic shortcuts and additional methods
-
-
-class E5_Event(CRMEntity):
-    """Event - something that happened."""
-
-    class_code: str = "E5"
-
-    # Shortcut fields
-    timespan: UUID | None = Field(None, description="Time-span entity ID")
-    took_place_at: UUID | None = Field(None, description="Place entity ID")
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E5: Event",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-    )
-
-
-class E7_Activity(E5_Event):
-    """Activity - an event that involves action."""
-
-    class_code: str = "E7"
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E7: Activity",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-    )
-
-
-class E12_Production(E7_Activity):
-    """Production - the creation of a human-made object."""
-
-    class_code: str = "E12"
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E12: Production",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-    )
-
-
-class E8_Acquisition(E7_Activity):
-    """Acquisition - the act of acquiring something."""
-
-    class_code: str = "E8"
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E8: Acquisition",
-            "canonical_fields": ["label", "type", "notes", "timespan", "took_place_at"],
-        }
-    )
-
-
-class E22_HumanMadeObject(CRMEntity):
-    """Human-Made Object - a physical object created by humans."""
-
-    class_code: str = "E22"
-
-    # Shortcut fields
-    current_location: UUID | None = Field(
-        None, description="Current location entity ID"
-    )
-    produced_by: UUID | None = Field(None, description="Production event entity ID")
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E22: Human-Made Object",
-            "canonical_fields": [
-                "label",
-                "type",
-                "notes",
-                "current_location",
-                "produced_by",
-            ],
-        }
-    )
-
-
-class E21_Person(CRMEntity):
-    """Person - a human individual."""
-
-    class_code: str = "E21"
-
-    # Shortcut fields
-    current_location: UUID | None = Field(
-        None, description="Current location entity ID"
-    )
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E21: Person",
-            "canonical_fields": ["label", "type", "notes", "current_location"],
-        }
-    )
-
-
-class E74_Group(CRMEntity):
-    """Group - a collection of actors."""
-
-    class_code: str = "E74"
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E74: Group",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-    )
-
-
-class E53_Place(CRMEntity):
-    """Place - a spatial location."""
-
-    class_code: str = "E53"
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E53: Place",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-    )
-
-
-class E52_TimeSpan(CRMEntity):
-    """Time-Span - a temporal extent."""
-
-    class_code: str = "E52"
-
-    # Shortcut fields
-    begin_of_the_begin: UUID | None = Field(
-        None, description="Beginning time primitive ID"
-    )
-    end_of_the_end: UUID | None = Field(None, description="End time primitive ID")
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E52: Time-Span",
-            "canonical_fields": [
-                "label",
-                "type",
-                "notes",
-                "begin_of_the_begin",
-                "end_of_the_end",
-            ],
-        }
-    )
-
-
-class E42_Identifier(CRMEntity):
-    """Identifier - a unique identifier."""
-
-    class_code: str = "E42"
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E42: Identifier",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-    )
-
-
-class E35_Title(CRMEntity):
-    """Title - a name or title."""
-
-    class_code: str = "E35"
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "description": "CIDOC CRM E35: Title",
-            "canonical_fields": ["label", "type", "notes"],
-        }
-    )

@@ -10,7 +10,6 @@ from typing import Any
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import networkx as nx
-import numpy as np
 
 
 def get_node_colors(
@@ -196,9 +195,6 @@ def get_layout_positions(
     Returns:
         Dictionary mapping node IDs to (x, y) positions
     """
-    if seed is not None:
-        np.random.seed(seed)
-
     if layout == "spring":
         return nx.spring_layout(graph, iterations=iterations, seed=seed)  # type: ignore[no-any-return]
     if layout == "circular":

@@ -6,6 +6,7 @@ from uuid import uuid4
 
 import pytest
 
+from ...models.base import CRMValidationError
 from ...models.generated.e_classes import (
     E12_Production,
     E22_HumanMadeObject,
@@ -21,6 +22,7 @@ from ...validators.typing_rules import (
 )
 
 
+@pytest.mark.unit
 class TestQuantifierValidation:
     """Test quantifier validation functionality."""
 
@@ -37,7 +39,7 @@ class TestQuantifierValidation:
         entity = E22_HumanMadeObject(id=uuid4(), class_code="E22")
 
         # P108 has quantifier "0..1" - should not allow 2 values
-        with pytest.raises(Exception):  # Should raise CRMValidationError
+        with pytest.raises(CRMValidationError):
             enforce_quantifier(
                 entity, "P108", [uuid4(), uuid4()], ValidationSeverity.RAISE
             )
@@ -62,6 +64,7 @@ class TestQuantifierValidation:
         assert len(messages) == 0
 
 
+@pytest.mark.unit
 class TestTypingValidation:
     """Test typing validation functionality."""
 
@@ -79,7 +82,7 @@ class TestTypingValidation:
         target = E22_HumanMadeObject(id=uuid4(), class_code="E22")
 
         # P108: E22 -> E12 should be invalid with E22 target
-        with pytest.raises(Exception):  # Should raise CRMValidationError
+        with pytest.raises(CRMValidationError):
             validate_domain_range_alignment(
                 source, target, "P108", ValidationSeverity.RAISE
             )
@@ -96,6 +99,7 @@ class TestTypingValidation:
         assert len(results) == 0
 
 
+@pytest.mark.unit
 class TestValidationSeverity:
     """Test validation severity handling."""
 
@@ -113,7 +117,7 @@ class TestValidationSeverity:
         entity = E22_HumanMadeObject(id="obj_001", class_code="E22")
 
         # This should raise an exception
-        with pytest.raises(Exception):
+        with pytest.raises(CRMValidationError):
             enforce_quantifier(
                 entity, "P108", ["prod_001", "prod_002"], ValidationSeverity.RAISE
             )

@@ -1,4 +1,4 @@
-"""CRM validation framework for COLLIE."""
+"""CRM validation framework for infoextract-cidoc."""
 
 from .quantifiers import (
     ValidationSeverity,

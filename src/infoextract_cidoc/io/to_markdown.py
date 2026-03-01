@@ -133,7 +133,7 @@ def _render_detailed(
     body_lines = []
 
     # Add all non-empty fields
-    for field_name, field_value in entity.dict().items():
+    for field_name, field_value in entity.model_dump().items():
         if field_value and field_name not in ["id", "class_code"]:
             friendly_name = _get_friendly_property_name(field_name, aliases)
             formatted_value = _format_uuid_for_display(field_value)
@@ -254,7 +254,7 @@ def _get_friendly_class_name(class_code: str, aliases: dict[str, str] | None) ->
         "E35": "Title",
     }
 
-    return default_aliases.get(class_code, f"E{class_code}")
+    return default_aliases.get(class_code, class_code)
 
 
 def _get_friendly_property_name(

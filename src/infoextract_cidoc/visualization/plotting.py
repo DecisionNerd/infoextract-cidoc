@@ -130,6 +130,7 @@ def plot_temporal_network(
             non_temporal_nodes.append(node_id)
 
     # Create subgraph for temporal nodes
+    pos: dict[str, Any] = {}
     if temporal_nodes:
         temporal_subgraph = graph.subgraph(temporal_nodes)
 
