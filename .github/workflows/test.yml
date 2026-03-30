@@ -74,7 +74,7 @@ jobs:
       - name: Run tests
         run: uv run pytest src/infoextract_cidoc/tests/ -m "not llm" -n auto --junitxml=test-results.xml -v
       - name: Upload test results to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         if: always()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -103,7 +103,7 @@ jobs:
           --cov-fail-under=70
           --junitxml=test-results.xml
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
@@ -111,7 +111,7 @@ jobs:
           name: codecov-coverage
           fail_ci_if_error: false
       - name: Upload test results to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         if: always()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
